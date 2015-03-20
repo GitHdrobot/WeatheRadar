@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/res">
+        <file>res/green_24.ico</file>
+        <file>res/weather_48.ico</file>
+        <file>res/red_24.ico</file>
+    </qresource>
+</RCC>
