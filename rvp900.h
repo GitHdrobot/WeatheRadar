@@ -92,8 +92,8 @@ public:
     *code is passed in bits (13,12,9,8) of the command word, and selects one of
     *sixteen pulse widths as described under PWINFO.
     *设置脉冲宽度和脉冲重复频率
-    * 该命令用来选择脉冲宽度和触发频率。一个4位的脉冲宽度码在该命令字的（13，12,9,8）位设置，
-    * 正如PWINFO命令的描述，选择1/16的脉冲宽度
+    *该命令用来选择脉冲宽度和触发频率。一个4位的脉冲宽度码在该命令字的（13，12,9,8）位设置，
+    *正如PWINFO命令的描述，选择1/16的脉冲宽度
     */
     int SetPulWidth(char *buffer);
     /*
@@ -105,10 +105,35 @@ public:
     *generator is temporarily set to a special noise rate (usually much lower than
     *the operating rate) during the process.
     *对噪声电平采样
-    * 该命令用来估计当前接收机的噪声大小，这样就可以从随后测量值中减去该噪声。256个脉冲在256个距离
-    * 处采样，在可选距离处开始，。。。
+    *该命令用来估计当前接收机的噪声大小，这样就可以从随后测量值中减去该噪声。256个脉冲在256个距离
+    *处采样，在可选距离处开始，。。。
     */
     int SamNoise();
+    /*
+    *PROC : initate processing command
+    *The PROC command controls the actual processing and output of radar
+    *data. PROC is a single-word command that specifies the type of processing to
+    *be performed, and the type of output to be generated. The two mode bits in
+    *the command word select either:
+    *Synchronous mode————The processor acquires, processes, and outputs
+    *one ray in response to each PROC command. Processing is begun
+    *only after each command is actually received.
+    *Free running mode————A single PROC command is issued, and rays
+    *are continually output as fast as they can be produced and consumed.
+    *This continues until any other command is written
+    *Time Series mode————The processor acquires, processes, and outputs
+    *one ray of time series samples in response to each PROC command.
+    *Similar to Synchronous mode above. Data are output as 8-bit time
+    *series, 16-bit time series, or 16-bit power spectra
+    *PROC:开始处理指令
+    *PROC指令控制实际的处理和雷达数据的输出。PROC指令是一个单字命令，该命令指定了进行处理的方式
+    *和输出类型。命令中的两个模式位可以选择：
+    *同步模式————每执行一次PROC命令，处理器获取处理、输出一个雷达射线。在接收到每个指令后，处理才开始。
+    *自由运行模式————执行单个PROC指令，射线持续输出，其速度和射线产生、处理一样快。
+    *该过程会持续进行下去，知道写入另外一个命令
+    *时间序列模式————每执行一个PROC指令，处理器获取、长生输出一个射线的时间序列样本。
+    *和上面的同步模式相似。数据以8位、16位时间序列或者16位功率谱的形式输出
+    */
 public:
     int  clientSocket;
     char pulseRati;
