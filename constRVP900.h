@@ -126,5 +126,22 @@
 #define SNOISE_PREFIX "00000011"
 #define SNOISE_OPCODE 0x05
 #define SNOISE_L8BIT SETPWF_OPCODE
+
+/*
+*PROC command const,initiate processing
+*初始化数据处理
+*/
+#define PROC_N "PROC"
+#define PROC_FREFIX "00000007"
+#define PROC_L8BIT 0x26
+
+/*
+*GPARM command const,get processor parameters
+*获取处理器状态信息
+*/
+#define GPARM_PREFIX "00000007"
+#define GPARM_N "GPARM"
+#define GPARM_L8BIT 0x09
+#define GPARM_H8BIT 0x00
 #endif // CONSTRVP900_H
 

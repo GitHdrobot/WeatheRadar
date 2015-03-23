@@ -23,7 +23,6 @@ public:
     int assembleCmdMsg(int length,char *cmd,char *data);//构造要发送的命令的信息
     int sendMsg(char *buffer,int length);//向RVP900发送数据
     int getRvp900status(char *buffer);//获取RVP900的状态信息
-    int readData(char *Buffer,int length);//从RVP900中读取数据
     /*
     *构造发送的指令信息
     */
@@ -134,6 +133,17 @@ public:
     *时间序列模式————每执行一个PROC指令，处理器获取、长生输出一个射线的时间序列样本。
     *和上面的同步模式相似。数据以8位、16位时间序列或者16位功率谱的形式输出
     */
+    int PROC(char *buffer,int length);
+    /*
+    *GPARM : Get Processor Parameters
+    *This command is used to access status information from the RVP900
+    *processor. Sixty-four words are always transferred, some later words are
+    *reserved for future compatibility and are read as zeros.
+    *获取处理器参数
+    *该命令用来访问RVP900处理器的状态信息。一般都传输64位字，出于将来兼容性考虑，
+    *保留后面的字，作为0读出
+    */
+    int GPARM(char* inBuffer,char *outBuffer);
 public:
     int  clientSocket;
     char pulseRati;

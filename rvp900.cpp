@@ -11,6 +11,7 @@ RVP900::RVP900()
         0xa0,0xa0,0,0,0,0,0x40,0x6,0,0,0,0,0x80,0xc
     };
     LDRNV[504]={0x15,0,0};
+    PulseRatio = 0x80;
 }
 
 RVP900::~RVP900()
@@ -262,6 +263,76 @@ int RVP900::SamNoise(){
 
     return RVP_NO_ERR;
 }
+int RVP900::PROC(char* inBuffer,char *outBuffer){
+    sendBuffer[0]=0;
+    strcat(sendBuffer,PROC_FREFIX;
+    strcat(sendBuffer,COMMAND_WRITE);
+    strcat(sendBuffer,COMMAND_SEP);
+
+    sendBuffer[13]=PROC_L8BIT;
+    sendBuffer[14]=PulseRatio;//0x80;
+    if ((sendMsg(sendBuffer,15))!=0)
+        return SOCKET_SEND_ERR;
+
+    if (readSocketResp()!=0)
+        return SOCKET_READ_ERR;
+
+    if (comboCmdMsg("READ","808",10)!= RVP_NO_ERR)//Read Proc data
+       return SOCKET_SEND_ERR;
+
+    char sSize[10];
+    int iSize,iRecvSize;
+
+    iRecvSize = recv (clientsocket,sSize,8,0);
+    if (iRecvSize!=8)
+        return SOCKET_RECV_NOT_CMPLT_ERR;
+    sSize[8]=0;
+    sscanf(sSize,"%d",&iSize);// = strtol(sSize,&sEnd,10);
+    if (iSize<=0)
+        return SOCKET_RECV_ERR;
+    iRecvSize = recv (clientsocket,recvBuffer,iSize,0);
+    if ((strncmp(recvBuffer,"Ack",3))!=0)
+        return SOCKET_RECV_ERR;
+    if (iRecvSize!=iSize)
+    {
+        int lenn=iSize-iRecvSize;
+        iRecvSize = recv (clientsocket,recvBuffer+iRecvSize,lenn,0);
+        if (iRecvSize!=lenn)
+            return iRecvSize;
+        memcpy(outBuffer,recvBuffer+4,808);
+        return lenn;
+    }
+    else
+        memcpy(outBuffer,recvBuffer+4,808);
+    return RVP_NO_ERR;
+}
+
+int RVP900::GPARM(char *buffer){
+    sendBuffer[0]=0;
+    strcat(sendBuffer,GPARM_PREFIX);//构造写命令
+    strcat(sendBuffer,COMMAND_SEP);
+    strcat(sendBuffer,COMMAND_WRITE);
+    sendBuffer[13]=GPARM_L8BIT;
+    sendBuffer[14]=GPARM_H8BIT;
+    if ((sendMsg(sendBuffer,15))!=0)
+        return SOCKET_SEND_ERR;
+    if (readSocketResp()!=0)
+        return SOCKET_READ_ERR;
+    if (assembleCmdMsg(10,"READ|","128|")==-1)//Read PARAM
+        return SOCKET_SEND_ERR;
+    if (readSocketResp()!=0)
+        return SOCKET_READ_ERR;
+    for (int i=0;i<128;i++)
+        buffer[i]=recvBuffer[4+i];
+    return RVP_NO_ERR;
+}
+int RVP900::sendMsg(char *buffer,int length)//向RVP900发送数据
+{
+    if (send(clientSocket,buffer,length,0)!= RVP_NO_ERR)//将buffer指向的length个字符发送到clientSocket
+        return SOCKET_SEND_ERR;
+    return RVP_NO_ERR;
+}
+
 
 
 
@@ -336,70 +407,5 @@ int RVP900::comboCmdMsg(char *cmd,char *data,int length){//构造发送的指令
     int len=COMMAND_PREFIX_LEN+length;//总的长度
     if ((sendMsg(sendBuffer,len))!=0)//发送sendBuffer指向的长度为len的数据
         return SOCKET_SEND_ERR;
-    return RVP_NO_ERR;
-}
-
-int RVP900::sendMsg(char *buffer,int length)//向RVP900发送数据
-{
-    if (send(clientSocket,buffer,length,0)==-1)//将buffer指向的length个字符发送到clientSocket
-        return SOCKET_SEND_ERR;
-    return RVP_NO_ERR;
-}
-
-int RVP900::getRvp900status(char *buffer)//获取RVP900的状态信息
-{
-    sendBuffer[0]=0;
-    strcat(sendBuffer,"00000007WRIT|");//构造写命令
-    sendBuffer[13]=0x09;
-    sendBuffer[14]=0x00;
-    if ((sendMsg(sendBuffer,15))!=0)
-        return -1;
-    if (readSocketResp()!=0)
-        return -2;
-    if (assembleCmdMsg(10,"READ|","128|")==-1)//Read PARAM
-        return -3;
-    if (readSocketResp()!=0)
-        return -4;
-    for (int i=0;i<128;i++)
-        buffer[i]=recvBuffer[4+i];
-    return RVP_NO_ERR;
-}
-
-int RVP900::readData(char *Buffer,int length){
-    sendBuffer[0]=0;
-    strcat(sendBuffer,"00000007WRIT|");
-    sendBuffer[13]=0x26;
-    sendBuffer[14]=pulseRatio;//0x80;
-    if ((sendMsg(sendBuffer,15))!=0)
-        return -1;
-    if (readSocketResp()!=0)
-        // return -2;
-        if (assembleCmdMsg(10,"READ|","808|")==-1)//Read Proc data
-            return -3;
-    char sSize[10];
-    int iSize,iRecvSize;
-    iRecvSize = recv (clientSocket,sSize,8,0);
-    if (iRecvSize!=8)
-        return -5;
-    sSize[8]=0;
-    sscanf(sSize,"%d",&iSize);// = strtol(sSize,&sEnd,10);
-    if (iSize<=0)
-        return -6;
-    iRecvSize = recv (clientSocket,recvBuffer,iSize,0);
-    if ((strncmp(recvBuffer,"Ack",3))!=0)
-        return -7;
-    if (iRecvSize!=iSize)
-    {
-        int lenn=iSize-iRecvSize;
-        iRecvSize = recv (clientSocket,recvBuffer+iRecvSize,lenn,0);
-        if (iRecvSize!=lenn)
-            return iRecvSize;
-
-        memcpy(Buffer,recvBuffer+4,808);
-        return lenn;
-    }
-    else
-        memcpy(Buffer,recvBuffer+4,808);
-
     return RVP_NO_ERR;
 }
