@@ -266,7 +266,7 @@ int RVP900::SamNoise(){
 int RVP900::PROC(char* inBuffer,char *outBuffer){
     sendBuffer[0]=0;
     strcat(sendBuffer,PROC_FREFIX;
-    strcat(sendBuffer,COMMAND_WRITE);
+            strcat(sendBuffer,COMMAND_WRITE);
     strcat(sendBuffer,COMMAND_SEP);
 
     sendBuffer[13]=PROC_L8BIT;
@@ -278,7 +278,7 @@ int RVP900::PROC(char* inBuffer,char *outBuffer){
         return SOCKET_READ_ERR;
 
     if (comboCmdMsg("READ","808",10)!= RVP_NO_ERR)//Read Proc data
-       return SOCKET_SEND_ERR;
+        return SOCKET_SEND_ERR;
 
     char sSize[10];
     int iSize,iRecvSize;
@@ -408,4 +408,7 @@ int RVP900::comboCmdMsg(char *cmd,char *data,int length){//构造发送的指令
     if ((sendMsg(sendBuffer,len))!=0)//发送sendBuffer指向的长度为len的数据
         return SOCKET_SEND_ERR;
     return RVP_NO_ERR;
+}
+RVP900 RVP900::getRVP900Ins(){
+    return insRVP900;
 }

@@ -1,3 +1,7 @@
+/*
+*显示界面上的一些常量设置
+*/
+
 #ifndef CONSTCODE_H
 #define CONSTCODE_H
 

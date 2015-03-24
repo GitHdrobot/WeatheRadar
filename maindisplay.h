@@ -9,6 +9,9 @@
 #include <QDateTime>
 
 #include "constcode.h"
+/*调用RVP900中的成员函数*/
+#include "rvp900.h"
+
 
 class MainDisplay : public QWidget
 {

@@ -9,6 +9,10 @@
 
 #include "constcode.h"
 
+#include "rvp900.h"
+
+RVP900 *pRVP900;
+
 namespace Ui {
 class MainWindow;
 }

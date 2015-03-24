@@ -133,7 +133,7 @@ public:
     *时间序列模式————每执行一个PROC指令，处理器获取、长生输出一个射线的时间序列样本。
     *和上面的同步模式相似。数据以8位、16位时间序列或者16位功率谱的形式输出
     */
-    int PROC(char *buffer,int length);
+    static int PROC(char *buffer,int length);
     /*
     *GPARM : Get Processor Parameters
     *This command is used to access status information from the RVP900
@@ -152,6 +152,12 @@ public:
     unsigned char LDRNV[504];
     unsigned char SOPRM[52];
     char PulseRatio;
+
+private:
+    static RVP900 insRVP900;
+public:
+    static RVP900 getRVP900Ins();
+
 };
 
 #endif // RVP900_H

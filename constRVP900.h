@@ -1,17 +1,21 @@
+/*
+*RVP900的一些常量设置 主要包括指令部分
+*/
+
 #ifndef CONSTRVP900_H
 #define CONSTRVP900_H
 
-#define RVP900_HOSTNAME "RVP900"
-#define RVP900_PORT 30740
-#define SOCKET_CREATE_ERR -2
-#define SOCKET_CONN_ERR -3
-#define SOCKET_READ_ERR -4
-#define SOCKET_SEND_ERR -5
-#define SOCKET_RECV_ERR -6
-#define NOT_ACK_ERR -7
-#define SOCKET_RECV_NOT_CMPLT_ERR -8
-#define IOTEST_ERR -9
-#define RVP_NO_ERR 0
+#define RVP900_HOSTNAME "RVP900"    //主机名
+#define RVP900_PORT 30740   //端口号
+#define SOCKET_CREATE_ERR -2    //创建SOCKET错误
+#define SOCKET_CONN_ERR -3      //SOCKET连接错误
+#define SOCKET_READ_ERR -4      //SOCKET读取错误
+#define SOCKET_SEND_ERR -5      //SOCKET发送错误
+#define SOCKET_RECV_ERR -6      //SOCKET接受错误
+#define NOT_ACK_ERR -7          //RVP9未响应错误
+#define SOCKET_RECV_NOT_CMPLT_ERR -8    //SOCKET接收不完全错误
+#define IOTEST_ERR -9       //IOTEST测试错误
+#define RVP_NO_ERR 0        //无错误
 
 
 /*
@@ -115,7 +119,7 @@
 *设置脉冲宽度和脉冲重复频率
 */
 #define SETPWF_PREFIX "00000009"
-#define SETPWF_OPCODE 0x10
+#define SETPWF_OPCODE 0x10 //指令SETPWF操作码
 #define SETPWF_L8BIT SETPWF_OPCODE
 #define SETPWF_H8BIT 0x0
 
