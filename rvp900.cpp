@@ -1,17 +1,12 @@
 #include "rvp900.h"
 
+
+
 RVP900::RVP900()
 {
     clientSocket = -1;
     pulseRatio = 0x80;
-    SOPRM[52]={
-        0x98,0,0,0,0,0,0,0,0,0,0x2,0,0x20,0,0xa6,0x5,
-        0xae,0x7,0x30,0,0x40,0xfe,0x5,0,0x22,0,0x92,
-        0x0,0,0x1,0xa,0x2,0xaa,0xaa,0x88,0x88,0xa0,0xa0,
-        0xa0,0xa0,0,0,0,0,0x40,0x6,0,0,0,0,0x80,0xc
-    };
-    LDRNV[504]={0x15,0,0};
-    PulseRatio = 0x80;
+
 }
 
 RVP900::~RVP900()
@@ -36,11 +31,11 @@ int RVP900::reset(){
     //    }
     // if(((recvBuffer[4]-'0')&0x1)==0){
     sendBuffer[0] = 0;
-    strcat(sendBuffer,RESET_PREFIX);
-    strcat(sendBuffer,COMMAND_WRITE);
-    strcat(sendBuffer,COMMAND_SEP);
-    strcat(sendBuffer,RESET_LOW8BIT);
-    strcat(sendBuffer,RESET_HIGH8BIT);
+    strcat(sendBuffer,RESET_PREFIX);//8bit
+    strcat(sendBuffer,COMMAND_WRITE);//4bit
+    strcat(sendBuffer,COMMAND_SEP);//1bit
+    sendBuffer[13] = RESET_LOW8BIT;
+    sendBuffer[13] = RESET_HIGH8BIT;
     sendBuffer[RESET_LEN] = 0;
     if(int s = sendMsg(sendBuffer,RESET_LEN) !=RVP_NO_ERR){
         return s ;
@@ -51,11 +46,11 @@ int RVP900::reset(){
 }
 int RVP900::IOTest(){
     sendBuffer[0] = 0;
-    strcat(sendBuffer,IOTEST_PREFIX);
-    strcat(sendBuffer,COMMAND_WRITE);
-    strcat(sendBuffer,COMMAND_SEP);
-    strcat(sendBuffer,IOTEST_LOW8BIT);
-    strcat(sendBuffer,IOTEST_HIGH8BIT);
+    strcat(sendBuffer,IOTEST_PREFIX);//8bit
+    strcat(sendBuffer,COMMAND_WRITE);//4bit
+    strcat(sendBuffer,COMMAND_SEP);//1bit
+    sendBuffer[13] = IOTEST_LOW8BIT;
+    sendBuffer[14] = IOTEST_HIGH8BIT;
     for(int i=COMMAND_PREFIX_LEN + COMM_WRIT_LEN;i<IOTEST_COMM_LEN;i++){
         sendBuffer[i] = i;
     }
@@ -84,11 +79,12 @@ int RVP900::IOTest(){
 
 int RVP900::loadSync(){
     sendBuffer[0]=0;
-    strcat(sendBuffer,LSYNC_PREFIX);
-    strcat(sendBuffer,COMMAND_WRITE);
-    strcat(sendBuffer,COMMAND_SEP);
-    strcat(sendBuffer,LSYNC_LOW8BIT);
-    strcat(sendBuffer,LSYNC_HIGH8BIT);
+    strcat(sendBuffer,LSYNC_PREFIX);//8bit
+    strcat(sendBuffer,COMMAND_WRITE);//4bit
+    strcat(sendBuffer,COMMAND_SEP);//1bit
+    sendBuffer[13] = LSYNC_LOW8BIT;
+    sendBuffer[14] = LSYNC_HIGH8BIT;
+
     if(int s = sendMsg(sendBuffer,LSYNC_LEN)!= RVP_NO_ERR){
         return s;
     }
@@ -153,7 +149,7 @@ int RVP900::setOperPRM(){
 /*
 *CFGHDR 配置射线头字节
 */
-int RVP900::ConFGHDR(){
+int RVP900::conFGHDR(){
     sendBuffer[0]=0;
     strcat(sendBuffer,CFGHDR_PREFIX);//OP_CFGHDR
     strcat(sendBuffer,COMMAND_WRITE);
@@ -230,7 +226,7 @@ int RVP900::setLFILT(char *buffer){
     return RVP_NO_ERR;
 }
 
-int RVP900::SetPulWidth(char *buffer)
+int RVP900::setPulWidth(char *buffer)
 {
     sendBuffer[0]=0;
     strcat(sendBuffer,SETPWF_PREFIX);
@@ -245,7 +241,7 @@ int RVP900::SetPulWidth(char *buffer)
         return SOCKET_READ_ERR;
     return RVP_NO_ERR;
 }
-int RVP900::SamNoise(){
+int RVP900::samNoise(){
     sendBuffer[0]=0;
     strcat(sendBuffer,SNOISE_PREFIX);
     strcat(sendBuffer,COMMAND_WRITE);
@@ -265,12 +261,12 @@ int RVP900::SamNoise(){
 }
 int RVP900::PROC(char* inBuffer,char *outBuffer){
     sendBuffer[0]=0;
-    strcat(sendBuffer,PROC_FREFIX;
-            strcat(sendBuffer,COMMAND_WRITE);
+    strcat(sendBuffer,PROC_FREFIX);
+    strcat(sendBuffer,COMMAND_WRITE);
     strcat(sendBuffer,COMMAND_SEP);
 
     sendBuffer[13]=PROC_L8BIT;
-    sendBuffer[14]=PulseRatio;//0x80;
+    sendBuffer[14]=pulseRatio;//0x80;
     if ((sendMsg(sendBuffer,15))!=0)
         return SOCKET_SEND_ERR;
 
@@ -283,20 +279,20 @@ int RVP900::PROC(char* inBuffer,char *outBuffer){
     char sSize[10];
     int iSize,iRecvSize;
 
-    iRecvSize = recv (clientsocket,sSize,8,0);
+    iRecvSize = recv (clientSocket,sSize,8,0);
     if (iRecvSize!=8)
         return SOCKET_RECV_NOT_CMPLT_ERR;
     sSize[8]=0;
     sscanf(sSize,"%d",&iSize);// = strtol(sSize,&sEnd,10);
     if (iSize<=0)
         return SOCKET_RECV_ERR;
-    iRecvSize = recv (clientsocket,recvBuffer,iSize,0);
+    iRecvSize = recv (clientSocket,recvBuffer,iSize,0);
     if ((strncmp(recvBuffer,"Ack",3))!=0)
         return SOCKET_RECV_ERR;
     if (iRecvSize!=iSize)
     {
         int lenn=iSize-iRecvSize;
-        iRecvSize = recv (clientsocket,recvBuffer+iRecvSize,lenn,0);
+        iRecvSize = recv (clientSocket,recvBuffer+iRecvSize,lenn,0);
         if (iRecvSize!=lenn)
             return iRecvSize;
         memcpy(outBuffer,recvBuffer+4,808);
@@ -307,7 +303,7 @@ int RVP900::PROC(char* inBuffer,char *outBuffer){
     return RVP_NO_ERR;
 }
 
-int RVP900::GPARM(char *buffer){
+int RVP900::GPARM(char* inBuffer,char *outBuffer){
     sendBuffer[0]=0;
     strcat(sendBuffer,GPARM_PREFIX);//构造写命令
     strcat(sendBuffer,COMMAND_SEP);
@@ -323,7 +319,7 @@ int RVP900::GPARM(char *buffer){
     if (readSocketResp()!=0)
         return SOCKET_READ_ERR;
     for (int i=0;i<128;i++)
-        buffer[i]=recvBuffer[4+i];
+        inBuffer[i]=recvBuffer[4+i];
     return RVP_NO_ERR;
 }
 int RVP900::sendMsg(char *buffer,int length)//向RVP900发送数据
@@ -409,6 +405,6 @@ int RVP900::comboCmdMsg(char *cmd,char *data,int length){//构造发送的指令
         return SOCKET_SEND_ERR;
     return RVP_NO_ERR;
 }
-RVP900 RVP900::getRVP900Ins(){
-    return insRVP900;
-}
+//RVP900 RVP900::getRVP900Ins(){
+//    return insRVP900;
+//}

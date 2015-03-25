@@ -1,17 +1,17 @@
 #include "fetchdatathread.h"
-
+#include "rvp900.h"
 /*构造函数*/
 FetchDataThread::FetchDataThread(QObject *parent) :
     QObject(parent)
 {
-    FLAG=0;
+    flag=0;
 
-    ThreadFlag=false;
+    threadFlag=false;
 }
 
 void FetchDataThread::run(){
-    while(ThreadFlag)
+    while(threadFlag)
     {
-        int c=pRVP900.PROC(null,808);
+       int c = rvp9.PROC(inbuff,outbuff);
     }
 }

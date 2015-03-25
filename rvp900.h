@@ -12,6 +12,8 @@
 //rvp900 控制类
 #include "constRVP900.h"
 
+
+
 class RVP900
 {
 public:
@@ -48,7 +50,7 @@ public:
     *elevation axis
     *该命令用来加载天线的旋转的角度表 天线可以按照相位角、仰角的方式旋转
     */
-    int LoadSync();
+    int loadSync();
     /*
     *setup opertating parameters, The command
     *should be issued whenever any of the parameters in the list change. The
@@ -65,7 +67,7 @@ public:
     PROC命令处理后的输出数据可能包含可选的头字数据，这些头字可以提供关于每条射线额外的信息
     该命令配置字集，这些字集组成每个头。一共有32个不同的字、字组选择，由命令后面的位掩码表示
     */
-    int ConFGHDR();
+    int conFGHDR();
     /*
     *This command informs the signal processor of the ranges at which data are
     *to be collected. An arbitrary set of range bins are selected via an 8192-bit
@@ -94,7 +96,7 @@ public:
     *该命令用来选择脉冲宽度和触发频率。一个4位的脉冲宽度码在该命令字的（13，12,9,8）位设置，
     *正如PWINFO命令的描述，选择1/16的脉冲宽度
     */
-    int SetPulWidth(char *buffer);
+    int setPulWidth(char *buffer);
     /*
     *SNOISE :sample noise level
     *This command is used to estimate the current noise level from the receiver,
@@ -107,7 +109,7 @@ public:
     *该命令用来估计当前接收机的噪声大小，这样就可以从随后测量值中减去该噪声。256个脉冲在256个距离
     *处采样，在可选距离处开始，。。。
     */
-    int SamNoise();
+    int samNoise();
     /*
     *PROC : initate processing command
     *The PROC command controls the actual processing and output of radar
@@ -133,7 +135,7 @@ public:
     *时间序列模式————每执行一个PROC指令，处理器获取、长生输出一个射线的时间序列样本。
     *和上面的同步模式相似。数据以8位、16位时间序列或者16位功率谱的形式输出
     */
-    static int PROC(char *buffer,int length);
+    int PROC(char* inBuffer,char *outBuffer);
     /*
     *GPARM : Get Processor Parameters
     *This command is used to access status information from the RVP900
@@ -144,19 +146,26 @@ public:
     *保留后面的字，作为0读出
     */
     int GPARM(char* inBuffer,char *outBuffer);
+
 public:
     int  clientSocket;
     char pulseRati;
     char sendBuffer[1024*8];//发送数据buffer
     char recvBuffer[1024*8];//接收数据buffer
-    unsigned char LDRNV[504];
-    unsigned char SOPRM[52];
-    char PulseRatio;
 
-private:
-    static RVP900 insRVP900;
-public:
-    static RVP900 getRVP900Ins();
+    char pulseRatio;
+
+    unsigned char SOPRM[52]={
+        0x98,0,0,0,0,0,0,0,0,0,0x2,0,0x20,0,0xa6,0x5,
+        0xae,0x7,0x30,0,0x40,0xfe,0x5,0,0x22,0,0x92,
+        0x0,0,0x1,0xa,0x2,0xaa,0xaa,0x88,0x88,0xa0,0xa0,
+        0xa0,0xa0,0,0,0,0,0x40,0x6,0,0,0,0,0x80,0xc};
+    unsigned char LDRNV[504]={0x15,0,0};
+
+//private:
+    //static RVP900 insRVP900;
+//public:
+    //static RVP900 getRVP900Ins();
 
 };
 

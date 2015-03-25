@@ -11,8 +11,6 @@
 
 #include "rvp900.h"
 
-RVP900 *pRVP900;
-
 namespace Ui {
 class MainWindow;
 }
@@ -35,8 +33,9 @@ public slots:
 
 
 
-public :
+//public :
    // void paintEvent(QPaintEvent *);
+   // RVP900 rvp900;
 
 };
 

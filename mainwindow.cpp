@@ -6,7 +6,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    pRVP900 = &RVP900.getRVP900Ins();
     ui->setupUi(this);
 
    //QAction  *act = new QAction("seeting",this);
