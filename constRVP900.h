@@ -32,18 +32,33 @@
 #define COMMAND_SEP "|"     //分隔字符
 #define COMM_WRIT_LEN 4+1+2  //写命令长度 WIRT 4个，| 1个，命令字 2两个
 
+#define SET_ZERO 0 //置0
+#define SET_ONE 1 //置1
 
 //reset command const 重置指令常量
 /*重置指令会将rvp900全部重置
 */
 //低8位
 #define RESET_OPCODE 0xc  //reset指令操作码 0-4位
-#define FLAG_FIF 0x8 //清空FIFO缓冲区 7位
-#define RESET_LOW8BIT FLAG_FIF * 0x10 + RESET_OPCODE//低8位
+/*第5位置1 设置该位 表示载入已保存的设置 以兼容RVP6、7*/
+#define RESET_5thBIT_NV  0x20
+/*第6位置1 设置该位 表示载入已保存的设置 以兼容RVP6、7*/
+#define RESET_6thBIT_NV  0x40
+/*第7位置1 设置该位  表示将删除所以当前输出缓冲区FIFO的所有数据
+*该命令将会清掉上次命令执行后的输出数据，这样可以重新读入新的输出数据
+*/
+#define RESET_7thBIT_FIF  0x80
+
+
+#define RESET_LOW8BIT RESET_7thBIT_FIF + RESET_OPCODE//低8位
 
 //高8位
-#define FLAG_NSE 0x1 //将接收机的噪声恢复至默认值 8位
-#define FLAG_NV 0x2 //重新载入配置 9位
+/*第8位置1 设置该位 表示将接收机对于所有脉冲宽度（在Mt中设置）的噪声水平
+ *设置到加电默认值*/
+#define RESET_8thBIT_NSE  0x100
+/*第9位置1 设置该位 表示载入已保存的设置 以兼容RVP6、7*/
+#define RESET_9thBIT_NV  0x200
+
 #define RESET_HIGH8BIT 0x0//高8位
 
 #define RESET_PREFIX "00000007"
@@ -57,6 +72,7 @@
 *再读取该32个字节 若与发送的相等 则说明没有出故障的数据总线
 */
 //该命令的命令字中只有操作码
+//0-4 bit
 #define IOTEST_OPCONDE 0x3
 //低8位
 #define IOTEST_LOW8BIT IOTEST_OPCONDE
@@ -71,7 +87,31 @@
 *LSYNC command const ,加载 天线同步表
 */
 #define LSYNC "LSYNC"
-#define LSYNC_LOW8BIT 0x11
+//low 8bit
+/*0-4位*/
+#define LSYNC_OPCODE 0x11
+#define LSYNC_LOW8BIT LSYNC_OPCODE
+
+//high 8bit
+/*设置该位表示该命令后是新的一个表的大小和数组值。若Ld=0，
+ *那么LSYNC只是一个字的命令。否则，后面的字用来载入新的表。
+ */
+#define LSYNC_8thBIT_LD 0x100
+/*指定TAG角度输入时4位BCD码，否则假设角度为16位的二进制码*/
+#define LSYNC_9thBIT_BCD 0x200
+/*同步是基于TAG1531（仰角）输入，否则是使用TAG015（相位）*/
+#define LSYNC_10thBIT_E1 0x400
+/*打开天线同步功能*/
+#define LSYNC_11thBIT_ENA 0x800
+/*该位表示 由于CPI的特点经常会导致全部的射线
+ *被丢掉，脉冲个数少于预期个数时，允许使用短的射线
+ *此时，设置该位，用户需要编写代码检查进入每条射线的实际的脉冲数
+ *并且手工丢弃那些太短而不能包含有用数据的射线
+*/
+#define LSYNC_12thBIT_SHT 0x1000
+/*没看明白 设置角宽是固定的还是动态变化的？*/
+#define LSYNC_13thBIT_DYN 0x2000
+
 #define LSYNC_HIGH8BIT 0x20
 #define LSYNC_PREFIX "00000007"
 #define LSYNC_LEN COMMAND_PREFIX_LEN+COMM_WRIT_LEN
@@ -147,5 +187,20 @@
 #define GPARM_N "GPARM"
 #define GPARM_L8BIT 0x09
 #define GPARM_H8BIT 0x00
+
+
+/*
+ *定义距离库的个数 
+ **/
+#define BINS_NUM 200;
+/*
+ *定义选择输出数据有几种 
+ **/
+#define BINS_TYPE_NUM 4;
+/*输出数据头的长度*/
+#define BINS_HEADER_LEN 8
+/*定义数据的总长度*/
+#define BINS_LEN BINS_NUM*BINS_TYPE_NUM + BINS_HEADER_LEN
+
 #endif // CONSTRVP900_H
 

@@ -259,7 +259,7 @@ int RVP900::samNoise(){
 
     return RVP_NO_ERR;
 }
-int RVP900::PROC(char* inBuffer,char *outBuffer){
+int RVP900::PROC(char *outBuffer){
     sendBuffer[0]=0;
     strcat(sendBuffer,PROC_FREFIX);
     strcat(sendBuffer,COMMAND_WRITE);
