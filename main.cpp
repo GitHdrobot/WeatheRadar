@@ -3,6 +3,8 @@
 
 RVP900 rvp9;//rvp9控制对象
 
+DispDevice dispDev;//存放显示设备信息
+
 unsigned char paintBuff[1024];//绘图数据缓冲区
 
 unsigned char outbuff[1024*16];//读取数据缓冲区
@@ -116,7 +118,8 @@ unsigned char lfilt[2]={0x00,0x00}; //滤波器设置
 unsigned char ratio[2]={0x80,0x00}; //脉冲重复比设置
 unsigned char elBuffer[2]={0x00,0x00};
 
-
+/*初始化函数**/
+int initialize();
 
 int main(int argc, char *argv[])
 {
@@ -126,5 +129,7 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
-/*进行显示相关的初始化**/
-int dispInit(){}
+
+int initialize(){
+    //打开一个设置文件，读取设置信息
+}

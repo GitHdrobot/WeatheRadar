@@ -29,6 +29,11 @@
 #define MODE3_1_V 8
 #define MODE3_1_W 9
 
+#define MODE1_PIC 1   //一图
+#define MODE1_PIC 2   //两图
+#define MODE1_PIC 4   //四图
+
+
 #define ROTATE_ANGLE 30   // 旋转角度
 #define ARC_NUM 5 //绘制的圆弧个数
 #define MIN_GRADUATION 1  //最小刻度 1度
@@ -65,6 +70,8 @@
 #define PAL_COLOR_NUM 256 //256种颜色
 #define BASE_COLOR_NUM 3    //基本原色个数
 
+#define CONFIG_WIDTH 365  //右侧设置面板占据的宽度
+#define TOP_BOTTOM_HEIGHT 7 //上下占据的高度
 
 
 

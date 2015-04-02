@@ -11,6 +11,11 @@
 
 #include "rvp900.h"
 
+#include "dispdevice.h"
+
+extern DispDevice dispDev;
+
+
 namespace Ui {
 class MainWindow;
 }

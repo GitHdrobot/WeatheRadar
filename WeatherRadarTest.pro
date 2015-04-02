@@ -19,7 +19,7 @@ SOURCES += main.cpp\
     maindisplay.cpp \
     rvp900.cpp \
     fetchdatathread.cpp \
-    rvp900sets.cpp
+    dispdevice.cpp
 
 HEADERS  += mainwindow.h \
     dialogsetting.h \
@@ -29,7 +29,7 @@ HEADERS  += mainwindow.h \
     maindisplay.h \
     rvp900.h \
     fetchdatathread.h \
-    rvp900sets.h
+    dispdevice.h
 
 FORMS    += mainwindow.ui \
     dialogsetting.ui \

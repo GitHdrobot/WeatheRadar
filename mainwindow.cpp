@@ -6,13 +6,23 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+    /*获取显示设备可用的分辨率*/
+    QDesktopWidget *dwsktopwidget = QApplication::desktop();
+    QRect deskrect = dwsktopwidget->availableGeometry();
+    //QRect screenrect = dwsktopwidget->screenGeometry();
+    dispDev.setWidthHeight(deskrect.width,deskrect.height);
 
-   //QAction  *act = new QAction("seeting",this);
-   //ui->menuParaSetting->addAction(act);
+    ui->setupUi(this);
     connect(ui->menuParaSetting,SIGNAL(aboutToShow()),this,SLOT(paraSetSlot()));
-    //connect(ui->menuParaSetting,SIGNAL(aboutToHide()),this,SLOT(paraSetSlot()));
     connect(ui->action4_Pic,SIGNAL(triggered()),this,SLOT(dispFourPicSlot()));
+    this->resize(dispDev.width,dispDev.height);
+    /*
+        this->setMaximumHeight(dispDev.height);
+        this->setMaximumWidth(dispDev.width);
+        this->setMinimumHeight(dispDev.height);
+        this->setMinimumWidth(dispDev.width);
+    */
+
 }
 
 MainWindow::~MainWindow()
@@ -31,7 +41,7 @@ void MainWindow::paraSetSlot()
 
 void MainWindow::dispFourPicSlot()
 {
-   //qDebug( "my icon size = %x",4 );
+    //qDebug( "my icon size = %x",4 );
 }
 
 //void MainWindow::paintEvent(QPaintEvent *)

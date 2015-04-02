@@ -11,11 +11,67 @@
 #include <stdlib.h>
 //rvp900 控制类
 #include "constRVP900.h"
+#include "dispdevice.h"
 
-
+extern DispDevice dispDev;
 
 class RVP900
 {
+    //RVP900 Properties
+public :
+
+    //距离库个数 与距离掩码设置位个数相同
+    int binsNum;
+    //采集数据种类 dBz,dBt,dBw,v，默认为ALL
+    bool dataZDR_BIT,dataZ_BIT,dataT_BIT,dataV_BIT,dataW_BIT,dataALL,dataARC_BIT;
+    //采集的数据是否包含 头部TAG，默认为true
+    bool dataHeader;
+    //距离量程 distance range,目前仅设置六个距离范围
+    enum enum_disRange {RANGE_FIRST,RANGE_SECOND,RANGE_THIRD,RANGE_FOURTH,RANGE_FIFTH,RANGE_SIXTH} disRange;
+    //脉冲重复频率
+    enum enum_PRF {PRF_FIRST,PRF_SECOND,PRF_THIRD,PRF_FOURTH,PRF_FIFTH,PRF_SIXTH} PRF;
+    /*数据采集方式 collect mode,有三种Synchronous，
+    *free running，time series，默认是time series
+    */
+    enum enum_colMode {SYNCHRONOUS,FREE_RUNNING,TIME_SERIES} colMode;
+    //脉冲宽度
+    int pulseWidth;
+    //双PRF，脉冲重复比,此处不是真实比率
+    enum enum_PRF_Ratio{PRF_NONE,PRF_2TO3,PRF_3TO4,PRF_4TO5} PRF_Ratio;
+    //多普勒滤波器 doppler filter
+    enum enum_dopFilter {DF_NONE,ONE,TWO,THREE,FOUTH,FIVE,SIX,SEVEN} dopFilter;
+    //处理模式 processing mode
+    enum enum_proMode {PPP,FFT,RPP,DPRT_1,DPRT_2} proMode;
+    //脉冲累积数 pulse accummunate
+    enum enum_pulAccumulate {};
+    //Threshold of LOG、SIG、CCOR、SQI,门限值
+    float LOG_Threshold,SIG_Threshold,CCOR_Threshold,SQI_Threshold;
+    //R2使能 r2 enable
+    bool RTwoEnable;
+    //距离平均 distance averaging
+    int avgDistance;
+
+    /*socket to RVP9*/
+public:
+    int  clientSocket;
+
+    /*RVP900 buffer*/
+public:
+    char sendBuffer[1024*8];//发送指令buffer 用于缓存与指令相关信息
+    char recvBuffer[1024*8];//接收数据buffer
+    char dataOutBuff[1024*16];//接收数据buffer
+    unsigned char low8Bits,high8Bits;//一个双字的低位字buffer，和高位字buffer
+
+    /*predefined parameter variable of command ，预定义的指令参数*/
+public:
+    unsigned char SOPRM[52]={
+        0x98,0,0,0,0,0,0,0,0,0,0x2,0,0x20,0,0xa6,0x5,
+        0xae,0x7,0x30,0,0x40,0xfe,0x5,0,0x22,0,0x92,
+        0x0,0,0x1,0xa,0x2,0xaa,0xaa,0x88,0x88,0xa0,0xa0,
+        0xa0,0xa0,0,0,0,0,0x40,0x6,0,0,0,0,0x80,0xc};
+    unsigned char LDRNV[504]={0x15,0,0};
+
+    /*RVP900 Methods*/
 public:
     RVP900();
     ~RVP900();
@@ -146,28 +202,8 @@ public:
     *保留后面的字，作为0读出
     */
     int GPARM(char* inBuffer,char *outBuffer);
-
-public:
-    int  clientSocket;
-    char pulseRati;
-    char sendBuffer[1024*8];//发送指令buffer 用于缓存与指令相关信息
-    char recvBuffer[1024*8];//接收数据buffer
-    char dataOutBuff[1024*16];//接收数据buffer
-
-    char pulseRatio;
-
-    unsigned char SOPRM[52]={
-        0x98,0,0,0,0,0,0,0,0,0,0x2,0,0x20,0,0xa6,0x5,
-        0xae,0x7,0x30,0,0x40,0xfe,0x5,0,0x22,0,0x92,
-        0x0,0,0x1,0xa,0x2,0xaa,0xaa,0x88,0x88,0xa0,0xa0,
-        0xa0,0xa0,0,0,0,0,0x40,0x6,0,0,0,0,0x80,0xc};
-    unsigned char LDRNV[504]={0x15,0,0};
-
-//private:
-    //static RVP900 insRVP900;
-//public:
-    //static RVP900 getRVP900Ins();
-
+    /*RVP900初始化函数 对参数进行必要的初始化*/
+    int RVP9Initialize();
 };
 
 #endif // RVP900_H

@@ -177,7 +177,20 @@
 */
 #define PROC_N "PROC"
 #define PROC_FREFIX "00000007"
-#define PROC_L8BIT 0x26
+#define PROC_BS_OPCODE 0x06
+#define PROC_SYNCHRONOUS 0x20 //synchronous mode
+#define PROC_FREE_RUNNING 0x40 //free running mode
+#define PROC_KDP 0x80   //？？？
+#define PROC_UNFOLD_NONE 0x00   //none
+#define PROC_UNFOLD_2TO3 0x100  //双PRF为2：3
+#define PROC_UNFOLD_3TO4 0x200
+#define PROC_UNFOLD_4TO5 0x300
+#define PROC_ZDR 0x400  //zdr
+#define PROC_W 0x800  //W
+#define PROC_V 0x1000  //V
+#define PROC_T 0x2000  //T
+#define PROC_Z 0x4000  //Z
+#define PROC_ARC 0x8000  //ARC
 
 /*
 *GPARM command const,get processor parameters
@@ -192,15 +205,17 @@
 /*
  *定义距离库的个数 
  **/
-#define BINS_NUM 200;
+#define BINS_NUM 200
 /*
  *定义选择输出数据有几种 
  **/
-#define BINS_TYPE_NUM 4;
+#define BINS_TYPE_NUM 4
 /*输出数据头的长度*/
 #define BINS_HEADER_LEN 8
 /*定义数据的总长度*/
 #define BINS_LEN BINS_NUM*BINS_TYPE_NUM + BINS_HEADER_LEN
+
+//#define SYNCHRONOUS 1
 
 #endif // CONSTRVP900_H
 
