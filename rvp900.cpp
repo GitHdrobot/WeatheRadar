@@ -455,7 +455,7 @@ int RVP900::comboCmdMsg(char *cmd,char *data,int length){//构造发送的指令
     return RVP_NO_ERR;
 }
 int RVP900::RVP9Initialize(){
-    if(MODE){}
+    if(MODE1_PIC){}
     dispDev.dispAreaWidth ;
     dispDev.dispAreaHeight ;
 
