@@ -5,6 +5,8 @@ RVP900 rvp9;//rvp9控制对象
 
 DispDevice dispDev;//存放显示设备信息
 
+int dispMode;
+
 unsigned char paintBuff[1024];//绘图数据缓冲区
 
 unsigned char outbuff[1024*16];//读取数据缓冲区
@@ -17,6 +19,12 @@ unsigned char binsVBuff[1024];//V bins buff
 
 unsigned char binsTBuff[1024];//dBT bins buff
 
+//暂不需要这些数据
+/*
+unsigned char binsZDRBuff[1024];//ZDR bins buff
+unsigned char binsKDPBuff[1024];//KDP bins buff
+unsigned char binsKDPBuff[1024*6];//ARC bins buff
+*/
 unsigned char binsTAGBuff[8];//TAG buff
 
 /*

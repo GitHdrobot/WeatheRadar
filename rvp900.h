@@ -13,7 +13,10 @@
 #include "constRVP900.h"
 #include "dispdevice.h"
 
+#include "constcode.h"
+
 extern DispDevice dispDev;
+extern int dispMode;
 
 class RVP900
 {
@@ -23,23 +26,35 @@ public :
     //距离库个数 与距离掩码设置位个数相同
     int binsNum;
     //采集数据种类 dBz,dBt,dBw,v，默认为ALL
-    bool dataZDR_BIT,dataZ_BIT,dataT_BIT,dataV_BIT,dataW_BIT,dataALL,dataARC_BIT;
+    bool dataZDR_BIT,dataZ_BIT,dataT_BIT,dataV_BIT,dataW_BIT,dataALL,dataARC_BIT,dataKDP_BIT;
+    int dataTypeNums;
     //采集的数据是否包含 头部TAG，默认为true
-    bool dataHeader;
+    bool noHeader;
+    //采集数据的头信息
+    bool hdrTag_BIT,hdrPRT_BIT,hdrPul_BIT,hdrTim_BIT,hdrGpm_BIT,
+    hdrFlg_BIT,hdrUTC_BIT,hdrMMT_BIT,hdrSYT_BIT,hdrPBN_BIT,hdrTID_BIT;
+    //数据头的长度 以字节计
+    int hdrBytesNum,dataBytesNum ;
     //距离量程 distance range,目前仅设置六个距离范围
-    enum enum_disRange {RANGE_FIRST,RANGE_SECOND,RANGE_THIRD,RANGE_FOURTH,RANGE_FIFTH,RANGE_SIXTH} disRange;
+    enum enum_disRange
+    {RANGE_FIRST=10,RANGE_SECOND=20,RANGE_THIRD=30,
+        RANGE_FOURTH=50,RANGE_FIFTH=150,RANGE_SIXTH=300} disRange;
     //脉冲重复频率
-    enum enum_PRF {PRF_FIRST,PRF_SECOND,PRF_THIRD,PRF_FOURTH,PRF_FIFTH,PRF_SIXTH} PRF;
+    enum enum_PRF
+    {PRF_FIRST=300,PRF_SECOND=500,PRF_THIRD=1000,
+        PRF_FOURTH=2000,PRF_FIFTH=3000,PRF_SIXTH=4000,PRF_SIXTH=5000} PRF;
+
     /*数据采集方式 collect mode,有三种Synchronous，
     *free running，time series，默认是time series
     */
     enum enum_colMode {SYNCHRONOUS,FREE_RUNNING,TIME_SERIES} colMode;
-    //脉冲宽度
+    //脉冲宽度 1us,5us,10us,20us,默认1us
     int pulseWidth;
     //双PRF，脉冲重复比,此处不是真实比率
     enum enum_PRF_Ratio{PRF_NONE,PRF_2TO3,PRF_3TO4,PRF_4TO5} PRF_Ratio;
     //多普勒滤波器 doppler filter
-    enum enum_dopFilter {DF_NONE,ONE,TWO,THREE,FOUTH,FIVE,SIX,SEVEN} dopFilter;
+    enum enum_dopFilter {DF_NONE,DF_ONE,DF_TWO,DF_THREE,DF_FOUTH,
+                         DF_FIVE,DF_SIX,DF_SEVEN} dopFilter;
     //处理模式 processing mode
     enum enum_proMode {PPP,FFT,RPP,DPRT_1,DPRT_2} proMode;
     //脉冲累积数 pulse accummunate
@@ -49,8 +64,12 @@ public :
     //R2使能 r2 enable
     bool RTwoEnable;
     //距离平均 distance averaging
-    int avgDistance;
+    unsigned char avgDistance;
+    //以下参数有待查阅
+    /*杂项控制 1、距离订正通断 2、r2使能 3、单库杂波消除 4、强度斑点消除 5、速度斑点消除 6、3x3平滑输出**/
 
+    //距离分辨率25-1000 米，默认125米，通过TTY设置
+    int resolution;
     /*socket to RVP9*/
 public:
     int  clientSocket;
@@ -61,6 +80,8 @@ public:
     char recvBuffer[1024*8];//接收数据buffer
     char dataOutBuff[1024*16];//接收数据buffer
     unsigned char low8Bits,high8Bits;//一个双字的低位字buffer，和高位字buffer
+
+    unsigned char inputNBuff;//指令输入参数缓冲区
 
     /*predefined parameter variable of command ，预定义的指令参数*/
 public:
@@ -115,6 +136,7 @@ public:
     */
     int setOperPRM();
     /*
+     *Configure Ray Header Words
     *The processed data that are output by the PROC command may contain
     optional header words that give additional information about each ray.
     This command configures the set of words that makeup each header. There
@@ -123,7 +145,7 @@ public:
     PROC命令处理后的输出数据可能包含可选的头字数据，这些头字可以提供关于每条射线额外的信息
     该命令配置字集，这些字集组成每个头。一共有32个不同的字、字组选择，由命令后面的位掩码表示
     */
-    int conFGHDR();
+    int CFGHDR();
     /*
     *This command informs the signal processor of the ranges at which data are
     *to be collected. An arbitrary set of range bins are selected via an 8192-bit
@@ -131,7 +153,7 @@ public:
     *该命令指示信号处理器在哪些位置收集数据。通过8192个掩码位来选择一个任意的距离库集合
     *距离库产生公式：RES*（N-1），N表示第N位，RES表示距离分辨率
     */
-    int loadRanMsk(char* buffer,int ranMark);
+    int loadRanMsk(int ranMark);
     /*
     *LFILT:Load Clutter Filter Flags
     *A special feature of the RVP9 processor is that any of the available clutter
@@ -204,6 +226,10 @@ public:
     int GPARM(char* inBuffer,char *outBuffer);
     /*RVP900初始化函数 对参数进行必要的初始化*/
     int RVP9Initialize();
+    /*返回数据头的长度*/
+    int getHeaderLength();
+    /*计算返回的数据长度*/
+    int getDataLength();
 };
 
 #endif // RVP900_H

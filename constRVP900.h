@@ -129,6 +129,20 @@
 */
 #define CFGHDR_N "CFGHDR"
 #define CFGHDR_PREFIX "00000011"
+
+#define CFGHDR_OPCODE 0x5f
+#define CFGHDR_TAG 0x01
+#define CFGHDR_PRT 0x02
+#define CFGHDR_PUL 0x04
+#define CFGHDR_TIM 0x08
+#define CFGHDR_GPM 0x10
+#define CFGHDR_FLG 0x20
+#define CFGHDR_UTC 0x40
+#define CFGHDR_MMT 0x80
+#define CFGHDR_SYT 0x100
+#define CFGHDR_PBN 0x200
+#define CFGHDR_TID 0x400
+
 /*
 * LRMSK command const, load range mask
 * 载入距离掩码，距离掩码的作用主要是更加灵活的设置收集数据的距离库
@@ -214,6 +228,10 @@
 #define BINS_HEADER_LEN 8
 /*定义数据的总长度*/
 #define BINS_LEN BINS_NUM*BINS_TYPE_NUM + BINS_HEADER_LEN
+
+
+#define BIT_CLEAR 0
+#define BYTE_CLEAR 0
 
 //#define SYNCHRONOUS 1
 

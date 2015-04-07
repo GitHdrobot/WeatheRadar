@@ -149,30 +149,70 @@ int RVP900::setOperPRM(){
 /*
 *CFGHDR 配置射线头字节
 */
-int RVP900::conFGHDR(){
+int RVP900::CFGHDR(){
     sendBuffer[0]=0;
+    low8Bits = 0x00;
+    high8Bits = 0x00;
     strcat(sendBuffer,CFGHDR_PREFIX);//OP_CFGHDR
     strcat(sendBuffer,COMMAND_WRITE);
     strcat(sendBuffer,COMMAND_SEP);
-    sendBuffer[13]=0x5f;
-    sendBuffer[14]=0x00;
-    sendBuffer[15]=0x01;
-    sendBuffer[16]=0x0;
-    sendBuffer[17]=0x0;
-    sendBuffer[18]=0x0;
+    low8Bits = CFGHDR_OPCODE;
+    sendBuffer[13]=low8Bits;
+    sendBuffer[14]=high8Bits;
+    if(hdrTag_BIT){
+        inputNBuff += CFGHDR_TAG;
+    }
+    if(hdrPRT_BIT){
+        inputNBuff += CFGHDR_PRT;
+    }
+    if(hdrPul_BIT){
+        inputNBuff += CFGHDR_PUL;
+    }
+    if(hdrTim_BIT){
+        inputNBuff += CFGHDR_TIM;
+    }
+    if(hdrGpm_BIT){
+        inputNBuff += CFGHDR_GPM;
+    }
+    if(hdrFlg_BIT){
+        inputNBuff += CFGHDR_FLG;
+    }
+    if(hdrUTC_BIT){
+        inputNBuff += CFGHDR_UTC;
+    }
+    sendBuffer[15]=inputNBuff;
+    inputNBuff = 0x00;
+    if(hdrMMT_BIT){
+        inputNBuff += CFGHDR_MMT;
+    }
+    if(hdrSYT_BIT){
+        inputNBuff += CFGHDR_SYT;
+    }
+    if(hdrPBN_BIT){
+        inputNBuff += CFGHDR_PBN;
+    }
+    if(hdrTID_BIT){
+        inputNBuff += CFGHDR_TID;
+    }
+    sendBuffer[16] = inputNBuff;
+    sendBuffer[17] = BYTE_CLEAR;
+    sendBuffer[18] = BYTE_CLEAR;
+
+    hdrBytesNum = getHeaderLength();
+
     if ((sendMsg(sendBuffer,19))!=0)
         return SOCKET_SEND_ERR;
     if (readSocketResp()!=0)
         return SOCKET_READ_ERR;
     return RVP_NO_ERR;
 }
-int RVP900::loadRanMsk(char* buffer,int ranMark){
+int RVP900::loadRanMsk(int ranMark){
     sendBuffer[0]=0;
     strcat (sendBuffer,LRMSK_PREFIX);//OP_LRMSK
     strcat (sendBuffer,COMMAND_WRITE);
     strcat (sendBuffer,COMMAND_SEP);
     sendBuffer[13]=LRMSK_OPCODE; //距离掩码指令操作码
-    sendBuffer[14]=buffer[1];    //距离平均
+    sendBuffer[14]= avgDistance;    //距离平均
     if ((sendMsg(sendBuffer,15))!=0)
         return SOCKET_SEND_ERR;
     if (readSocketResp()!=0)
@@ -275,7 +315,9 @@ int RVP900::PROC(char *outBuffer){
     }else if(colMode == TIME_SERIES){//该模式 未明确
         low8Bits += PROC_SYNCHRONOUS;
     }
-    //low8Bits += PROC_KDP; 默认不选择KDP
+    if(dataKDP_BIT){
+        low8Bits += PROC_KDP;//KDP第7位
+    }
     sendBuffer[13] = low8Bits;
 
     if(PRF_Ratio == PRF_NONE){//双PRF比率
@@ -316,13 +358,14 @@ int RVP900::PROC(char *outBuffer){
     }
 
     sendBuffer[14]=high8Bits;
+
     if ((sendMsg(sendBuffer,15))!=0)
         return SOCKET_SEND_ERR;
 
     if (readSocketResp()!=0)
         return SOCKET_READ_ERR;
 
-    if (comboCmdMsg("READ","808",10)!= RVP_NO_ERR)//Read Proc data
+    if (comboCmdMsg(COMMAND_READ,dataBytesNum,10)!= RVP_NO_ERR)//Read Proc data
         return SOCKET_SEND_ERR;
 
     char sSize[10];
@@ -344,11 +387,11 @@ int RVP900::PROC(char *outBuffer){
         iRecvSize = recv (clientSocket,recvBuffer+iRecvSize,lenn,0);
         if (iRecvSize!=lenn)
             return iRecvSize;
-        memcpy(outBuffer,recvBuffer+4,808);
+        memcpy(outBuffer,recvBuffer+4,dataBytesNum);
         return lenn;
     }
     else
-        memcpy(outBuffer,recvBuffer+4,808);
+        memcpy(outBuffer,recvBuffer+4,dataBytesNum);
     return RVP_NO_ERR;
 }
 
@@ -363,7 +406,7 @@ int RVP900::GPARM(char* inBuffer,char *outBuffer){
         return SOCKET_SEND_ERR;
     if (readSocketResp()!=0)
         return SOCKET_READ_ERR;
-    if (assembleCmdMsg(10,"READ|","128|")==-1)//Read PARAM
+    if (int s = comboCmdMsg("READ","128",10)==-1)//Read PARAM
         return SOCKET_SEND_ERR;
     if (readSocketResp()!=0)
         return SOCKET_READ_ERR;
@@ -402,7 +445,7 @@ int RVP900::connectRVP(){//连接到RVP900
     if (readSocketResp()!=0)
         return SOCKET_READ_ERR;
 
-    if (assembleCmdMsg(56,"INFO|","ByteOrder=LittleEndian,WillCompress=0,Version=8.04")==-1)
+    if (int s= comboCmdMsg("INFO","ByteOrder=LittleEndian,WillCompress=0,Version=8.04",56)==-1)
         return SOCKET_SEND_ERR;
     if (readSocketResp()!=0)
         return SOCKET_READ_ERR;
@@ -455,9 +498,107 @@ int RVP900::comboCmdMsg(char *cmd,char *data,int length){//构造发送的指令
     return RVP_NO_ERR;
 }
 int RVP900::RVP9Initialize(){
-    if(MODE1_PIC){}
-    dispDev.dispAreaWidth ;
-    dispDev.dispAreaHeight ;
+    if(dispDev.dispAreaWidth > dispDev.dispAreaHeight){
+        dispDev.radius = dispDev.dispAreaHeight;
+    }else{
+        dispDev.radius = dispDev.dispAreaWidth;
+    }
+    if(dispMode == MODE_1PIC){
+
+    }else if(dispMode == MODE_2PIC){
+        dispDev.radius /= 2;
+    }else if(dispMode == MODE_4PIC){
+        dispDev.radius /= 2;
+    }
+    //使用扇形半径的像素点个数定义距离库的个数
+    //距离库个数 与距离掩码设置位个数相同
+    binsNum = dispDev.radius;
+    //采集数据种类 dBz,dBt,dBw,v，默认为Z、T、V、W
+    dataZDR_BIT = false;
+    dataZ_BIT = true;
+    dataT_BIT = true;
+    dataV_BIT = true;
+    dataW_BIT = true;
+    dataALL = false;
+    dataARC_BIT = false;
+    dataKDP_BIT = false;
+    dataTypeNums = 4;
+    //采集的数据是否包含 头部TAG，默认为true
+    dataHeader = true;
+    //距离量程 distance range,目前仅设置六个距离范围
+    disRange = RANGE_FIRST;
+    //脉冲重复频率
+    PRF = PRF_FIRST;
+    /*数据采集方式 collect mode,有三种Synchronous，
+    *free running，time series，默认是time series
+    */
+    colMode = SYNCHRONOUS;
+    //脉冲宽度
+    pulseWidth = 1;
+    //双PRF，脉冲重复比,此处不是真实比率
+    PRF_Ratio = PRF_NONE;
+    //多普勒滤波器 doppler filter
+    dopFilter = DF_NONE;
+    //处理模式 processing mode
+    proMode = PPP;
+    //脉冲累积数 pulse accummunate
+    //enum enum_pulAccumulate {};
+    //Threshold of LOG、SIG、CCOR、SQI,门限值
+    LOG_Threshold=0.0,SIG_Threshold=0.0,CCOR_Threshold=0.0,SQI_Threshold=0.0;
+    //R2使能 r2 enable
+    RTwoEnable = false;
+    //距离平均 distance averaging
+    avgDistance = 0x0;
 
     return 0;
+}
+/*返回数据的头的长度**/
+int RVP900::getHeaderLength(){
+    int len = 0;
+    if(noHeader){
+        return 0;
+    }
+    if(hdrTag_BIT){//tag 头占4个字 八个字节
+        len += 4*2;
+    }
+    if(hdrPRT_BIT){//0xFFFF
+        len += 2*2;
+    }
+    if(hdrPul_BIT){
+        inputNBuff += 1*2;
+    }
+    if(hdrTim_BIT){
+        inputNBuff += 1*2;
+    }
+    if(hdrGpm_BIT){
+        inputNBuff += 64*2;
+    }
+    if(hdrFlg_BIT){
+        inputNBuff += 1*2;
+    }
+    if(hdrUTC_BIT){
+        inputNBuff += 3*2;
+    }
+    sendBuffer[15]=inputNBuff;
+    inputNBuff = 0x00;
+    if(hdrMMT_BIT){
+        inputNBuff += 1*2;
+    }
+    if(hdrSYT_BIT){
+        inputNBuff += 2*2;
+    }
+    if(hdrPBN_BIT){
+        inputNBuff += 1*2;
+    }
+    if(hdrTID_BIT){
+        inputNBuff += 14*2;
+    }
+    /*
+    if(PedINU){
+        inputNBuff += 14*2;
+    }*/
+    return hdrBytesNum = len;
+}
+int RVP900::getDataLength(){
+    return dataBytesNum = hdrBytesNum + binsNum * dataTypeNums ;
 }

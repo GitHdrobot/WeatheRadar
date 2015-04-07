@@ -14,6 +14,9 @@ public:
     int dispAreaWidth;//显示区域宽度
     int dispAreaHeight;//显示区域高度
 
+    /*显示的扇形半径**/
+    int radius;
+
     int getResWidth();
     int getResHeight();
     int setResWidth(int width);

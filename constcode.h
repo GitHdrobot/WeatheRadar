@@ -29,9 +29,9 @@
 #define MODE3_1_V 8
 #define MODE3_1_W 9
 
-#define MODE1_PIC 1   //一图
-#define MODE1_PIC 2   //两图
-#define MODE1_PIC 4   //四图
+#define MODE_1PIC 1   //一图
+#define MODE_2PIC 2   //两图
+#define MODE_4PIC 4   //四图
 
 
 #define ROTATE_ANGLE 30   // 旋转角度
