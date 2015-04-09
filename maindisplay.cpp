@@ -3,7 +3,7 @@
 
 MainDisplay::MainDisplay(QWidget *parent) : QWidget(parent)
 {
-
+    colorNums = 32;
     colorPalFactory();
     //    FILE *fp;
     //    if((fp=fopen("Palette.dat","rb")))
@@ -68,7 +68,7 @@ void MainDisplay::paintShadeGuide() {
     painter.save();
     paintDBZPal();
     //paintDBTPal();
-   // paintWPal();
+    // paintWPal();
     //paintVPal();
     painter.restore();
 }
@@ -125,27 +125,35 @@ void  MainDisplay::paintVPal(){
 }
 
 void MainDisplay::colorPalFactory(){
-    //r1,r2,r1g1,r2g2,g1,g2,g1b1,g2b2,b1,b2,r1b1,r2b2
-    for(int i=0;i<21;i++){//r1
-        PalColorMat[i][0] = 128 + i;
+    unsigned char space = 256 / colorNums;
+    int cursor = 0;
+    //R  0 - colorNums
+    for(int i=0;i<colorNums;i++){
+        PalColorMat[i][0] = i * space;
         PalColorMat[i][1] = 0;
         PalColorMat[i][2] = 0;
     }
-    for(int i=0;i<21;i++){//r2
-        PalColorMat[21 + i][0] = 235 + i;
-        PalColorMat[21 + i][1] = 0;
-        PalColorMat[21 + i][2] = 0;
+    //cursor = colorNums;
+    //G  colorNums - 2 * colorNums
+    for(int i=0;i<colorNums;i++){
+        PalColorMat[colorNums + i][0] = 0;
+        PalColorMat[colorNums + i][1] = space * i;
+        PalColorMat[colorNums + i][2] = 0;
     }
-    for(int i=0;i<21;i++){//r1g1
-        PalColorMat[21*2+i][0] = 128 + i;
-        PalColorMat[21*2+i][1] = 128 + i;
-        PalColorMat[21*2+i][2] = 0;
+    //cursor = 2 * colorNums;
+    //B  2*colorNums - 3*colorNums
+    for(int i=0;i<colorNums;i++){
+        PalColorMat[colorNums*2+i][0] = 0;
+        PalColorMat[colorNums*2+i][1] = 0;
+        PalColorMat[colorNums*2+i][2] = space * i;
     }
-
-    for(int i=0;i<21;i++){//r2g2
-        PalColorMat[21*3+i][0] = 235 + i;
-        PalColorMat[21*3+i][1] = 235 + i;
-        PalColorMat[21*3+i][2] = 0;
+    //cursor = 3 * colorNums;
+    //RG
+    for(int i=0,k=0;i<colorNums * colorNums;i++,k++){
+         for(int j=0;j<colorNums;j++){
+             PalColorMat[colorNums*3+ i*colorNums + j][0] = PalColorMat[k][0];
+             PalColorMat[colorNums*3+ i][1] = PalColorMat[colorNums + j][1];
+         }
     }
 
     for(int i=0;i<21;i++){//g1

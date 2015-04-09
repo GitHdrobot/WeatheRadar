@@ -206,13 +206,18 @@ int RVP900::CFGHDR(){
         return SOCKET_READ_ERR;
     return RVP_NO_ERR;
 }
+//load range mask
 int RVP900::loadRanMsk(int ranMark){
     sendBuffer[0]=0;
+    //距离掩码设置的掩码位个数
+    int markNums = (ranMark % resolution)?0:(ranMark / resolution + 1);
     strcat (sendBuffer,LRMSK_PREFIX);//OP_LRMSK
     strcat (sendBuffer,COMMAND_WRITE);
     strcat (sendBuffer,COMMAND_SEP);
     sendBuffer[13]=LRMSK_OPCODE; //距离掩码指令操作码
     sendBuffer[14]= avgDistance;    //距离平均
+    binsNum = markNums / (avgDistance+1);
+    /*要先发一次？？？**/
     if ((sendMsg(sendBuffer,15))!=0)
         return SOCKET_SEND_ERR;
     if (readSocketResp()!=0)
@@ -222,12 +227,12 @@ int RVP900::loadRanMsk(int ranMark){
     strcat (sendBuffer,LRMSK_IN_PREFIX);//距离掩码输入参数
     strcat (sendBuffer,COMMAND_WRITE);//写入指令
     strcat (sendBuffer,COMMAND_SEP);//指令参数分隔符
-    for (int i=0;i<ranMark;i++)   //设置对应的距离掩码位
+    for (int i=0;i<markNums;i++)   //设置对应的距离掩码位
     {
-        sendBuffer[13+i*2+0]=0xff;
-        sendBuffer[13+i*2+1]=0xff;
+        sendBuffer[13+i]=0xff;
+        //sendBuffer[13+i*2+1]=0xff;
     }
-    for (int i=ranMark;i<512;i++)
+    for (int i=markNums;i<512;i++)
     {
         sendBuffer[13+i*2+0]=0;
         sendBuffer[13+i*2+1]=0;
@@ -510,9 +515,6 @@ int RVP900::RVP9Initialize(){
     }else if(dispMode == MODE_4PIC){
         dispDev.radius /= 2;
     }
-    //使用扇形半径的像素点个数定义距离库的个数
-    //距离库个数 与距离掩码设置位个数相同
-    binsNum = dispDev.radius;
     //采集数据种类 dBz,dBt,dBw,v，默认为Z、T、V、W
     dataZDR_BIT = false;
     dataZ_BIT = true;
@@ -549,7 +551,8 @@ int RVP900::RVP9Initialize(){
     RTwoEnable = false;
     //距离平均 distance averaging
     avgDistance = 0x0;
-
+    //距离分辨率 125m
+    resolution = 125;
     return 0;
 }
 /*返回数据的头的长度**/
