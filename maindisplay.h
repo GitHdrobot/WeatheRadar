@@ -34,8 +34,8 @@ public:
     void paintDBTPal();
     void paintDBZPal();
     void paintPie(int drawMode);
-    /*颜色库构造 R、G、B，RG、RB、GB，Y = 3*(x^2 + x),x = 32,Y = 3*k+96
-    *RGB的变化范围为0-255，共256个颜色，取32个颜色，隔8取1
+    /*颜色库构造 R、G、B，RG、RB、GB，Y = 3*(x^3 + x),x = 16,Y = 4*k+96
+    *RGB的变化范围为0-255，共256个颜色，取16个颜色，隔16取1
     */
     unsigned char colorNums;
     void colorPalFactory();
