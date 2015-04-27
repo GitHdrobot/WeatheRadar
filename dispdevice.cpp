@@ -35,6 +35,12 @@ int DispDevice::getDispAreaWidth(){
 int DispDevice::getDispAreaHeight(){
     return dispAreaHeight;
 }
+int DispDevice::setDispAreaWidth(){
+    this.dispAreaWidth = widthRatio * resWidth;
+}
+int DispDevice::setDispAreaHeight(){
+    this.dispAreaWidth = hightRatio * resHeight;
+}
 int DispDevice::setDispAreaWidth(int width){
     this.dispAreaWidth = width;
 }

@@ -5,7 +5,6 @@
 #ifndef CONSTCODE_H
 #define CONSTCODE_H
 
-#define PI 3.1415926
 
 #define MODE1_ARC_X 100.0
 #define MODE1_ARC_Y 100.0
@@ -65,14 +64,20 @@
 #define W_PAL_W 50
 #define W_PAL_H 20
 
-#define SHADE_GUADE_NUM 15 //调色板个数
+
+
+
+
 
 #define PAL_COLOR_NUM 256 //256种颜色
-#define BASE_COLOR_NUM 3    //基本原色个数
+
 
 #define CONFIG_WIDTH 365  //右侧设置面板占据的宽度
 #define TOP_BOTTOM_HEIGHT 7 //上下占据的高度
 
 
+#define PI 3.1415926
+#define BASE_COLOR_NUM 3    //基本原色个数
+#define SHADE_GUADE_NUM 15 //调色板个数
 
 #endif // CONSTCODE_H

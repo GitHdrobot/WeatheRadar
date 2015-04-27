@@ -3,15 +3,22 @@
 
 MainDisplay::MainDisplay(QWidget *parent) : QWidget(parent)
 {
+    isPalExist = false;
     colorNums = 16;
     colorPalFactory();
-    //    FILE *fp;
-    //    if((fp=fopen("Palette.dat","rb")))
-    //    {
-    //        printf("打开调色板成功\n");
-    //        fread(PalColorMat,1,768,fp);
-    //        fclose(fp);
-    //    }
+    /*读取配置文件 文件打开成功 **/
+    FILE *fp;
+    if((fp=fopen("Palette.dat","rb")))
+    {
+        //printf("打开调色板成功\n");
+        fread(PalColorMat,1,colorNums*colorNums*colorNums+BASE_COLOR_NUM*colorNums,fp);
+        fclose(fp);
+        isPalExist = true;
+    }
+    if(!isPalExist){
+        colorPalFactory();
+        fwrite(PalColorMat,1,colorNums*colorNums*colorNums+BASE_COLOR_NUM*colorNums,fp);
+    }
 }
 
 MainDisplay::~MainDisplay()
@@ -75,9 +82,10 @@ void MainDisplay::paintShadeGuide() {
 
 void  MainDisplay::paintDBZPal(){
     QPen  pen;
+    int palSpace = colorNums * colorNums * colorNums /15;
     for(int i=1;i<=15;i++)
     {
-        int c =i*17;
+        int c =palSpace * i;
         pen.setColor(QColor(255,255,255));
         QBrush brush(QColor(PalColorMat[c][0],PalColorMat[c][1],PalColorMat[c][2]));
         painter.setPen(pen);

@@ -39,6 +39,7 @@ public:
     */
     unsigned char colorNums;
     void colorPalFactory();
+    bool isPalExist;
 
     QPainter painter;
     void paintEvent(QPaintEvent *);
