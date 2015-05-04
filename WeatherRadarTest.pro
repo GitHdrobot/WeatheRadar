@@ -20,8 +20,8 @@ SOURCES += main.cpp\
     rvp900.cpp \
     fetchdatathread.cpp \
     dispdevice.cpp \
-    rectpal.cpp \
-    sector.cpp
+    sector.cpp \
+    calibration.cpp
 
 HEADERS  += mainwindow.h \
     dialogsetting.h \
@@ -32,8 +32,8 @@ HEADERS  += mainwindow.h \
     rvp900.h \
     fetchdatathread.h \
     dispdevice.h \
-    rectpal.h \
-    sector.h
+    sector.h \
+    calibration.h
 
 FORMS    += mainwindow.ui \
     dialogsetting.ui \
