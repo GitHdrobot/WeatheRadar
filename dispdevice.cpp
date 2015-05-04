@@ -10,46 +10,38 @@ DispDevice::~DispDevice()
 
 }
 
-int DispDevice::getResWidth(){
-    return resWidth;
-}
-int DispDevice::getResHeight(){
-    return resHeight;
-}
-int DispDevice::setResWidth(int width){
-    this.resWidth = width;
+
+int DispDevice::getHeight() const {
+    return height;
 }
 
-int DispDevice::setResHeight(int height){
-    this.resHeight = height;
+void DispDevice::setHeight(int height) {
+    this->height = height;
 }
 
-int DispDevice::setResWidthHeight(int width,int height){
-    this.resHeight = height;
-    this.resWidth = width;
+int DispDevice::getHeightPad() const {
+    return heightPad;
 }
 
-int DispDevice::getDispAreaWidth(){
-    return dispAreaWidth;
-}
-int DispDevice::getDispAreaHeight(){
-    return dispAreaHeight;
-}
-int DispDevice::setDispAreaWidth(){
-    this.dispAreaWidth = widthRatio * resWidth;
-}
-int DispDevice::setDispAreaHeight(){
-    this.dispAreaWidth = hightRatio * resHeight;
-}
-int DispDevice::setDispAreaWidth(int width){
-    this.dispAreaWidth = width;
+void DispDevice::setHeightPad(int heightPad) {
+    this->heightPad = heightPad;
 }
 
-int DispDevice::setDispAreaHeight(int height){
-    this.dispAreaHeight = height;
+int DispDevice:: getWidth() const {
+    return width;
 }
 
-int DispDevice::setDispAreaWidthHeight(int width,int height){
-    this.dispAreaHeight = height;
-    this.dispAreaWidth = width;
+void DispDevice::setWidth(int width) {
+    this->width = width;
 }
+
+int DispDevice::getWidthPad() const {
+    return widthPad;
+}
+
+void DispDevice::setWidthPad(int widthPad) {
+    this->widthPad = widthPad;
+}
+
+
+

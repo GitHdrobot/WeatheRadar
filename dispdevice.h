@@ -7,35 +7,24 @@ public:
     DispDevice();
     ~DispDevice();
 public:
-    int resWidth;//显示设备宽度
-    int resHeight;//显示设备高度
+    //设备的宽度、高度
+    int width,height;
+    //宽高度填充，有效高度，即设备的分辨率减去填充的 为实际可见的
+    int widthPad,heightPad;
+    int getHeight() const ;
 
-    /*高度约耗7pixel，宽度约365pixel**/
-    int dispAreaWidth;//显示区域宽度
-    int dispAreaHeight;//显示区域高度
+    void setHeight(int height) ;
 
-    /*显示的扇形半径**/
-    int radius;
+    int getHeightPad() const ;
 
-    /*显示区域相对于设备宽度的比率 即：dispAreaWidth = resWidth * widthRatio*/
-    int widthRatio;
-    /*显示区域相对于设备高度的比率 dispAreaHeight = resHeight * widthRatio*/
-    int hightRatio;
+    void setHeightPad(int heightPad);
 
-    int getResWidth();
-    int getResHeight();
-    int setResWidth(int width);
-    int setResHeight(int height);
-    int setResWidthHeight(int width,int height);
+    int getWidth() const ;
 
-    int getDispAreaWidth();
-    int setDispAreaWidth();
-    int getDispAreaHeight();
-    int setDispAreaHeight();
+    void setWidth(int width);
 
-    int setDispAreaHeight(int height);
-    int setDispAreaWidth(int width);
-    int setDispAreaWidthHeight(int width,int height);
+    int getWidthPad() const ;
+    void setWidthPad(int widthPad);
 };
 
 #endif // DISPDEVICE_H

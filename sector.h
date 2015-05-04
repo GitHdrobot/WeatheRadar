@@ -1,6 +1,7 @@
 #ifndef SECTOR_H
 #define SECTOR_H
 
+#include <qobject.h>
 
 class Sector
 {
@@ -9,91 +10,91 @@ public:
     ~Sector();
 public:
     int xloc,yloc;//X，Y坐标
-    int widthi,heighti;//宽、高
-    int startAnglei,endAnglei;//起始角度
-    int arcCalNumi,arcCalWidthi;//圆弧上刻度的个数,刻度线的宽度
-    int radCalNumi,radCalWidthi;//半径上刻度的个数,刻度线的宽度
+    int width,height;//宽、高
+    int startAngle,endAngle;//起始角度
+
+    int arcCalNum,arcCalWidth;//圆弧上刻度的个数,刻度线的宽度
+    int radCalNum,radCalWidth;//半径上刻度的个数,刻度线的宽度
     //value
     //圆弧刻度上标定的起始刻度的值、每个刻度代表的值,每隔几个刻度标定一次值
-    int arcStaVali,arcValPerScalei,arcSpaceScalei;
+    int arcStartVal,arcValPerScale,arcSpaceScale;
     //圆弧刻度上标定的起始刻度的值、每个刻度代表的值,每隔几个刻度标定一次值
-    int radStaVali,radValPerScalei,radSpaceScalei;
-
+    int radStartVal,radValPerScale,radSpaceScale;
+    //扇形边框颜色
+    int rgb_Red,rgb_Blue,rgb_Green;
 
 public :
-    setXloc(int x);
 
-    setYloc(int y);
+    int getArcCalNum() const ;
 
+    void setArcCalNum(int arcCalNum) ;
 
-    setWidthi(int w);
+    int getArcCalWidth() const ;
 
-    setHeighti(int h);
+    void setArcCalWidth(int arcCalWidth) ;
 
-    setStartAnglei(int sa);
+    int getArcSpaceScale() const ;
 
-    setEndAnglei(int ea);
+    void setArcSpaceScale(int arcSpaceScale) ;
 
-    setArcCalNumi(int n);
+    int getArcStartVal() const ;
 
-    setArcCalWidthi(int w);
+    void setArcStartVal(int arcStartVal) ;
 
-    setRadCalNumi(int n);
+    int getArcValPerScale() const ;
 
-    setRadCalWidthi(int w);
+    void setArcValPerScale(int arcValPerScale) ;
 
+    int getEndAngle() const ;
 
-    setArcStaVali(int s);
+    void setEndAngle(int endAngle) ;
+    int getHeight() const ;
+    void setHeight(int height) ;
 
-    setArcValPerScalei(int p);
+    int getRadCalNum() const ;
 
-    setArcSpaceScalei(int scales);
+    void setRadCalNum(int radCalNum) ;
 
+    int getRadCalWidth() const ;
 
-    setRadStaVali(int s);
+    void setRadCalWidth(int radCalWidth) ;
 
-    setRadValPerScalei(int p);
+    int getRadSpaceScale() const ;
 
-    setRadSpaceScalei(int scales);
+    void setRadSpaceScale(int radSpaceScale) ;
 
+    int getRadStartVal() const ;
 
-    getXloc( );
+    void setRadStartVal(int radStartVal) ;
 
-    getYloc( );
+    int getRadValPerScale() const ;
 
+    void setRadValPerScale(int radValPerScale) ;
 
-    getWidthi( );
+    int getRgbBlue() const ;
 
-    getHeighti( );
+    void setRgbBlue(int rgbBlue) ;
+    int getRgbGreen() const ;
+    void setRgbGreen(int rgbGreen);
 
-    getStartAnglei( );
+    int getRgbRed() const;
 
-    getEndAnglei( );
+    void setRgbRed(int rgbRed);
 
-    getArcCalNumi( );
+    int getStartAngle() const ;
 
-    getArcCalWidthi( );
+    void setStartAngle(int startAngle) ;
 
-    getRadCalNumi( );
+    int getWidth() const ;
 
-    getRadCalWidthi( );
+    void setWidth(int width) ;
 
+    int getXloc() ;
 
-    getArcStaVali();
+    void setXloc(int xloc) ;
 
-    getArcValPerScalei();
-
-    getArcSpaceScalei();
-
-
-    getRadStaVali();
-
-    getRadValPerScalei();
-
-    getRadSpaceScalei();
-
-
-
+    int getYloc() const ;
+    void setYloc(int yloc);
 };
 
 

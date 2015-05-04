@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     fetchdatathread.cpp \
     dispdevice.cpp \
     sector.cpp \
-    calibration.cpp
+    calibration.cpp \
+    palette.cpp
 
 HEADERS  += mainwindow.h \
     dialogsetting.h \
@@ -33,7 +34,8 @@ HEADERS  += mainwindow.h \
     fetchdatathread.h \
     dispdevice.h \
     sector.h \
-    calibration.h
+    calibration.h \
+    palette.h
 
 FORMS    += mainwindow.ui \
     dialogsetting.ui \

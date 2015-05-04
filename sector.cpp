@@ -1,133 +1,162 @@
 #include "sector.h"
 
-Sector::Sector()
-{
+Sector::Sector() {
+    // TODO Auto-generated constructor stub
 
 }
 
-Sector::~Sector()
-{
-
+Sector::~Sector() {
+    // TODO Auto-generated destructor stub
 }
 
-Sector::setXloc(int x){
-
-    xloc =x;
+int Sector::getArcCalNum() const {
+    return arcCalNum;
 }
 
-Sector::setYloc(int y){
-    yloc = y;
+void Sector::setArcCalNum(int arcCalNum) {
+    this->arcCalNum = arcCalNum;
 }
 
-
-Sector::setWidthi(int w){
-    widthi = w;
+int Sector::getArcCalWidth() const {
+    return arcCalWidth;
 }
 
-Sector::setHeighti(int h){
-    heighti = h;
+void Sector::setArcCalWidth(int arcCalWidth) {
+    this->arcCalWidth = arcCalWidth;
 }
 
-Sector::setStartAnglei(int sa){
-    startAnglei = sa;
+int Sector::getArcSpaceScale() const {
+    return arcSpaceScale;
 }
 
-Sector::setEndAnglei(int ea){
-    endAnglei = ea;
+void Sector::setArcSpaceScale(int arcSpaceScale) {
+    this->arcSpaceScale = arcSpaceScale;
 }
 
-Sector::setArcCalNumi(int n){
-    arcCalNumi = n;
+int Sector::getArcStartVal() const {
+    return arcStartVal;
 }
 
-Sector::setArcCalWidthi(int w){
-    radCalWidthi = w;
+void Sector::setArcStartVal(int arcStartVal) {
+    this->arcStartVal = arcStartVal;
 }
 
-Sector::setRadCalNumi(int n){
-    radCalNumi = n;
+int Sector::getArcValPerScale() const {
+    return arcValPerScale;
 }
 
-Sector::setRadCalWidthi(int w){
-    radCalWidthi = w;
+void Sector::setArcValPerScale(int arcValPerScale) {
+    this->arcValPerScale = arcValPerScale;
 }
 
-
-Sector::setArcStaVali(int s){
-    arcStaVali = s;
+int Sector::getEndAngle() const {
+    return endAngle;
 }
 
-Sector::setArcValPerScalei(int p){
-    arcValPerScalei = p;
+void Sector::setEndAngle(int endAngle) {
+    this->endAngle = endAngle;
 }
 
-Sector::setArcSpaceScalei(int scales){
-    arcSpaceScalei = scales;
+int Sector::getHeight() const {
+    return height;
 }
 
-
-Sector::setRadStaVali(int s){
-    radStaVali = s;
+void Sector::setHeight(int height) {
+    this->height = height;
 }
 
-Sector::setRadValPerScalei(int p){
-    radValPerScalei = p;
+int Sector::getRadCalNum() const {
+    return radCalNum;
 }
 
-Sector::setRadSpaceScalei(int scales){
-    radSpaceScalei = scales;
+void Sector::setRadCalNum(int radCalNum) {
+    this->radCalNum = radCalNum;
 }
 
+int Sector::getRadCalWidth() const {
+    return radCalWidth;
+}
 
-Sector::getXloc( ){
+void Sector::setRadCalWidth(int radCalWidth) {
+    this->radCalWidth = radCalWidth;
+}
+
+int Sector::getRadSpaceScale() const {
+    return radSpaceScale;
+}
+
+void Sector::setRadSpaceScale(int radSpaceScale) {
+    this->radSpaceScale = radSpaceScale;
+}
+
+int Sector::getRadStartVal() const {
+    return radStartVal;
+}
+
+void Sector::setRadStartVal(int radStartVal) {
+    this->radStartVal = radStartVal;
+}
+
+int Sector::getRadValPerScale() const {
+    return radValPerScale;
+}
+
+void Sector::setRadValPerScale(int radValPerScale) {
+    this->radValPerScale = radValPerScale;
+}
+
+int Sector::getRgbBlue() const {
+    return rgb_Blue;
+}
+
+void Sector::setRgbBlue(int rgbBlue) {
+    rgb_Blue = rgbBlue;
+}
+
+int Sector::getRgbGreen() const {
+    return rgb_Green;
+}
+
+void Sector::setRgbGreen(int rgbGreen) {
+    rgb_Green = rgbGreen;
+}
+
+int Sector::getRgbRed() const {
+    return rgb_Red;
+}
+
+void Sector::setRgbRed(int rgbRed) {
+    rgb_Red = rgbRed;
+}
+
+int Sector::getStartAngle() const {
+    return startAngle;
+}
+
+void Sector::setStartAngle(int startAngle) {
+    this->startAngle = startAngle;
+}
+
+int Sector::getWidth() const {
+    return width;
+}
+
+void Sector::setWidth(int width) {
+    this->width = width;
+}
+
+int Sector::getXloc() const {
     return xloc;
 }
 
-Sector::getYloc( ){
+void Sector::setXloc(int xloc) {
+    this->xloc = xloc;
+}
+
+int Sector::getYloc() const {
     return yloc;
 }
 
-
-Sector::getWidthi( ){
-    return widthi;
-}
-
-Sector::getHeighti( ){return heighti;}
-
-Sector::getStartAnglei( ){return startAnglei;}
-
-Sector::getEndAnglei( ){return endAnglei;}
-
-Sector::getArcCalNumi( ){return arcCalNumi;}
-
-Sector::getRadCalWidthi( ){reutrn radCalWidthi;}
-
-Sector::getRadCalNumi( ){return radCalNumi;}
-
-Sector::getRadCalWidthi( ){return radCalWidthi;}
-
-
-Sector::getArcStaVali(){
-    return arcStaVali;
-}
-
-Sector::getArcValPerScalei(){
-    return arcValPerScalei;
-}
-
-Sector::getArcSpaceScalei(){
-    return arcSpaceScalei;
-}
-
-
-Sector::getRadStaVali(){
-    return radStaVali;
-}
-
-Sector::getRadValPerScalei(){
-    return radValPerScalei;
-}
-
-Sector::getRadSpaceScalei(){
-    return radSpaceScalei;
+void Sector::setYloc(int yloc) {
+    this->yloc = yloc;
 }
