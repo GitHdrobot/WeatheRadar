@@ -2,7 +2,7 @@
 #define PALETTE_H
 
 
-class palette
+class Palette
 {
 
 public:
@@ -20,8 +20,8 @@ public:
     char *comTxt;
 
 public:
-    palette();
-    ~palette();
+    Palette();
+    ~Palette();
 
 
     char* getComTxt() const ;

@@ -1,108 +1,108 @@
 #include "palette.h"
 
-palette::palette()
+Palette::Palette()
 {
 
 }
 
-palette::~palette()
+Palette::~Palette()
 {
 
 }
 
 
-char* palette::getComTxt() const {
+char* Palette::getComTxt() const {
     return comTxt;
 }
 
-void palette::setComTxt(char* comTxt) {
+void Palette::setComTxt(char* comTxt) {
     this->comTxt = comTxt;
 }
 
-int palette::getFillBlue() const {
+int Palette::getFillBlue() const {
     return fillBlue;
 }
 
-void palette::setFillBlue(int fillBlue) {
+void Palette::setFillBlue(int fillBlue) {
     this->fillBlue = fillBlue;
 }
 
-int palette::getFillGreen() const {
+int Palette::getFillGreen() const {
     return fillGreen;
 }
 
-void palette::setFillGreen(int fillGreen) {
+void Palette::setFillGreen(int fillGreen) {
     this->fillGreen = fillGreen;
 }
 
-int palette::getFillRed() const {
+int Palette::getFillRed() const {
     return fillRed;
 }
 
-void palette::setFillRed(int fillRed) {
+void Palette::setFillRed(int fillRed) {
     this->fillRed = fillRed;
 }
 
-int palette::getFrameWidth() const {
+int Palette::getFrameWidth() const {
     return frameWidth;
 }
 
-void palette::setFrameWidth(int frameWidth) {
+void Palette::setFrameWidth(int frameWidth) {
     this->frameWidth = frameWidth;
 }
 
-int palette::getHeight() const {
+int Palette::getHeight() const {
     return height;
 }
 
-void palette::setHeight(int height) {
+void Palette::setHeight(int height) {
     this->height = height;
 }
 
-int palette::getRgbBlue() const {
+int Palette::getRgbBlue() const {
     return rgb_Blue;
 }
 
-void palette::setRgbBlue(int rgbBlue) {
+void Palette::setRgbBlue(int rgbBlue) {
     rgb_Blue = rgbBlue;
 }
 
-int palette::getRgbGreen() const {
+int Palette::getRgbGreen() const {
     return rgb_Green;
 }
 
-void palette::setRgbGreen(int rgbGreen) {
+void Palette::setRgbGreen(int rgbGreen) {
     rgb_Green = rgbGreen;
 }
 
-int palette::getRgbRed() const {
+int Palette::getRgbRed() const {
     return rgb_Red;
 }
 
-void palette::setRgbRed(int rgbRed) {
+void Palette::setRgbRed(int rgbRed) {
     rgb_Red = rgbRed;
 }
 
-int palette::getWidth() const {
+int Palette::getWidth() const {
     return width;
 }
 
-void palette::setWidth(int width) {
+void Palette::setWidth(int width) {
     this->width = width;
 }
 
-int palette::getXloc() const {
+int Palette::getXloc() const {
     return xloc;
 }
 
-void palette::setXloc(int xloc) {
+void Palette::setXloc(int xloc) {
     this->xloc = xloc;
 }
 
-int palette::getYloc() const {
+int Palette::getYloc() const {
     return yloc;
 }
 
-void palette::setYloc(int yloc) {
+void Palette::setYloc(int yloc) {
     this->yloc = yloc;
 }

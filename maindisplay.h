@@ -10,6 +10,8 @@
 
 #include "constcode.h"
 
+#include "palette.h"
+
 /*调用RVP900中的成员函数*/
 #include "rvp900.h"
 
@@ -43,6 +45,9 @@ public:
 
     QPainter painter;
     void paintEvent(QPaintEvent *);
+
+    /*绘制调色板*/
+    int paintPal(Palette pal);
 
 };
 

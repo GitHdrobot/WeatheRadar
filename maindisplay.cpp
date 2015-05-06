@@ -167,3 +167,16 @@ void MainDisplay::colorPalFactory(){
     }
 
 }
+
+
+int MainDisplay::paintPal(Palette pal,QPainter painter){
+    painter.save();
+    QPen  pen;
+    pen.setColor(QColor(255,255,255));
+    QBrush brush(QColor(pal.rgb_Red,pal.rgb_Green,pal.rgb_Blue));
+    painter.setPen(pen);
+    painter.setBrush(brush);
+    painter.drawRect(pal.xloc,pal.yloc,pal.width,pal.height);
+    painter.restore();
+    return 1;
+}
