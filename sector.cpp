@@ -2,6 +2,39 @@
 
 Sector::Sector() {
     // TODO Auto-generated constructor stub
+    //X，Y坐标
+    xloc = 0;
+    yloc = 0;
+    //宽、高
+    width = 0;
+    height=0;
+    //起始角度、跨度
+    startAngle = 30;
+    endAngle = 150;
+    spanAngle = 120;
+    //圆弧上刻度线 旋转的刻度
+    rotateAngle = 1;
+    //刻度进制 即多少个小刻度组成一个大刻度
+    numSystem = 30;
+    //圆弧上刻度的个数,刻度线的宽度
+    arcCalNum = 120;
+    arcCalWidth = 5;
+    //半径上刻度的个数,刻度线的宽度
+    radCalNum = 3;
+    radCalWidth = 5;//直接绘制的圆弧 故此变量未使用
+    //value
+    //圆弧刻度上标定的起始刻度的值、每个刻度代表的值,每隔几个刻度标定一次值
+    arcStartVal = 0;
+    arcValPerScale = 1;
+    arcSpaceScale = 10;//暂未使用
+    //圆弧刻度上标定的起始刻度的值、每个刻度代表的值,每隔几个刻度标定一次值
+    radStartVal = 0;
+    radValPerScale = 1;
+    radSpaceScale = 10;//暂未使用
+    //扇形边框颜色
+    rgb_Red = 255;
+    rgb_Blue = 255;
+    rgb_Green = 255;
 
 }
 

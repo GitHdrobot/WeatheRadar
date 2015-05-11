@@ -23,75 +23,93 @@ MainDisplay::MainDisplay(QWidget *parent) : QWidget(parent)
 
 MainDisplay::~MainDisplay()
 {
-
+    delete pal;
 }
 
 void MainDisplay::paintEvent(QPaintEvent *){
     painter.begin(this);
     setAutoFillBackground(true);
     paintShadeGuide();
-    paintPie(MODE3_1_DBZ);
+    paintSector(sector,painter);
 }
 
 void MainDisplay::paintShadeGuide() {
-    painter.save();
-    paintDBZPal();
-    //paintDBTPal();
-    // paintWPal();
-    //paintVPal();
-    painter.restore();
+
+    paintDBZPal(pal,palLenth);
+
 }
 
-void  MainDisplay::paintDBZPal(){
-    QPen  pen;
+void  MainDisplay::paintDBZPal(Palette pal[],int palLenth){
+    //设置调色板填充颜色,位置
     int palSpace = colorNums * colorNums * colorNums /15;
-    for(int i=1;i<=15;i++)
+    for(int i=0;i<palLenth;i++)
     {
+        //颜色
         int c =palSpace * i;
-        pen.setColor(QColor(255,255,255));
-        QBrush brush(QColor(PalColorMat[c][0],PalColorMat[c][1],PalColorMat[c][2]));
-        painter.setPen(pen);
-        painter.setBrush(brush);
-        painter.drawRect(DBZ_PAL_X,DBZ_PAL_Y+i*DBZ_PAL_H,DBZ_PAL_W,DBZ_PAL_H);
+        pal[i].fillRed =PalColorMat[c][0];
+        pal[i].fillGreen = PalColorMat[c][1];
+        pal[i].fillBlue = PalColorMat[c][2] ;
+        //调色板位置
+        pal[i].xloc = 50;
+        pal[i].yloc = 50;
+        pal[i].yloc += i * pal[i].height;
+        paintPal(pal[i],painter);
     }
 
 }
-void MainDisplay::paintDBTPal(){
-    QPen  pen;
-    for(int i=1;i<=15;i++)
-    {
-        int c =i*17;
-        pen.setColor(QColor(255,255,255));
-        QBrush brush(QColor(PalColorMat[c][0],PalColorMat[c][1],PalColorMat[c][2]));
-        painter.setPen(pen);
-        painter.setBrush(brush);
-        painter.drawRect(DBT_PAL_X,DBT_PAL_Y+i*DBT_PAL_H,DBT_PAL_W,DBT_PAL_H);
-    }
-}
-void  MainDisplay::paintWPal(){
-    QPen  pen;
-    for(int i=1;i<=15;i++)
-    {
-        int c =i*17;
-        pen.setColor(QColor(255,255,255));
-        QBrush brush(QColor(PalColorMat[c][0],PalColorMat[c][1],PalColorMat[c][2]));
-        painter.setPen(pen);
-        painter.setBrush(brush);
-        painter.drawRect(W_PAL_X,i*W_PAL_H+W_PAL_Y,W_PAL_W,W_PAL_H);
-    }
-}
-void  MainDisplay::paintVPal(){
-    QPen  pen;
-    for(int i=1;i<=15;i++)
-    {
-        int c =i*17;
-        pen.setColor(QColor(255,255,255));
-        QBrush brush(QColor(PalColorMat[c][0],PalColorMat[c][1],PalColorMat[c][2]));
-        painter.setPen(pen);
-        painter.setBrush(brush);
-        painter.drawRect(V_PAL_X,i*V_PAL_H+V_PAL_Y,V_PAL_W,V_PAL_H);
-    }
 
+void MainDisplay::paintDBTPal(Palette pal[],int palLenth){
+    //设置调色板填充颜色,位置
+    int palSpace = colorNums * colorNums * colorNums /15;
+    for(int i=0;i<palLenth;i++)
+    {
+        //颜色
+        int c =palSpace * i;
+        pal[i].fillRed =PalColorMat[c][0];
+        pal[i].fillGreen = PalColorMat[c][1];
+        pal[i].fillBlue = PalColorMat[c][2] ;
+        //调色板位置
+        pal[i].xloc = 100;
+        pal[i].yloc = 100;
+        pal[i].yloc += i * pal[i].height;
+        paintPal(pal[i],painter);
+    }
+}
+
+void  MainDisplay::paintWPal(Palette pal[],int palLenth){
+    //设置调色板填充颜色,位置
+    int palSpace = colorNums * colorNums * colorNums /15;
+    for(int i=0;i<palLenth;i++)
+    {
+        //颜色
+        int c =palSpace * i;
+        pal[i].fillRed =PalColorMat[c][0];
+        pal[i].fillGreen = PalColorMat[c][1];
+        pal[i].fillBlue = PalColorMat[c][2] ;
+        //调色板位置
+        pal[i].xloc = 150;
+        pal[i].yloc = 150;
+        pal[i].yloc += i * pal[i].height;
+        paintPal(pal[i],painter);
+    }
+}
+
+void  MainDisplay::paintVPal(Palette pal[],int palLenth){
+    //设置调色板填充颜色,位置
+    int palSpace = colorNums * colorNums * colorNums /15;
+    for(int i=0;i<palLenth;i++)
+    {
+        //颜色
+        int c =palSpace * i;
+        pal[i].fillRed =PalColorMat[c][0];
+        pal[i].fillGreen = PalColorMat[c][1];
+        pal[i].fillBlue = PalColorMat[c][2] ;
+        //调色板位置
+        pal[i].xloc = 200;
+        pal[i].yloc = 200;
+        pal[i].yloc += i * pal[i].height;
+        paintPal(pal[i],painter);
+    }
 }
 
 void MainDisplay::colorPalFactory(){
@@ -133,15 +151,22 @@ void MainDisplay::colorPalFactory(){
 
 int MainDisplay::paintPal(Palette pal,QPainter painter){
     painter.save();
+    QRectF palRect(pal.xloc,pal.yloc,pal.width,pal.height);
     QPen  pen;
+    pen.setWidth(pal.frameWidth);
     pen.setColor(QColor(255,255,255));
-    QBrush brush(QColor(pal.rgb_Red,pal.rgb_Green,pal.rgb_Blue));
+    QBrush brush(QColor(pal.fillRed,pal.fillGreen,pal.fillBlue));
     painter.setPen(pen);
     painter.setBrush(brush);
-    painter.drawRect(pal.xloc,pal.yloc,pal.width,pal.height);
+    painter.drawRect(palRect);
+    QRectF txtRect(palRect);
+    txtRect.x += txtRect.width + 3;
+    txtRect.width /= 2;
+    painter.drawText(txtRect,pal.comTxt);
     painter.restore();
     return 1;
 }
+
 int MainDisplay::paintSector(Sector sector,QPainter painter){
     painter.save();//save painter status
     QRectF pieRect(sector.xloc,sector.yloc,sector.width,sector.height);//rectangle of sector

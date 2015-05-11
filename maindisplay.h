@@ -30,13 +30,17 @@ public slots:
 
 public:
     unsigned char PalColorMat[PAL_COLOR_NUM][BASE_COLOR_NUM];     //调色板颜色矩阵256*3
+    //调色板
+    Palette pal[15];
+    //扇形
+    Sector sector;
     //绘制调色板V,W,DBT,DBZ
     void paintShadeGuide();
-    void paintVPal();
-    void paintWPal();
-    void paintDBTPal();
-    void paintDBZPal();
-    /*颜色库构造 R、G、B，RG、RB、GB，Y = 3*(x^3 + x),x = 16,Y = 4*k+96
+    void paintVPal(Palette pal[],int palLenth);
+    void paintWPal(Palette pal[],int palLenth);
+    void paintDBTPal(Palette pal[],int palLenth);
+    void paintDBZPal(Palette pal[],int palLenth);
+    /*颜色库构造 R、G、B，Y = x*x*x,x = 16,Y = 16^3
     *RGB的变化范围为0-255，共256个颜色，取16个颜色，隔16取1
     */
     unsigned char colorNums;

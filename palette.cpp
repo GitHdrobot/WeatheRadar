@@ -2,7 +2,19 @@
 
 Palette::Palette()
 {
-
+    //边框属性设置
+    rgb_Red = 255;
+    rgb_Green=255;
+    rgb_Blue=255;
+    frameWidth = 1;
+    width = 50;
+    height = 20;
+    fillRed = 0;
+    fillGreen = 0;
+    fillBlue = 0;
+    xloc = 0;
+    yloc = 0;
+    comTxt = "";
 }
 
 Palette::~Palette()

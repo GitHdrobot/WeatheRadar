@@ -10,7 +10,7 @@ public:
     int frameWidth;
     //边框颜色
     int rgb_Red,rgb_Green,rgb_Blue;
-    //边框位置
+    //位置
     int xloc,yloc;
     //边框大小
     int width,height;
