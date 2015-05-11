@@ -29,32 +29,34 @@ signals:
 public slots:
 
 public:
-    unsigned char PalColorMat[PAL_COLOR_NUM][BASE_COLOR_NUM];     //调色板颜色矩阵256*3
+    unsigned char PalColorMat[palColorNum][baseColorNum];     //调色板颜色矩阵256*3
     //调色板
-    Palette pal[15];
+    Palette pal[palNum];
     //扇形
     Sector sector;
+
+    /*颜色库构造 R、G、B，Y = x*x*x,x = 16,Y = 16^3
+    *RGB的变化范围为0-255，共256个颜色，取16个颜色，隔16取1
+    */
+    unsigned char colorNums;
+
+    bool isPalExist;
+
+    QPainter painter;
+    void paintEvent(QPaintEvent *);
+
     //绘制调色板V,W,DBT,DBZ
     void paintShadeGuide();
     void paintVPal(Palette pal[],int palLenth);
     void paintWPal(Palette pal[],int palLenth);
     void paintDBTPal(Palette pal[],int palLenth);
     void paintDBZPal(Palette pal[],int palLenth);
-    /*颜色库构造 R、G、B，Y = x*x*x,x = 16,Y = 16^3
-    *RGB的变化范围为0-255，共256个颜色，取16个颜色，隔16取1
-    */
-    unsigned char colorNums;
     void colorPalFactory();
-    bool isPalExist;
-
-    QPainter painter;
-    void paintEvent(QPaintEvent *);
-
     /*绘制调色板*/
-    int paintPal(Palette pal,QPainter painter);
+    int paintPal();
 
     /*绘制扇形*/
-    int paintSector(Sector sector,QPainter painter);
+    int paintSector();
 
 };
 

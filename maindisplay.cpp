@@ -24,6 +24,7 @@ MainDisplay::MainDisplay(QWidget *parent) : QWidget(parent)
 MainDisplay::~MainDisplay()
 {
     delete pal;
+    delete sector;
 }
 
 void MainDisplay::paintEvent(QPaintEvent *){
@@ -167,7 +168,7 @@ int MainDisplay::paintPal(Palette pal,QPainter painter){
     return 1;
 }
 
-int MainDisplay::paintSector(Sector sector,QPainter painter){
+int MainDisplay::paintSector(){
     painter.save();//save painter status
     QRectF pieRect(sector.xloc,sector.yloc,sector.width,sector.height);//rectangle of sector
     QPen pen;

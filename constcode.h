@@ -74,12 +74,19 @@
 #define SHADE_GUADE_NUM 15 //调色板个数
 
 
-
-const int palColorNum  = 256;//256种颜色
-const int startAngle  = 30;//扇形起始角度
-const int spanAngle  = 120;//扇形跨度
-const int shadeGuadeNum = 15;//调色板的个数
-const int minAngle = 1;//最小角度1°
-
+/*256种颜色*/
+const int palColorNum  = 256;
+/*扇形起始角度*/
+const int startAngle  = 30;
+/*扇形跨度*/
+const int spanAngle  = 120;
+/*调色板的个数*/
+const int shadeGuadeNum = 15;
+/*最小角度1°*/
+const int minAngle = 1;
+/*基础颜色个数*/
+const int baseColorNum = 3;
+/*调色板个数*/
+const int palNum = 15;
 
 #endif // CONSTCODE_H
