@@ -160,3 +160,27 @@ int Sector::getYloc() const {
 void Sector::setYloc(int yloc) {
     this->yloc = yloc;
 }
+
+int Sector::getSpanAngle() const {
+    return spanAngle;
+}
+
+void Sector::setSpanAngle(int spanAngle) {
+    this->spanAngle = spanAngle;
+}
+
+int Sector::getRotateAngle() const {
+    return rotateAngle;
+}
+
+void Sector::setRotateAngle(int rotateAngle) {
+    this->rotateAngle = rotateAngle;
+}
+int Sector::getNumSystem() const {
+    return numSystem;
+}
+
+void Sector::setNumSystem(int numSystem) {
+    this->numSystem = numSystem;
+}
+

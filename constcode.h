@@ -65,19 +65,21 @@
 #define W_PAL_H 20
 
 
-
-
-
-
 #define PAL_COLOR_NUM 256 //256种颜色
-
-
 #define CONFIG_WIDTH 365  //右侧设置面板占据的宽度
 #define TOP_BOTTOM_HEIGHT 7 //上下占据的高度
-
 
 #define PI 3.1415926
 #define BASE_COLOR_NUM 3    //基本原色个数
 #define SHADE_GUADE_NUM 15 //调色板个数
+
+
+
+const int palColorNum  = 256;//256种颜色
+const int startAngle  = 30;//扇形起始角度
+const int spanAngle  = 120;//扇形跨度
+const int shadeGuadeNum = 15;//调色板的个数
+const int minAngle = 1;//最小角度1°
+
 
 #endif // CONSTCODE_H

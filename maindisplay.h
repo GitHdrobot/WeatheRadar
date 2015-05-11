@@ -11,6 +11,7 @@
 #include "constcode.h"
 
 #include "palette.h"
+#include "sector.h"
 
 /*调用RVP900中的成员函数*/
 #include "rvp900.h"
@@ -35,7 +36,6 @@ public:
     void paintWPal();
     void paintDBTPal();
     void paintDBZPal();
-    void paintPie(int drawMode);
     /*颜色库构造 R、G、B，RG、RB、GB，Y = 3*(x^3 + x),x = 16,Y = 4*k+96
     *RGB的变化范围为0-255，共256个颜色，取16个颜色，隔16取1
     */
@@ -47,7 +47,10 @@ public:
     void paintEvent(QPaintEvent *);
 
     /*绘制调色板*/
-    int paintPal(Palette pal);
+    int paintPal(Palette pal,QPainter painter);
+
+    /*绘制扇形*/
+    int paintSector(Sector sector,QPainter painter);
 
 };
 

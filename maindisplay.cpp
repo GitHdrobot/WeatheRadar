@@ -33,44 +33,6 @@ void MainDisplay::paintEvent(QPaintEvent *){
     paintPie(MODE3_1_DBZ);
 }
 
-void MainDisplay::paintPie( int drawMode)
-{
-    painter.save();
-    if(drawMode == MODE3_1_DBZ){
-        QRectF pieRect(MODE1_ARC_X,MODE1_ARC_Y,MODE1_ARC_W,MODE1_ARC_H);
-
-        painter.setPen(Qt::red);
-        painter.save();
-
-        painter.drawPie(pieRect,MODE1_ARC_ST_ANGLE,MODE1_ARC_SP_ANGLE);
-
-        for(int i=1;i<ARC_NUM;i++){
-            int x,y,w;
-            x = MODE1_ARC_X + i * MODE1_ARC_W / ARC_NUM / 2;
-            y = MODE1_ARC_Y + i * MODE1_ARC_W / ARC_NUM / 2;
-            w = MODE1_ARC_W - i * MODE1_ARC_W / ARC_NUM;
-            painter.drawArc(x,y,w,w,MODE1_ARC_ST_ANGLE,MODE1_ARC_SP_ANGLE);
-        }
-
-        //painter.setRenderHint(QPainter::Antialiasing, true);//open Antialiasing
-        painter.translate(MODE1_ARC_X+0.5*MODE1_ARC_W,0.5*MODE1_ARC_H+MODE1_ARC_Y);
-        painter.rotate(ROTATE_ANGLE);
-        for(int i=0;i<3;i++){
-            painter.rotate(ROTATE_ANGLE);
-            painter.drawLine(0,0,-0.5*MODE1_ARC_W,0);
-        }
-        painter.restore();
-        painter.translate(MODE1_ARC_X+0.5*MODE1_ARC_W,0.5*MODE1_ARC_H+MODE1_ARC_Y);//translate to center of pie
-        painter.rotate(ROTATE_ANGLE);
-        for(int i=0;i<GRADUATION_NUM;i++){
-            painter.rotate(MIN_GRADUATION);
-            painter.drawLine(-0.5*MODE1_ARC_W,0,-0.5*MODE1_ARC_W+GRADUATION_LEN,0);
-        }
-        painter.restore();
-    }
-}
-
-
 void MainDisplay::paintShadeGuide() {
     painter.save();
     paintDBZPal();
@@ -177,6 +139,48 @@ int MainDisplay::paintPal(Palette pal,QPainter painter){
     painter.setPen(pen);
     painter.setBrush(brush);
     painter.drawRect(pal.xloc,pal.yloc,pal.width,pal.height);
+    painter.restore();
+    return 1;
+}
+int MainDisplay::paintSector(Sector sector,QPainter painter){
+    painter.save();//save painter status
+    QRectF pieRect(sector.xloc,sector.yloc,sector.width,sector.height);//rectangle of sector
+    QPen pen;
+    pen.setColor(Qt::white);//set color 、style of pen
+    pen.setStyle(Qt::SolidLine);
+    painter.setPen(pen);//set pen to painter
+    //draw pie
+    painter.drawPie(pieRect,sector.startAngle,sector.spanAngle);
+    //绘制扇形上的圆弧
+    for(int i=1;i<sector.radCalNum;i++){
+        int x,y,wInc,hInc,w,h;
+        wInc = i * sector.width / sector.radCalNum;
+        hInc = i * sector.height / sector.radCalNum;
+        x = sector.xloc + wInc / 2;
+        y = sector.yloc + hInc / 2;
+        w = sector - wInc;
+        h = sector-hInc;
+        painter.drawArc(x,y,w,h,sector.startAngle,sector.spanAngle);
+    }
+
+    //painter.setRenderHint(QPainter::Antialiasing, true);//open Antialiasing
+    //    进行坐标系变换 从扇形的坐标移动到扇形的中心点处
+    painter.translate(sector.xloc+0.5*sector.width,sector.yloc + 0.5*sector.height);
+    //旋转到起始角度
+    int angle = 180-sector.endAngle;
+    if(angle < 0){
+        angle = 360-sector.endAngle;
+    }
+    painter.rotate(angle);
+    for(int i=0;i<sector.arcCalNum;i++){
+        painter.rotate(sector.rotateAngle);
+        //从中心点移动到扇形左边
+        if((i+1) % sector.numSystem == 0){//绘制大刻度线
+            painter.drawLine(-0.5*sector.width,0,0,0);
+        }
+        //绘制一般的小刻度线
+        painter.drawLine(-0.5*sector.width,0,-0.5*sector.width+sector.arcCalWidth,0);
+    }
     painter.restore();
     return 1;
 }

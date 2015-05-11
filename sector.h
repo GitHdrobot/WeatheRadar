@@ -11,8 +11,9 @@ public:
 public:
     int xloc,yloc;//X，Y坐标
     int width,height;//宽、高
-    int startAngle,endAngle;//起始角度
-
+    int startAngle,endAngle,spanAngle;//起始角度、跨度
+    int rotateAngle;//圆弧上刻度线 旋转的刻度
+    int numSystem;//刻度进制 即多少个小刻度组成一个大刻度
     int arcCalNum,arcCalWidth;//圆弧上刻度的个数,刻度线的宽度
     int radCalNum,radCalWidth;//半径上刻度的个数,刻度线的宽度
     //value
@@ -95,6 +96,21 @@ public :
 
     int getYloc() const ;
     void setYloc(int yloc);
+
+
+
+    int getSpanAngle() const ;
+
+    void setSpanAngle(int spanAngle) ;
+
+
+    int getRotateAngle() const;
+
+    void setRotateAngle(int rotateAngle) ;
+
+    int getNumSystem() const ;
+
+    void setNumSystem(int numSystem) ;
 };
 
 
