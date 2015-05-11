@@ -23,8 +23,8 @@ MainDisplay::MainDisplay(QWidget *parent) : QWidget(parent)
 
 MainDisplay::~MainDisplay()
 {
-    delete pal;
-    delete sector;
+    delete []pal;
+    delete &sector;
 }
 
 void MainDisplay::paintEvent(QPaintEvent *){
@@ -35,7 +35,7 @@ void MainDisplay::paintEvent(QPaintEvent *){
 }
 
 void MainDisplay::paintShadeGuide() {
-
+    int palLenth = 15;
     paintDBZPal(pal,palLenth);
 
 }
@@ -161,7 +161,7 @@ int MainDisplay::paintPal(Palette pal){
     painter.setBrush(brush);
     painter.drawRect(palRect);
     QRectF txtRect(palRect);
-    txtRect.x += txtRect.width() + 3;
+    txtRect.setX(txtRect.x() + txtRect.width() + 3);
     txtRect.setWidth(txtRect.width()/2);
     painter.drawText(txtRect,pal.comTxt);
     painter.restore();

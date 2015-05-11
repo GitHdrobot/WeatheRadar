@@ -10,7 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QDesktopWidget *dwsktopwidget = QApplication::desktop();
     QRect deskrect = dwsktopwidget->availableGeometry();
     //QRect screenrect = dwsktopwidget->screenGeometry();
-    dispDev.setWidthHeight(deskrect.width,deskrect.height);
+    dispDev.setWidth(deskrect.width());
+    dispDev.setHeight(deskrect.height());
 
     ui->setupUi(this);
     connect(ui->menuParaSetting,SIGNAL(aboutToShow()),this,SLOT(paraSetSlot()));

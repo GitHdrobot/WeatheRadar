@@ -5,7 +5,7 @@
 RVP900::RVP900()
 {
     clientSocket = -1;
-    pulseRatio = 0x80;
+    //pulseRatio = 0x80;
 
 }
 

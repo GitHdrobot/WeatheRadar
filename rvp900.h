@@ -42,7 +42,7 @@ public :
     //脉冲重复频率
     enum enum_PRF
     {PRF_FIRST=300,PRF_SECOND=500,PRF_THIRD=1000,
-        PRF_FOURTH=2000,PRF_FIFTH=3000,PRF_SIXTH=4000,PRF_SIXTH=5000} PRF;
+        PRF_FOURTH=2000,PRF_FIFTH=3000,PRF_SIXTH=4000,PRF_SEVENTH=5000} PRF;
 
     /*数据采集方式 collect mode,有三种Synchronous，
     *free running，time series，默认是time series
