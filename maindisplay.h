@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <QTimer>
 #include <QDateTime>
+#include <QDesktopWidget>
 
 #include "constcode.h"
 
@@ -53,11 +54,13 @@ public:
     void paintDBZPal(Palette pal[],int palLenth);
     void colorPalFactory();
     /*绘制调色板*/
-    int paintPal();
+    int paintPal(Palette pal);
 
     /*绘制扇形*/
     int paintSector();
 
+    /*控制扇形的绘制*/
+    int paintSectorManager();
 };
 
 #endif // MAINDISPLAY_H

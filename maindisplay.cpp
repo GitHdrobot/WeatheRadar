@@ -31,7 +31,7 @@ void MainDisplay::paintEvent(QPaintEvent *){
     painter.begin(this);
     setAutoFillBackground(true);
     paintShadeGuide();
-    paintSector(sector,painter);
+    paintSectorManager();
 }
 
 void MainDisplay::paintShadeGuide() {
@@ -54,7 +54,7 @@ void  MainDisplay::paintDBZPal(Palette pal[],int palLenth){
         pal[i].xloc = 50;
         pal[i].yloc = 50;
         pal[i].yloc += i * pal[i].height;
-        paintPal(pal[i],painter);
+        paintPal(pal[i]);
     }
 
 }
@@ -73,7 +73,7 @@ void MainDisplay::paintDBTPal(Palette pal[],int palLenth){
         pal[i].xloc = 100;
         pal[i].yloc = 100;
         pal[i].yloc += i * pal[i].height;
-        paintPal(pal[i],painter);
+        paintPal(pal[i]);
     }
 }
 
@@ -91,7 +91,7 @@ void  MainDisplay::paintWPal(Palette pal[],int palLenth){
         pal[i].xloc = 150;
         pal[i].yloc = 150;
         pal[i].yloc += i * pal[i].height;
-        paintPal(pal[i],painter);
+        paintPal(pal[i]);
     }
 }
 
@@ -109,7 +109,7 @@ void  MainDisplay::paintVPal(Palette pal[],int palLenth){
         pal[i].xloc = 200;
         pal[i].yloc = 200;
         pal[i].yloc += i * pal[i].height;
-        paintPal(pal[i],painter);
+        paintPal(pal[i]);
     }
 }
 
@@ -150,7 +150,7 @@ void MainDisplay::colorPalFactory(){
 }
 
 
-int MainDisplay::paintPal(Palette pal,QPainter painter){
+int MainDisplay::paintPal(Palette pal){
     painter.save();
     QRectF palRect(pal.xloc,pal.yloc,pal.width,pal.height);
     QPen  pen;
@@ -161,8 +161,8 @@ int MainDisplay::paintPal(Palette pal,QPainter painter){
     painter.setBrush(brush);
     painter.drawRect(palRect);
     QRectF txtRect(palRect);
-    txtRect.x += txtRect.width + 3;
-    txtRect.width /= 2;
+    txtRect.x += txtRect.width() + 3;
+    txtRect.setWidth(txtRect.width()/2);
     painter.drawText(txtRect,pal.comTxt);
     painter.restore();
     return 1;
@@ -184,8 +184,8 @@ int MainDisplay::paintSector(){
         hInc = i * sector.height / sector.radCalNum;
         x = sector.xloc + wInc / 2;
         y = sector.yloc + hInc / 2;
-        w = sector - wInc;
-        h = sector-hInc;
+        w = sector.width - wInc;
+        h = sector.height-hInc;
         painter.drawArc(x,y,w,h,sector.startAngle,sector.spanAngle);
     }
 
@@ -209,4 +209,11 @@ int MainDisplay::paintSector(){
     }
     painter.restore();
     return 1;
+}
+int MainDisplay:: paintSectorManager(){
+    sector.xloc = 100;
+    sector.yloc = 100;
+    sector.width = 500;
+    sector.height = 500;
+    paintSector();
 }
