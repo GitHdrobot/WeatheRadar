@@ -369,8 +369,8 @@ int RVP900::PROC(char *outBuffer){
 
     if (readSocketResp()!=0)
         return SOCKET_READ_ERR;
-
-    if (comboCmdMsg(COMMAND_READ,dataBytesNum,10)!= RVP_NO_ERR)//Read Proc data
+     sprintf(formatuffer,"%d",dataBytesNum);//8位字符指示要发送数据的长度
+    if (comboCmdMsg(COMMAND_READ,formatuffer,10)!= RVP_NO_ERR)//Read Proc data
         return SOCKET_SEND_ERR;
 
     char sSize[10];
@@ -503,18 +503,6 @@ int RVP900::comboCmdMsg(char *cmd,char *data,int length){//构造发送的指令
     return RVP_NO_ERR;
 }
 int RVP900::RVP9Initialize(){
-    if(dispDev.dispAreaWidth > dispDev.dispAreaHeight){
-        dispDev.radius = dispDev.dispAreaHeight;
-    }else{
-        dispDev.radius = dispDev.dispAreaWidth;
-    }
-    if(dispMode == MODE_1PIC){
-
-    }else if(dispMode == MODE_2PIC){
-        dispDev.radius /= 2;
-    }else if(dispMode == MODE_4PIC){
-        dispDev.radius /= 2;
-    }
     //采集数据种类 dBz,dBt,dBw,v，默认为Z、T、V、W
     dataZDR_BIT = false;
     dataZ_BIT = true;

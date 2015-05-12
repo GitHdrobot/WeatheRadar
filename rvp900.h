@@ -3,12 +3,14 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
+//#include <sys/socket.h>
+//#include <netinet/in.h>
+//#include <netdb.h>
+//#include <arpa/inet.h>
 #include <errno.h>
-#include <arpa/inet.h>
 #include <stdlib.h>
+#include <qstring.h>
+
 //rvp900 控制类
 #include "constRVP900.h"
 #include "dispdevice.h"
@@ -79,6 +81,7 @@ public:
     char sendBuffer[1024*8];//发送指令buffer 用于缓存与指令相关信息
     char recvBuffer[1024*8];//接收数据buffer
     char dataOutBuff[1024*16];//接收数据buffer
+    char formatuffer[10];
     unsigned char low8Bits,high8Bits;//一个双字的低位字buffer，和高位字buffer
 
     unsigned char inputNBuff;//指令输入参数缓冲区

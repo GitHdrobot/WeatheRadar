@@ -30,7 +30,7 @@ signals:
 public slots:
 
 public:
-    unsigned char PalColorMat[palColorNum][baseColorNum];     //调色板颜色矩阵256*3
+    unsigned char PalColorMat[palColorNum+100][baseColorNum];     //调色板颜色矩阵256*3
     //调色板
     Palette pal[palNum];
     //扇形
@@ -39,7 +39,7 @@ public:
     /*颜色库构造 R、G、B，Y = x*x*x,x = 16,Y = 16^3
     *RGB的变化范围为0-255，共256个颜色，取16个颜色，隔16取1
     */
-    unsigned char colorNums;
+    int colorNums;
 
     bool isPalExist;
 

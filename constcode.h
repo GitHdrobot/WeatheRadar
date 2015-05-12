@@ -1,7 +1,6 @@
 /*
 *显示界面上的一些常量设置
 */
-
 #ifndef CONSTCODE_H
 #define CONSTCODE_H
 
@@ -73,9 +72,10 @@
 #define BASE_COLOR_NUM 3    //基本原色个数
 #define SHADE_GUADE_NUM 15 //调色板个数
 
-
-/*256种颜色*/
-const int palColorNum  = 256;
+/*颜色每隔16取1个*/
+const int colorSpace = 16;
+/*4K种颜色*/
+const int palColorNum  = colorSpace * colorSpace *colorSpace;
 /*扇形起始角度*/
 const int startAngle  = 30;
 /*扇形跨度*/
@@ -88,5 +88,6 @@ const int minAngle = 1;
 const int baseColorNum = 3;
 /*调色板个数*/
 const int palNum = 15;
-
+/*Qt角度的度量用的是一度的十六分之一*/
+const int angleFactor = 16;
 #endif // CONSTCODE_H

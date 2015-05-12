@@ -3,21 +3,19 @@
 
 MainDisplay::MainDisplay(QWidget *parent) : QWidget(parent)
 {
-    isPalExist = false;
     colorNums = 16;
-    colorPalFactory();
     /*读取配置文件 文件打开成功 **/
     FILE *fp;
-    if((fp=fopen("Palette.dat","rb")))
+    if((fp=fopen("/Palette.dat","rb")))
     {
         //printf("打开调色板成功\n");
-        fread(PalColorMat,1,colorNums*colorNums*colorNums+BASE_COLOR_NUM*colorNums,fp);
+        fread(PalColorMat,1,(palColorNum+100)*3,fp);
         fclose(fp);
-        isPalExist = true;
-    }
-    if(!isPalExist){
-        colorPalFactory();
-        fwrite(PalColorMat,1,colorNums*colorNums*colorNums+BASE_COLOR_NUM*colorNums,fp);
+    }else{
+        if(fp=fopen("Palette.dat","wb")){
+            colorPalFactory();
+            fwrite(PalColorMat,1,(palColorNum+100)*3,fp);
+        }
     }
 }
 
@@ -114,7 +112,7 @@ void  MainDisplay::paintVPal(Palette pal[],int palLenth){
 }
 
 void MainDisplay::colorPalFactory(){
-    unsigned char space = 256 / colorNums;
+    int space = 256 / colorNums;
     //R  0 - colorNums
     for(int i=0;i<colorNums;i++){
         PalColorMat[i][0] = i * space;
@@ -141,8 +139,8 @@ void MainDisplay::colorPalFactory(){
         for(int j=0;j<colorNums;j++){
             for(int k=0;k<colorNums;k++){
                 PalColorMat[3 * colorNums + i*colorNums*colorNums + j*colorNums +k][0] = PalColorMat[i][0];
-                PalColorMat[3 * colorNums + i*colorNums*colorNums + j*colorNums +k][1] = PalColorMat[colorNums + j][0];
-                PalColorMat[3 * colorNums + i*colorNums*colorNums + j*colorNums +k][2] = PalColorMat[colorNums*2 + k][0];
+                PalColorMat[3 * colorNums + i*colorNums*colorNums + j*colorNums +k][1] = PalColorMat[colorNums + j][1];
+                PalColorMat[3 * colorNums + i*colorNums*colorNums + j*colorNums +k][2] = PalColorMat[colorNums*2 + k][2];
             }
         }
     }
@@ -176,7 +174,7 @@ int MainDisplay::paintSector(){
     pen.setStyle(Qt::SolidLine);
     painter.setPen(pen);//set pen to painter
     //draw pie
-    painter.drawPie(pieRect,sector.startAngle,sector.spanAngle);
+    painter.drawPie(pieRect,sector.startAngle*angleFactor,sector.spanAngle*angleFactor);
     //绘制扇形上的圆弧
     for(int i=1;i<sector.radCalNum;i++){
         int x,y,wInc,hInc,w,h;
@@ -186,7 +184,7 @@ int MainDisplay::paintSector(){
         y = sector.yloc + hInc / 2;
         w = sector.width - wInc;
         h = sector.height-hInc;
-        painter.drawArc(x,y,w,h,sector.startAngle,sector.spanAngle);
+        painter.drawArc(x,y,w,h,sector.startAngle*angleFactor,sector.spanAngle*angleFactor);
     }
 
     //painter.setRenderHint(QPainter::Antialiasing, true);//open Antialiasing

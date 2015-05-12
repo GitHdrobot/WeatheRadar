@@ -90,7 +90,7 @@ public :
 
     void setWidth(int width) ;
 
-    int getXloc() ;
+    int getXloc()const ;
 
     void setXloc(int xloc) ;
 
