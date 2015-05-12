@@ -369,7 +369,7 @@ int RVP900::PROC(char *outBuffer){
 
     if (readSocketResp()!=0)
         return SOCKET_READ_ERR;
-     sprintf(formatuffer,"%d",dataBytesNum);//8位字符指示要发送数据的长度
+     sprintf(formatuffer,"%d",dataBytesNum);
     if (comboCmdMsg(COMMAND_READ,formatuffer,10)!= RVP_NO_ERR)//Read Proc data
         return SOCKET_SEND_ERR;
 
