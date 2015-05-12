@@ -3,10 +3,10 @@
 
 #include <stdio.h>
 #include <string.h>
-//#include <sys/socket.h>
-//#include <netinet/in.h>
-//#include <netdb.h>
-//#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <qstring.h>
@@ -216,7 +216,7 @@ public:
     *时间序列模式————每执行一个PROC指令，处理器获取、长生输出一个射线的时间序列样本。
     *和上面的同步模式相似。数据以8位、16位时间序列或者16位功率谱的形式输出
     */
-    int PROC( char *outBuffer);
+    int PROC(unsigned char *outBuffer);
     /*
     *GPARM : Get Processor Parameters
     *This command is used to access status information from the RVP900

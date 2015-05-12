@@ -14,12 +14,12 @@ void FetchDataThread::run() {
     int i = 0;
     while (threadFlag) {
         if (rvp9.PROC(outbuff) != RVP_NO_ERR) {
-            return SOCKET_READ_ERR;
+            //return SOCKET_READ_ERR;
         }
         //header of each ray
         if(rvp9.hdrTag_BIT){
             for(i=0;i<rvp9.hdrBytesNum;i++) {
-                TAGBuff[i] = outBuff[i];
+                binsTAGBuff[i] = outbuff[i];
             }
         }
         //目前不需要这些数据
@@ -55,16 +55,16 @@ void FetchDataThread::run() {
 
         } */
         for(;i<rvp9.hdrBytesNum + rvp9.binsNum;i++){
-            binsWBuff[i] = outBuff[i];
+            binsWBuff[i] = outbuff[i];
         }
         for(;i<rvp9.hdrBytesNum + 2*rvp9.binsNum;i++){
-            binsVBuff[i] = outBuff[i];
+            binsVBuff[i] = outbuff[i];
         }
         for(;rvp9.hdrBytesNum + 3*rvp9.binsNum;i++){
-            binsTBuff[i] = outBuff[i];
+            binsTBuff[i] = outbuff[i];
         }
         for(;rvp9.hdrBytesNum + 4*rvp9.binsNum;i++){
-            binsZBuff[i] = outBuff[i];
+            binsZBuff[i] = outbuff[i];
         }
         //ZDR 、KDP暂不需要
         /*

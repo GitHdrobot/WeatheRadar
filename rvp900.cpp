@@ -304,7 +304,7 @@ int RVP900::samNoise(){
 
     return RVP_NO_ERR;
 }
-int RVP900::PROC(char *outBuffer){
+int RVP900::PROC(unsigned char *outBuffer){
     low8Bits = 0x00;
     high8Bits = 0x00;
     sendBuffer[0]=0;
@@ -376,7 +376,7 @@ int RVP900::PROC(char *outBuffer){
     char sSize[10];
     int iSize,iRecvSize;
 
-    iRecvSize = recv (clientSocket,sSize,8,0);
+    iRecvSize = recv(clientSocket,sSize,8,0);
     if (iRecvSize!=8)
         return SOCKET_RECV_NOT_CMPLT_ERR;
     sSize[8]=0;
@@ -514,7 +514,7 @@ int RVP900::RVP9Initialize(){
     dataKDP_BIT = false;
     dataTypeNums = 4;
     //采集的数据是否包含 头部TAG，默认为true
-    dataHeader = true;
+    noHeader = true;
     //距离量程 distance range,目前仅设置六个距离范围
     disRange = RANGE_FIRST;
     //脉冲重复频率
