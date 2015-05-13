@@ -73,9 +73,11 @@
 #define SHADE_GUADE_NUM 15 //调色板个数
 
 /*颜色每隔16取1个*/
-const int colorSpace = 16;
+const int colorSpace = 8;
+/*选择16种颜色进行配色*/
+const int choosenColorNum = 16;
 /*1K种颜色*/
-const int palColorNum  = 1032;
+const int palColorNum  = 196;
 /*扇形起始角度*/
 const int startAngle  = 30;
 /*扇形跨度*/
