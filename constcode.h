@@ -74,8 +74,8 @@
 
 /*颜色每隔16取1个*/
 const int colorSpace = 16;
-/*4K种颜色*/
-const int palColorNum  = colorSpace * colorSpace *colorSpace;
+/*1K种颜色*/
+const int palColorNum  = 1032;
 /*扇形起始角度*/
 const int startAngle  = 30;
 /*扇形跨度*/

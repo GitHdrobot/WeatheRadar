@@ -13,7 +13,7 @@ MainDisplay::MainDisplay(QWidget *parent) : QWidget(parent)
         fclose(fp);
     }else{
         if(fp=fopen("Palette.dat","wb")){
-            colorPalFactory();
+            colorBinFactory();
             fwrite(PalColorMat,1,(palColorNum+100)*3,fp);
         }
     }
@@ -214,4 +214,69 @@ int MainDisplay:: paintSectorManager(){
     sector.width = 500;
     sector.height = 500;
     paintSector();
+}
+int MainDisplay:: colorBinFactory(){
+    int space = 256 / colorNums;
+    //R  0 - colorNums
+    for(int i=0;i<colorNums;i++){
+        PalColorMat[i][0] = i * space;
+        PalColorMat[i][1] = 0;
+        PalColorMat[i][2] = 0;
+    }
+    //cursor = colorNums;
+    //G  colorNums - 2 * colorNums
+    for(int i=0;i<colorNums;i++){
+        PalColorMat[colorNums + i][0] = 0;
+        PalColorMat[colorNums + i][1] = space * i;
+        PalColorMat[colorNums + i][2] = 0;
+    }
+    //cursor = 2 * colorNums;
+    //B  2*colorNums - 3*colorNums
+    for(int i=0;i<colorNums;i++){
+        PalColorMat[colorNums*2+i][0] = 0;
+        PalColorMat[colorNums*2+i][1] = 0;
+        PalColorMat[colorNums*2+i][2] = space * i;
+    }
+    int cursor = 3* colorNums;
+    //RG
+    for(int i=0;i<colorNums;i++)
+    {
+        for(int j=0;j<colorNums;j++){
+            PalColorMat[cursor + i*colorNums + j][0] = PalColorMat[i][0];
+            PalColorMat[cursor + i*colorNums + j][1] = PalColorMat[colorNums + j][1];
+            PalColorMat[cursor + i*colorNums + j][2] = 0;
+        }
+    }
+    cursor+=colorNums*colorNums;
+    //RB
+    for(int i=0;i<colorNums;i++)
+    {
+        for(int j=0;j<colorNums;j++){
+            PalColorMat[cursor + i*colorNums + j][0] = PalColorMat[i][0];
+            PalColorMat[cursor + i*colorNums + j][1] = 0;
+            PalColorMat[cursor + i*colorNums + j][2] = PalColorMat[2*colorNums + j][2];
+        }
+    }
+    cursor+=colorNums*colorNums;
+    //GB
+    for(int i=0;i<colorNums;i++)
+    {
+        for(int j=0;j<colorNums;j++){
+            PalColorMat[cursor + i*colorNums + j][0] = 0;
+            PalColorMat[cursor + i*colorNums + j][1] = PalColorMat[colorNums+i][1];
+            PalColorMat[cursor + i*colorNums + j][2] = PalColorMat[2*colorNums + j][2];
+        }
+    }
+    cursor+=colorNums*colorNums;
+    //RGB
+    for(int i=2;i<colorNums-2;i+=2)
+    {
+        for(int j=2;j<colorNums-2;j+=2){
+            for(int k=2;k<colorNums-2;k+=2){
+                PalColorMat[cursor + i*colorNums*colorNums + j*colorNums +k][0] = PalColorMat[i][0];
+                PalColorMat[cursor + i*colorNums*colorNums + j*colorNums +k][1] = PalColorMat[colorNums + j][1];
+                PalColorMat[cursor + i*colorNums*colorNums + j*colorNums +k][2] = PalColorMat[colorNums*2 + k][2];
+            }
+        }
+    }
 }
