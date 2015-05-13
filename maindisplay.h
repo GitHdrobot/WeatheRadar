@@ -30,7 +30,7 @@ signals:
 public slots:
 
 public:
-    unsigned char PalColorMat[palColorNum+100][baseColorNum];     //调色板颜色矩阵256*3
+    unsigned char PalColorMat[palColorNum][baseColorNum];     //调色板颜色矩阵256*3
     //调色板
     Palette pal[palNum];
     //扇形
