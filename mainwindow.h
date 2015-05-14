@@ -42,6 +42,24 @@ public slots:
    // void paintEvent(QPaintEvent *);
    // RVP900 rvp900;
 
+private slots:
+    void on_pbtnOpenTransmit_clicked();
+    void on_pbtnCloseTransmit_clicked();
+    void on_pbtnSweep_clicked();
+    void on_pbtnStopSweep_clicked();
+    void on_pbtnAzimuth_clicked();
+    void on_pbtnElevation_clicked();
+    void on_pbtnStop_clicked();
+    void on_pbtnCollect_clicked();
+
+    void on_comboBoxMode_activated(int index);
+    void on_comboBoxLmsk_activated(int index);
+    void on_comboBoxPRF_activated(int index);
+    void on_comboBoxDPrf_activated(int index);
+    void on_comboBoxPulseWidth_activated(int index);
+    void on_comboBoxDopFilter_activated(int index);
+    void on_doubleSpinBoxAzimuth_valueChanged(double arg1);
+    void on_doubleSpinBoxElevation_valueChanged(double arg1);
 };
 
 #endif // MAINWINDOW_H

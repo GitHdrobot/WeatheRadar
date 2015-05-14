@@ -67,6 +67,8 @@ public :
     bool RTwoEnable;
     //距离平均 distance averaging
     unsigned char avgDistance;
+    /*天线相位角 方位角 仰角*/
+    double azimuth,elevation;
     //以下参数有待查阅
     /*杂项控制 1、距离订正通断 2、r2使能 3、单库杂波消除 4、强度斑点消除 5、速度斑点消除 6、3x3平滑输出**/
 
@@ -85,6 +87,19 @@ public:
     unsigned char low8Bits,high8Bits;//一个双字的低位字buffer，和高位字buffer
 
     unsigned char inputNBuff;//指令输入参数缓冲区
+
+    unsigned char outbuff[1024*16];//读取数据缓冲区
+    unsigned char binsZBuff[1024];//dbZ bins buff
+    unsigned char binsWBuff[1024];//W bins buff
+    unsigned char binsVBuff[1024];//V bins buff
+    unsigned char binsTBuff[1024];//dBT bins buff
+
+    //暂不需要这些数据
+    /*
+    unsigned char binsZDRBuff[1024];//ZDR bins buff
+    unsigned char binsKDPBuff[1024];//KDP bins buff
+    unsigned char binsKDPBuff[1024*6];//ARC bins buff
+    */
 
     /*predefined parameter variable of command ，预定义的指令参数*/
 public:

@@ -181,7 +181,7 @@ int MainDisplay::paintSector(){
     for(int i=1;i<sector.radCalNum;i++){
         int x,y,wInc,hInc,w,h;
         wInc = i * sector.width / sector.radCalNum;
-        hInc = i * sector.height / sector.radCalNum;
+        hInc = i * sector.height / sector.radCalNum;-
         x = sector.xloc + wInc / 2;
         y = sector.yloc + hInc / 2;
         w = sector.width - wInc;

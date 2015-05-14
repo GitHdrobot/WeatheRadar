@@ -49,7 +49,7 @@
      </rect>
     </property>
     <property name="autoFillBackground">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(0, 0, 0);</string>
@@ -836,19 +836,6 @@
      <string>方位角</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEditAzimuth">
-    <property name="geometry">
-     <rect>
-      <x>1073</x>
-      <y>15</y>
-      <width>121</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0.0</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="labelElevation">
     <property name="geometry">
      <rect>
@@ -865,19 +852,6 @@
     </property>
     <property name="text">
      <string>仰角</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEditElevation">
-    <property name="geometry">
-     <rect>
-      <x>1243</x>
-      <y>15</y>
-      <width>121</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0.0</string>
     </property>
    </widget>
    <widget class="QComboBox" name="comboBoxMode">
@@ -1095,6 +1069,26 @@
      </property>
     </item>
    </widget>
+   <widget class="QDoubleSpinBox" name="doubleSpinBoxAzimuth">
+    <property name="geometry">
+     <rect>
+      <x>1070</x>
+      <y>20</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QDoubleSpinBox" name="doubleSpinBoxElevation">
+    <property name="geometry">
+     <rect>
+      <x>1240</x>
+      <y>20</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -1102,7 +1096,7 @@
      <x>0</x>
      <y>0</y>
      <width>1376</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDispMode">

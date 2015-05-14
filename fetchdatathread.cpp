@@ -13,13 +13,13 @@ FetchDataThread::FetchDataThread(QObject *parent) :
 void FetchDataThread::run() {
     int i = 0;
     while (threadFlag) {
-        if (rvp9.PROC(outbuff) != RVP_NO_ERR) {
+        if (rvp9.PROC(rvp9.outbuff) != RVP_NO_ERR) {
             //return SOCKET_READ_ERR;
         }
         //header of each ray
         if(rvp9.hdrTag_BIT){
             for(i=0;i<rvp9.hdrBytesNum;i++) {
-                binsTAGBuff[i] = outbuff[i];
+                rvp9.binsTAGBuff[i] = rvp9.outbuff[i];
             }
         }
         //目前不需要这些数据
@@ -55,16 +55,16 @@ void FetchDataThread::run() {
 
         } */
         for(;i<rvp9.hdrBytesNum + rvp9.binsNum;i++){
-            binsWBuff[i] = outbuff[i];
+            rvp9.binsWBuff[i] = rvp9.outbuff[i];
         }
         for(;i<rvp9.hdrBytesNum + 2*rvp9.binsNum;i++){
-            binsVBuff[i] = outbuff[i];
+            rvp9.binsVBuff[i] = rvp9.outbuff[i];
         }
         for(;rvp9.hdrBytesNum + 3*rvp9.binsNum;i++){
-            binsTBuff[i] = outbuff[i];
+            rvp9.binsTBuff[i] = rvp9.outbuff[i];
         }
         for(;rvp9.hdrBytesNum + 4*rvp9.binsNum;i++){
-            binsZBuff[i] = outbuff[i];
+            rvp9.binsZBuff[i] = rvp9.outbuff[i];
         }
         //ZDR 、KDP暂不需要
         /*

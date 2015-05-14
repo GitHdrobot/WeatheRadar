@@ -9,15 +9,7 @@ int dispMode;
 
 unsigned char paintBuff[1024];//绘图数据缓冲区
 
-unsigned char outbuff[1024*16];//读取数据缓冲区
 
-unsigned char binsZBuff[1024];//dbZ bins buff
-
-unsigned char binsWBuff[1024];//W bins buff
-
-unsigned char binsVBuff[1024];//V bins buff
-
-unsigned char binsTBuff[1024];//dBT bins buff
 
 //暂不需要这些数据
 /*
