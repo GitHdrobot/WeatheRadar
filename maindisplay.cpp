@@ -3,20 +3,23 @@
 
 MainDisplay::MainDisplay(QWidget *parent) : QWidget(parent)
 {
-    colorNums = 32;
+    colorNums = 50;
+
     /*读取配置文件 文件打开成功 **/
     FILE *fp;
-    if((fp=fopen("/Palette.dat","rb")))
+    if((fp=fopen("Palette.dat","rb")))
     {
         //printf("打开调色板成功\n");
-        fread(PalColorMat,1,(palColorNum+100)*3,fp);
+        fread(PalColorMat,1,palColorNum*3,fp);
         fclose(fp);
     }else{
         if(fp=fopen("Palette.dat","wb")){
             colorBinFactory();
-            fwrite(PalColorMat,1,(palColorNum+100)*3,fp);
+            fwrite(PalColorMat,1,palColorNum*3,fp);
+            fclose(fp);
         }
     }
+
 }
 
 MainDisplay::~MainDisplay()
@@ -40,18 +43,17 @@ void MainDisplay::paintShadeGuide() {
 
 void  MainDisplay::paintDBZPal(Palette pal[],int palLenth){
     //设置调色板填充颜色,位置
-    int palSpace = palColorNum /15;
     for(int i=0;i<palLenth;i++)
     {
         //颜色
-        int c =palSpace * i;
+        int c = 16*  i;
         pal[i].fillRed =PalColorMat[c][0];
         pal[i].fillGreen = PalColorMat[c][1];
         pal[i].fillBlue = PalColorMat[c][2] ;
         //调色板位置
         pal[i].xloc = 50;
-        pal[i].yloc = 50;
-        pal[i].yloc += i * pal[i].height;
+        pal[i].yloc = 350;
+        pal[i].yloc -= i * pal[i].height;
         paintPal(pal[i]);
     }
 
@@ -220,49 +222,43 @@ int MainDisplay:: colorBinFactory(){
     //color G单色
     for(int i=0;i<colorNums;i++){
         PalColorMat[ i][0] = 0;
-        PalColorMat[ i][1] = 0;
-        PalColorMat[ i][2] = 15+8*i;
+        PalColorMat[ i][1] = 50+4*i;
+        PalColorMat[ i][2] = 0 ;
     }
     cursor+=colorNums;
     //color BG 混色
     for(int i=0;i<colorNums;i++){
         PalColorMat[cursor + i][0] = 0;
-        PalColorMat[cursor + i][1] =15+ 8*i;
-        PalColorMat[cursor + i][2] = PalColorMat[i][2];
+        PalColorMat[cursor + i][1] =PalColorMat[colorNums - 1-i][1];
+        PalColorMat[cursor + i][2] = 50+4*i;
     }
     cursor+=colorNums;
     //color B 单色32种
     for(int i=0;i<colorNums;i++){
         PalColorMat[cursor + i][0] = 0;
         PalColorMat[cursor + i][1] = 0;
-        PalColorMat[cursor + i][2] = 15+8*i;
+        PalColorMat[cursor + i][2] = 50+4*i;
     }
     cursor+=colorNums;
     //color BR 混色
     for(int i=0;i<colorNums;i++){
-        PalColorMat[cursor+i][0] = 15+8*i;
+        PalColorMat[cursor+i][0] = 15+4*i;
         PalColorMat[cursor+i][1] = 0;
-        PalColorMat[cursor+i][2] =  PalColorMat[2*colorNums+i][2];
+        PalColorMat[cursor+i][2] =  PalColorMat[3*colorNums-1-i][2];
     }
     cursor+=colorNums;
     //color R 单色
     for(int i=0;i<colorNums;i++){
-        PalColorMat[cursor + i][0] =15+ 8*i;
+        PalColorMat[cursor + i][0] =15+4*i;
         PalColorMat[cursor + i][1] = 0;
         PalColorMat[cursor + i][2] = 0;
     }
     cursor+=colorNums;
     //color GR 混色
     for(int i=0;i<colorNums;i++){
-        PalColorMat[cursor+i][0] = PalColorMat[4*colorNums+i][0];
+        PalColorMat[cursor+i][0] = PalColorMat[3*colorNums+i][0];
         PalColorMat[cursor+i][1] = PalColorMat[i][1];
         PalColorMat[cursor+i][2] = 0;
     }
     cursor+=colorNums;
-    //RGB 三色混合
-    for(int i=0;i<4;i++){
-        PalColorMat[cursor+i][0] = PalColorMat[28+4*colorNums+i][0];
-        PalColorMat[cursor+i][1] = PalColorMat[28+i][1];
-        PalColorMat[cursor+i][2] = PalColorMat[28+2*colorNums+i][2];
-    }
 }
