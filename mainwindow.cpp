@@ -18,8 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->menuParaSetting,SIGNAL(aboutToShow()),this,SLOT(paraSetSlot()));
     connect(ui->action4_Pic,SIGNAL(triggered()),this,SLOT(dispFourPicSlot()));
-    connect(ui->doubleSpinBoxAzimuth,SIGNAL(valueChanged(double)),SLOT(on_doubleSpinBoxAzimuth_valueChanged(double));
-    connect(ui->doubleSpinBoxElevation,SIGNAL(valueChanged(double)),SLOT(on_doubleSpinBoxElevation_valueChanged(double));
+    connect(ui->doubleSpinBoxAzimuth,SIGNAL(valueChanged(double)),SLOT(on_doubleSpinBoxAzimuth_valueChanged(double)));
+    connect(ui->doubleSpinBoxElevation,SIGNAL(valueChanged(double)),SLOT(on_doubleSpinBoxElevation_valueChanged(double)));
     connect(ui->pbtnOpenTransmit,SIGNAL(clicked()),SLOT(on_pbtnOpenTransmit_clicked()));
     connect(ui->pbtnCloseTransmit,SIGNAL(clicked()),SLOT(on_pbtnCloseTransmit_clicked()));
     connect(ui->pbtnSweep,SIGNAL(clicked()),SLOT(on_pbtnSweep_clicked()));
@@ -192,4 +192,8 @@ void MainWindow::on_doubleSpinBoxAzimuth_valueChanged(double arg1)
 void MainWindow::on_doubleSpinBoxElevation_valueChanged(double arg1)
 {
     rvp9.elevation = arg1;
+}
+
+int MainWindow::initMainWindow(){
+
 }
