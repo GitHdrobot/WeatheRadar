@@ -92,4 +92,14 @@ const int baseColorNum = 3;
 const int palNum = 15;
 /*Qt角度的度量用的是一度的十六分之一*/
 const int angleFactor = 16;
+
+
+#define TTY_DEV0 "/dev/ttyS0" //端口路径 如果是在电脑端选择ttyUSB,在mini2440端则选择ttySAC
+#define TTY_DEV1 "/dev/ttyS1"
+#define TTY_DEV2 "/dev/ttyS2"
+#define TTY_DEV3 "/dev/ttyS3"
+#define TTY_DEV4 "/dev/ttyUSB0"
+#define TTY_DEV5 "/dev/ttyUSB1"
+
+
 #endif // CONSTCODE_H

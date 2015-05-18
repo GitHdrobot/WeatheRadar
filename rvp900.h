@@ -39,8 +39,8 @@ public :
     int hdrBytesNum,dataBytesNum ;
     //距离量程 distance range,目前仅设置六个距离范围
     enum enum_disRange
-    {RANGE_FIRST=10,RANGE_SECOND=20,RANGE_THIRD=30,
-        RANGE_FOURTH=50,RANGE_FIFTH=150,RANGE_SIXTH=300} disRange;
+    {RANGE_10=10,RANGE_20=20,RANGE_30=30,
+        RANGE_50=50,RANGE_150=150,RANGE_300=300} disRange;
     //脉冲重复频率
     enum enum_PRF
     {PRF_FIRST=300,PRF_SECOND=500,PRF_THIRD=1000,
@@ -74,6 +74,9 @@ public :
 
     //距离分辨率25-1000 米，默认125米，通过TTY设置
     int resolution;
+    /*发射机发射、接收、伺服状态*/
+    char trstatus[8];
+
     /*socket to RVP9*/
 public:
     int  clientSocket;

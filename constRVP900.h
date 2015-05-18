@@ -235,4 +235,10 @@
 
 //#define SYNCHRONOUS 1
 
+/*双脉冲重复比常量  设置的是PROC命令的8、9位*/
+#define DPRF_NONE 0   //none
+#define DPRF_2TO3 1  //双PRF为2：3
+#define DPRF_3TO4 2  //双PRF为3:4
+#define DPRF_4TO5 3   //双PRF为4:5
+
 #endif // CONSTRVP900_H

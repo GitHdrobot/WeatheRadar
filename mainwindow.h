@@ -7,14 +7,11 @@
 #include "dialogsample.h"   //采样设置对话框
 
 
-#include "constcode.h"
+#include "headerctrl.h"
 
-#include "rvp900.h"
-
-#include "dispdevice.h"
 
 extern DispDevice dispDev;
-
+extern QextSerialPort serialPort;
 
 namespace Ui {
 class MainWindow;
@@ -43,9 +40,13 @@ public slots:
    // RVP900 rvp900;
 
 private slots:
+    /*处理 打开发射按钮 发出的点击信号*/
     void on_pbtnOpenTransmit_clicked();
+    /*处理 关闭发射按钮 发出的点击信号*/
     void on_pbtnCloseTransmit_clicked();
+    /*处理 天线扫描按钮 发出的点击信号*/
     void on_pbtnSweep_clicked();
+    /*处理 天线停止扫描按钮 发出的点击信号*/
     void on_pbtnStopSweep_clicked();
     void on_pbtnAzimuth_clicked();
     void on_pbtnElevation_clicked();
@@ -54,8 +55,11 @@ private slots:
 
     void on_comboBoxMode_activated(int index);
     void on_comboBoxLmsk_activated(int index);
+    /*RPF 脉冲重复频率 改变*/
     void on_comboBoxPRF_activated(int index);
+    /*双脉冲重复比 改变   改变后仍需对PROC命令的8、9位进行设置*/
     void on_comboBoxDPrf_activated(int index);
+    /*脉宽  改变*/
     void on_comboBoxPulseWidth_activated(int index);
     void on_comboBoxDopFilter_activated(int index);
     void on_doubleSpinBoxAzimuth_valueChanged(double arg1);

@@ -1,22 +1,16 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include "headerctrl.h"
 
 RVP900 rvp9;//rvp9控制对象
+
+QextSerialPort serialPort;//串口控制对象
 
 DispDevice dispDev;//存放显示设备信息
 
 int dispMode;
 
 unsigned char paintBuff[1024];//绘图数据缓冲区
-
-
-
-//暂不需要这些数据
-/*
-unsigned char binsZDRBuff[1024];//ZDR bins buff
-unsigned char binsKDPBuff[1024];//KDP bins buff
-unsigned char binsKDPBuff[1024*6];//ARC bins buff
-*/
 unsigned char binsTAGBuff[8];//TAG buff
 
 /*
