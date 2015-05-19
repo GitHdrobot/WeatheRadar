@@ -274,3 +274,7 @@ void MainWindow::on_doubleSpinBoxElevation_valueChanged(double arg1)
 {
     rvp9.elevation = arg1;
 }
+
+int MainWindow::initMainWindow(){
+
+}

@@ -96,6 +96,7 @@ public:
     unsigned char binsWBuff[1024];//W bins buff
     unsigned char binsVBuff[1024];//V bins buff
     unsigned char binsTBuff[1024];//dBT bins buff
+    unsigned char binsTAGBuff[1024];//TAG Buff
 
     //暂不需要这些数据
     /*
