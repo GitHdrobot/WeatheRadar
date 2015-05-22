@@ -53,44 +53,44 @@ MainWindow::MainWindow(QWidget *parent) :
     serialPort.setDataBits(DATA_8);
     serialPort.setStopBits(STOP_1);
 
-    /*多普勒滤波器选项添加*/
-    ui->comboBoxDopFilter->addItem("None");
-    ui->comboBoxDopFilter->addItem("1");
-    ui->comboBoxDopFilter->addItem("2");
-    ui->comboBoxDopFilter->addItem("3");
-    ui->comboBoxDopFilter->addItem("4");
-    ui->comboBoxDopFilter->addItem("5");
-    ui->comboBoxDopFilter->addItem("6");
-    ui->comboBoxDopFilter->addItem("7");
+    //    /*多普勒滤波器选项添加*/
+    //    ui->comboBoxDopFilter->addItem("None");
+    //    ui->comboBoxDopFilter->addItem("1");
+    //    ui->comboBoxDopFilter->addItem("2");
+    //    ui->comboBoxDopFilter->addItem("3");
+    //    ui->comboBoxDopFilter->addItem("4");
+    //    ui->comboBoxDopFilter->addItem("5");
+    //    ui->comboBoxDopFilter->addItem("6");
+    //    ui->comboBoxDopFilter->addItem("7");
 
-    /*脉宽选项添加*/
-    ui->comboBoxPulseWidth->addItem(tr("1us"));
-    ui->comboBoxPulseWidth->addItem(tr("5us"));
-    ui->comboBoxPulseWidth->addItem(tr("10us"));
-    ui->comboBoxPulseWidth->addItem(tr("20us"));
+    //    /*脉宽选项添加*/
+    //    ui->comboBoxPulseWidth->addItem(tr("1us"));
+    //    ui->comboBoxPulseWidth->addItem(tr("5us"));
+    //    ui->comboBoxPulseWidth->addItem(tr("10us"));
+    //    ui->comboBoxPulseWidth->addItem(tr("20us"));
 
-    /*脉冲重复频率选项添加*/
-    ui->comboBoxPRF->addItem("300");
-    ui->comboBoxPRF->addItem("500");
-    ui->comboBoxPRF->addItem("1000");
-    ui->comboBoxPRF->addItem("2000");
-    ui->comboBoxPRF->addItem("3000");
-    ui->comboBoxPRF->addItem("4000");
-    ui->comboBoxPRF->addItem("5000");
+    //    /*脉冲重复频率选项添加*/
+    //    ui->comboBoxPRF->addItem("300");
+    //    ui->comboBoxPRF->addItem("500");
+    //    ui->comboBoxPRF->addItem("1000");
+    //    ui->comboBoxPRF->addItem("2000");
+    //    ui->comboBoxPRF->addItem("3000");
+    //    ui->comboBoxPRF->addItem("4000");
+    //    ui->comboBoxPRF->addItem("5000");
 
-    /*双脉冲重复比选项添加*/
-    ui->comboBoxDPrf->addItem("None");
-    ui->comboBoxDPrf->addItem("2:3");
-    ui->comboBoxDPrf->addItem("3:4");
-    ui->comboBoxDPrf->addItem("4:5");
+    //    /*双脉冲重复比选项添加*/
+    //    ui->comboBoxDPrf->addItem("None");
+    //    ui->comboBoxDPrf->addItem("2:3");
+    //    ui->comboBoxDPrf->addItem("3:4");
+    //    ui->comboBoxDPrf->addItem("4:5");
 
-    /*扫描距离 选项添加*/
-    ui->comboBoxLmsk->addItem("10KM");
-    ui->comboBoxLmsk->addItem("20KM");
-    ui->comboBoxLmsk->addItem("30KM");
-    ui->comboBoxLmsk->addItem("50KM");
-    ui->comboBoxLmsk->addItem("150KM");
-    ui->comboBoxLmsk->addItem("300KM");
+    //    /*扫描距离 选项添加*/
+    //    ui->comboBoxLmsk->addItem("10KM");
+    //    ui->comboBoxLmsk->addItem("20KM");
+    //    ui->comboBoxLmsk->addItem("30KM");
+    //    ui->comboBoxLmsk->addItem("50KM");
+    //    ui->comboBoxLmsk->addItem("150KM");
+    //    ui->comboBoxLmsk->addItem("300KM");
 
 }
 
@@ -121,16 +121,16 @@ void MainWindow::dispFourPicSlot()
 //处理 打开发射按钮 发出的点击信号
 void MainWindow::on_pbtnOpenTransmit_clicked()
 {
-    char Openbuf[]={0x54,0x01,0xAA,0x01,0};
-    serialPort.write(Openbuf);
+    char openbuf[]={0x54,0x01,0xAA,0x01,0};
+    serialPort.write(openbuf);
     serialPort.read(rvp9.trstatus,8);
     //改变相关显示状态
 }
 //处理 关闭发射按钮 发出的点击信号
 void MainWindow::on_pbtnCloseTransmit_clicked()
 {
-    char Closebuf[]={0x54,0x01,0x55,0x56,0};
-    serialPort.write(Closebuf);
+    char closebuf[]={0x54,0x01,0x55,0x56,0};
+    serialPort.write(closebuf);
     serialPort.read(rvp9.trstatus,8);
     //改变相关显示状态
 }
@@ -141,28 +141,39 @@ void MainWindow::on_pbtnSweep_clicked()
     ui->pbtnStopSweep->setEnabled(true);
     //此处的天线扫描不明白
     char c;
-    float eng;
-    int ieng;
-    rvp9.elevation=elDisplay_spinbox->value();
-    if (antenna_el>=0)
-        eng=antenna_el*4096.0/360.0;
-    else
-        eng=(360+antenna_el)*4096.0/360.0;
-    ieng=eng;
-    Abuf[4]=ieng%256;
-    Abuf[5]=ieng/256;
-    c=Abuf[0]+Abuf[1]+Abuf[2]+Abuf[3]+Abuf[4]+Abuf[5];
-    Abuf[6]=0-c;
-    PortSend(serial_fd,Abuf,7);
-    if(M!=-1)
+    float elevationf;
+    int elevationi;
+    //获取天线的仰角大小
+    rvp9.elevation=ui->spinBoxElevationSet->value();
+    if (rvp9.elevation>=0){
+        //乘以一个比例因子 将度转化为角码位数据 此处有12个角码位 即范围是0-4095
+        elevationf=rvp9.elevation*4096.0/360.0;
+    }
+    else{//角度为负
+        elevationf=(360+antenna_el)*4096.0/360.0;
+    }
+    //强制转换
+    elevationi = elevationf;
+    //取得仰角低字节数据
+    rvp9.antennaBuf[4]=elevationi % 256;
+    //取得仰角高字节数据
+    rvp9.antennaBuf[5]=elevationi / 256;
+    c=rvp9.antennaBuf[0]+rvp9.antennaBuf[1]+rvp9.antennaBuf[2]+rvp9.antennaBuf[3]+rvp9.antennaBuf[4]+rvp9.antennaBuf[5];
+    //作用不知道
+    rvp9.antennaBuf[6]=0-c;
+    //通过串口发送数据
+    serialPort.write(rvp9.antennaBuf,7);
+    if(true == rvp9.isWorking )
     {
+        //开始采集数据
         collect_Slot();
     }
 }
-
+//处理 天线停止扫描按钮 发出的点击信号
 void MainWindow::on_pbtnStopSweep_clicked()
 {
-    //处理 天线停止扫描按钮 发出的点击信号
+    char stopbuf[]={0x53,0x01,0x50,0x5C,0};
+    serialPort.write(stopbuf,4);
 }
 
 void MainWindow::on_pbtnAzimuth_clicked()
@@ -174,30 +185,55 @@ void MainWindow::on_pbtnElevation_clicked()
 {
     //仰角定位
 }
-
+/*停止采集*/
 void MainWindow::on_pbtnStop_clicked()
 {
-    //停止采集
-}
-
-void MainWindow::on_pbtnCollect_clicked()
-{
-    //恢复采集
-}
-
-
-void MainWindow::on_comboBoxMode_activated(int index)
-{
-    //扫描方式  改变
-    if(0 == index){
-
-    }else if(1 == index){
-
-    }else if(2 == index){
-
+    if(true == rvp9.isWorking){
+        rvp9.isWorking = false;
+        ui->pbtnStop->setEnabled(false);
+        ui->pbtnCollect->setEnabled(true);
+        ui->comboBoxDPrf->setEnabled(true);
+        ui->comboBoxPulseWidth->setEnabled(true);
+        ui->comboBoxDopFilter->setEnabled(true);
+        ui->comboBoxLmsk->setEnabled(true);
+        ui->comboBoxDPrf->setEnabled(true);
     }
 }
-    /*扫描距离 改变  距离掩码相关*/
+
+/*恢复采集*/
+void MainWindow::on_pbtnCollect_clicked()
+{
+    if(false == rvp9.isWorking){
+        rvp9.isWorking = true;
+        ui->pbtnStop->setEnabled(true);
+        ui->pbtnCollect->setEnabled(false);
+        ui->comboBoxDPrf->setEnabled(false);
+        ui->comboBoxPulseWidth->setEnabled(false);
+        ui->comboBoxDopFilter->setEnabled(false);
+        ui->comboBoxLmsk->setEnabled(false);
+        ui->comboBoxDPrf->setEnabled(false);
+    }
+}
+
+/*扫描方式  改变*/
+void MainWindow::on_comboBoxMode_activated(int index)
+{
+    if(0 == index){
+        //同步模式
+        rvp9.enum_colMode = rvp9.SYNCHRONOUS;
+        //不同扫描模式 下的天线扫描命令
+        rvp9.antennaBuf[3] = 0xF1;
+    }else if(1 == index){
+        //free running模式
+        rvp9.enum_colMode = rvp9.FREE_RUNNING;
+        rvp9.antennaBuf[3] = 0xF2;
+        //时间序列模式
+    }else if(2 == index){
+        rvp9.enum_colMode = rvp9.TIME_SERIES;
+        rvp9.antennaBuf[3] = 0xF3;
+    }
+}
+/*扫描距离 改变  距离掩码相关*/
 void MainWindow::on_comboBoxLmsk_activated(int index)
 {
     if(0 == index){
@@ -205,14 +241,14 @@ void MainWindow::on_comboBoxLmsk_activated(int index)
     }else if(1 == index){
         rvp9.disRange = rvp9.RANGE_20;
     }else if(2 == index){
-         rvp9.disRange = rvp9.RANGE_30;
+        rvp9.disRange = rvp9.RANGE_30;
     }else if(3 == index){
         rvp9.disRange = rvp9.RANGE_50;
-   }else if(4 == index){
+    }else if(4 == index){
         rvp9.disRange = rvp9.RANGE_150;
-   }else if(5 == index){
+    }else if(5 == index){
         rvp9.disRange = rvp9.RANGE_300;
-   }
+    }
 }
 /*RPF 脉冲重复频率 改变*/
 void MainWindow::on_comboBoxPRF_activated(int index)
@@ -267,14 +303,38 @@ void MainWindow::on_comboBoxDopFilter_activated(int index)
 /*设置方位角角度*/
 void MainWindow::on_doubleSpinBoxAzimuth_valueChanged(double arg1)
 {
-    rvp9.azimuth = arg1;
+    //rvp9.azimuth = arg1;
 }
 /*设置仰角角度*/
 void MainWindow::on_doubleSpinBoxElevation_valueChanged(double arg1)
 {
-    rvp9.elevation = arg1;
+    //rvp9.elevation = arg1;
 }
-
-int MainWindow::initMainWindow(){
-
+/*数据采集*/
+int MainWindow::collectData(){
+    rvp9.calculateVmax();
+    rvp9.isWorking = true;
+    while(rvp9.isWorking)
+    {
+        QApplication::processEvents();
+        unsigned short azimuths,elevations;
+        float azimuthf,elevationf;
+        //4个字 8个字节 包含两个32位的TAG样本
+        //拼装一个完整的相位
+        azimuths=(((unsigned char)rvp9.outbuff[0]+(unsigned char)rvp9.outbuff[1]*256)>>4);
+        azimuthf=float(azimuths)*360.0/4096.0;
+        elevations=(((unsigned char)rvp9.outbuff[2]+(unsigned char)rvp9.outbuff[3]*256)>>4);
+        elevationf=float(elevations)*360.0/4096.0;
+        //将角度折叠到[-PI,PI]
+        if(azimuthf>=180&&azimuthf<360)
+            azimuthf=azimuthf-360;
+        //更新相位控件的值
+        ui->spinBoxAzimuthDisp->setValue(azimuthf);
+        if(elevationf>=180&&elevationf<360)
+        {
+            elevationf=-(360-elevationf);
+        }
+        //更新仰角控件的值
+        ui->spinBoxElevationDisp->setValue(elevationf);
+    }
 }

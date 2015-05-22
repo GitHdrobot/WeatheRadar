@@ -25,17 +25,23 @@ class RVP900
     //RVP900 Properties
 public :
 
+    //PROC命令   标志位
+    //|ARC| Z | T | V | W |ZDR|Unfold |KDP
+    //采集数据种类 dBz,dBt,dBw,v
+    bool dataARC_BIT,dataZ_BIT,dataT_BIT,dataV_BIT,dataW_BIT,dataZDR_BIT;
+    unsigned char dataUnfold;
+    bool dataKDP_BIT;
+
+
     //距离库个数 与距离掩码设置位个数相同
     int binsNum;
-    //采集数据种类 dBz,dBt,dBw,v，默认为ALL
-    bool dataZDR_BIT,dataZ_BIT,dataT_BIT,dataV_BIT,dataW_BIT,dataALL,dataARC_BIT,dataKDP_BIT;
     int dataTypeNums;
     //采集的数据是否包含 头部TAG，默认为true
     bool noHeader;
     //采集数据的头信息
     bool hdrTag_BIT,hdrPRT_BIT,hdrPul_BIT,hdrTim_BIT,hdrGpm_BIT,
     hdrFlg_BIT,hdrUTC_BIT,hdrMMT_BIT,hdrSYT_BIT,hdrPBN_BIT,hdrTID_BIT;
-    //数据头的长度 以字节计
+    //数据头、数据的长度 以字节计
     int hdrBytesNum,dataBytesNum ;
     //距离量程 distance range,目前仅设置六个距离范围
     enum enum_disRange
@@ -76,27 +82,163 @@ public :
     int resolution;
     /*发射机发射、接收、伺服状态*/
     char trstatus[8];
+    /*RVP900的工作状态*/
+    bool isWorking;
+
+    /*天线扫描的串口命令 该命令组成可能是：前三个字节，控制天线的开关；
+     *第四个字节为扫描模式；第五六字节为角度信息；第七个字节不知（校验？）
+    */
+    char antennaBuf[7]={0x53,0x04,0x53,0xF2,0x00,0x00,0x00};
+    /*天线仰角buffer 两个字节 一个字*/
+    unsigned char elevationBuff[2]={0x00,0x00};
+    /*最大不模糊速度,雷达射频波长*/
+    float Vmax ,waveLen;
+    /*雷达射频频率(工作频率) 频率与波长的关系式：c=λf*/
+    int rf;
 
     /*socket to RVP9*/
-public:
     int  clientSocket;
 
-    /*RVP900 buffer*/
+
+
+    /*get 、set方法*/
 public:
-    char sendBuffer[1024*8];//发送指令buffer 用于缓存与指令相关信息
-    char recvBuffer[1024*8];//接收数据buffer
-    char dataOutBuff[1024*16];//接收数据buffer
-    char formatuffer[10];
-    unsigned char low8Bits,high8Bits;//一个双字的低位字buffer，和高位字buffer
+    const char* getAntennaBuf() const ;
+    unsigned char getAvgDistance() const ;
+    void setAvgDistance(unsigned char avgDistance) ;
+    double getAzimuth() const ;
+    void setAzimuth(double azimuth) ;
+    int getBinsNum() const ;
+    void setBinsNum(int binsNum) ;
+    float getCcorThreshold() const ;
+    void setCcorThreshold(float ccorThreshold) ;
+    enum enum_colMode {
+        SYNCHRONOUS, FREE_RUNNING, TIME_SERIES
+    } getColMode() const ;
+    void setColMode(enum_colMode colMode ) ;
+    bool isDataAll() const ;
+    void setDataAll(bool dataAll);
+    bool isDataArcBit() const ;
+    void setDataArcBit(bool dataArcBit) ;
+    int getDataBytesNum() const ;
+    void setDataBytesNum(int dataBytesNum) ;
+    bool isDataKdpBit() const ;
+    void setDataKdpBit(bool dataKdpBit) ;
+    bool isDataTBit() const ;
+    void setDataTBit(bool dataTBit) ;
+    int getDataTypeNums() const ;
+    void setDataTypeNums(int dataTypeNums) ;
+    bool isDataVBit() const ;
+    void setDataVBit(bool dataVBit) ;
+    bool isDataWBit() const ;
+    void setDataWBit(bool dataWBit) ;
+    bool isDataZBit() const ;
+    void setDataZBit(bool dataZBit) ;
+    bool isDataZdrBit() const ;
+    void setDataZdrBit(bool dataZdrBit);
+    enum enum_disRange {
+        RANGE_10 = 10,
+        RANGE_20 = 20,
+        RANGE_30 = 30,
+        RANGE_50 = 50,
+        RANGE_150 = 150,
+        RANGE_300 = 300
+    } getDisRange() const;
+    void setDisRange( enum_disRange disRange) ;
+    enum enum_dopFilter {
+        DF_NONE, DF_ONE, DF_TWO, DF_THREE, DF_FOUTH, DF_FIVE, DF_SIX, DF_SEVEN
+    } getDopFilter() const ;
+    void setDopFilter( enum_dopFilter dopFilter) ;
+    double getElevation() const ;
+    void setElevation(double elevation);
+    const unsigned char* getElevationBuff() const ;
+    int getHdrBytesNum() const;
+    void setHdrBytesNum(int hdrBytesNum) ;
+    bool isHdrFlgBit() const;
+    void setHdrFlgBit(bool hdrFlgBit) ;
+    bool isHdrGpmBit() const ;
+    void setHdrGpmBit(bool hdrGpmBit);
+    bool isHdrMmtBit() const;
+    void setHdrMmtBit(bool hdrMmtBit) ;
+    bool isHdrPbnBit() const;
+    void setHdrPbnBit(bool hdrPbnBit) ;
+    bool isHdrPrtBit() const ;
+    void setHdrPrtBit(bool hdrPrtBit) ;
+    bool isHdrPulBit() const ;
+    void setHdrPulBit(bool hdrPulBit);
+    bool isHdrSytBit() const;
+    void setHdrSytBit(bool hdrSytBit);
+    bool isHdrTagBit() const ;
+    void setHdrTagBit(bool hdrTagBit);
+    bool isHdrTidBit() const;
+    void setHdrTidBit(bool hdrTidBit) ;
+    bool isHdrTimBit() const ;
+    void setHdrTimBit(bool hdrTimBit) ;
+    bool isHdrUtcBit() const ;
+    void setHdrUtcBit(bool hdrUtcBit) ;
+    bool isIsWorking() const ;
+    void setIsWorking(bool isWorking) ;
+    float getLogThreshold() const ;
+    void setLogThreshold(float logThreshold) ;
+    bool isNoHeader() const ;
+    void setNoHeader(bool noHeader);
+    enum enum_PRF {
+        PRF_FIRST = 300,
+        PRF_SECOND = 500,
+        PRF_THIRD = 1000,
+        PRF_FOURTH = 2000,
+        PRF_FIFTH = 3000,
+        PRF_SIXTH = 4000,
+        PRF_SEVENTH = 5000
+    } getPrf() const ;
+    void setPrf( enum enum_PRF prf) ;
+    enum enum_PRF_Ratio {
+        PRF_NONE, PRF_2TO3, PRF_3TO4, PRF_4TO5
+    } getPrfRatio() const ;
+    void setPrfRatio( enum_PRF_Ratio prfRatio) ;
+    enum enum_proMode {
+        PPP, FFT, RPP, DPRT_1, DPRT_2
+    } getProMode() const ;
+    void setProMode( enum_proMode proMode);
+    int getPulseWidth() const ;
+    void setPulseWidth(int pulseWidth) ;
+    int getResolution() const ;
+    void setResolution(int resolution) ;
+    int getRf() const ;
+    void setRf(int rf) ;
+    bool isTwoEnable() const ;
+    void setTwoEnable(bool twoEnable) ;
+    float getSigThreshold() const ;
+    void setSigThreshold(float sigThreshold) ;
+    float getSqiThreshold() const ;
+    void setSqiThreshold(float sqiThreshold);
+    const char* getTrstatus() const ;
+    float getVmax() const;
+    void setVmax(float vmax);
+    float getWaveLen() const;
+    void setWaveLen(float waveLen);
+
+
+
+    /*RVP900 buffer  相关缓冲区*/
+public:
+    char sendBuffer[1024*8];//发送指令buffer 用于缓存等待发送的指令相关信息
+
+    char recvBuffer[1024*8];//用于缓存指令执行后返回的结果信息buffer
+
+    char formatBuffer[10];//用于存放 将其他类型的数据格式化为字符（字节）的buffer
+
+    unsigned char low8Bits,high8Bits;//一个双字节的低位字节buffer，和高位字节buffer
 
     unsigned char inputNBuff;//指令输入参数缓冲区
 
-    unsigned char outbuff[1024*16];//读取数据缓冲区
-    unsigned char binsZBuff[1024];//dbZ bins buff
-    unsigned char binsWBuff[1024];//W bins buff
-    unsigned char binsVBuff[1024];//V bins buff
-    unsigned char binsTBuff[1024];//dBT bins buff
-    unsigned char binsTAGBuff[1024];//TAG Buff
+    unsigned char outbuff[1024*16];//存放执行PROC指令后 读取到的数据
+
+//    unsigned char binsZBuff[1024];//dbZ bins buff
+//    unsigned char binsWBuff[1024];//W bins buff
+//    unsigned char binsVBuff[1024];//V bins buff
+//    unsigned char binsTBuff[1024];//dBT bins buff
+//    unsigned char binsTAGBuff[1024];//TAG Buff
 
     //暂不需要这些数据
     /*
@@ -114,7 +256,7 @@ public:
         0xa0,0xa0,0,0,0,0,0x40,0x6,0,0,0,0,0x80,0xc};
     unsigned char LDRNV[504]={0x15,0,0};
 
-    /*RVP900 Methods*/
+    /*RVP900 Methods   方法*/
 public:
     RVP900();
     ~RVP900();
@@ -235,7 +377,7 @@ public:
     *时间序列模式————每执行一个PROC指令，处理器获取、长生输出一个射线的时间序列样本。
     *和上面的同步模式相似。数据以8位、16位时间序列或者16位功率谱的形式输出
     */
-    int PROC(unsigned char *outBuffer);
+    int PROC();
     /*
     *GPARM : Get Processor Parameters
     *This command is used to access status information from the RVP900
@@ -252,6 +394,10 @@ public:
     int getHeaderLength();
     /*计算返回的数据长度*/
     int getDataLength();
+
+    /*计算最大不模糊速度 prf:脉冲重复频率，prf_ratio 脉冲重复比，wavelength 射频波长*/
+    int calculateVmax();
+
 };
 
 #endif // RVP900_H

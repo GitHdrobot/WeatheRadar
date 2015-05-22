@@ -38,6 +38,8 @@ public slots:
 //public :
    // void paintEvent(QPaintEvent *);
    // RVP900 rvp900;
+public:
+    int collectData();
 
 private slots:
     /*处理 打开发射按钮 发出的点击信号*/

@@ -663,19 +663,6 @@
      <string>方位定位</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEditAzimuth_2">
-    <property name="geometry">
-     <rect>
-      <x>1121</x>
-      <y>114</y>
-      <width>71</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0.0</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pbtnElevation">
     <property name="geometry">
      <rect>
@@ -692,19 +679,6 @@
     </property>
     <property name="text">
      <string>仰角定位</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="lineEditElevation_2">
-    <property name="geometry">
-     <rect>
-      <x>1299</x>
-      <y>114</y>
-      <width>71</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>0.0</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pbtnStop">
@@ -980,12 +954,17 @@
     </item>
     <item>
      <property name="text">
-      <string>3:2</string>
+      <string>2:3</string>
      </property>
     </item>
     <item>
      <property name="text">
-      <string>4:3</string>
+      <string>3:4</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>4:5</string>
      </property>
     </item>
    </widget>
@@ -1069,7 +1048,7 @@
      </property>
     </item>
    </widget>
-   <widget class="QDoubleSpinBox" name="doubleSpinBoxAzimuth">
+   <widget class="QDoubleSpinBox" name="spinBoxAzimuthDisp">
     <property name="geometry">
      <rect>
       <x>1070</x>
@@ -1079,13 +1058,33 @@
      </rect>
     </property>
    </widget>
-   <widget class="QDoubleSpinBox" name="doubleSpinBoxElevation">
+   <widget class="QDoubleSpinBox" name="spinBoxElevationDisp">
     <property name="geometry">
      <rect>
       <x>1240</x>
       <y>20</y>
       <width>111</width>
       <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBoxAzimuthSet">
+    <property name="geometry">
+     <rect>
+      <x>1120</x>
+      <y>111</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="spinBoxElevationSet">
+    <property name="geometry">
+     <rect>
+      <x>1300</x>
+      <y>111</y>
+      <width>71</width>
+      <height>21</height>
      </rect>
     </property>
    </widget>
@@ -1096,7 +1095,7 @@
      <x>0</x>
      <y>0</y>
      <width>1376</width>
-     <height>27</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDispMode">

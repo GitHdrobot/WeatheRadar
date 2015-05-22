@@ -2,10 +2,12 @@
 
 
 
+
+
+
 RVP900::RVP900()
 {
-    clientSocket = -1;
-    //pulseRatio = 0x80;
+
 
 }
 
@@ -304,7 +306,7 @@ int RVP900::samNoise(){
 
     return RVP_NO_ERR;
 }
-int RVP900::PROC(unsigned char *outBuffer){
+int RVP900::PROC(){
     low8Bits = 0x00;
     high8Bits = 0x00;
     sendBuffer[0]=0;
@@ -369,8 +371,9 @@ int RVP900::PROC(unsigned char *outBuffer){
 
     if (readSocketResp()!=0)
         return SOCKET_READ_ERR;
-     sprintf(formatuffer,"%d",dataBytesNum);
-    if (comboCmdMsg(COMMAND_READ,formatuffer,10)!= RVP_NO_ERR)//Read Proc data
+    //设置数据长度
+     sprintf(formatBuffer,"%d",dataBytesNum);
+    if (comboCmdMsg(COMMAND_READ,formatBuffer,10)!= RVP_NO_ERR)//Read Proc data
         return SOCKET_SEND_ERR;
 
     char sSize[10];
@@ -392,11 +395,11 @@ int RVP900::PROC(unsigned char *outBuffer){
         iRecvSize = recv (clientSocket,recvBuffer+iRecvSize,lenn,0);
         if (iRecvSize!=lenn)
             return iRecvSize;
-        memcpy(outBuffer,recvBuffer+4,dataBytesNum);
+        memcpy(outbuff,recvBuffer+4,dataBytesNum);
         return lenn;
     }
     else
-        memcpy(outBuffer,recvBuffer+4,dataBytesNum);
+        memcpy(outbuff,recvBuffer+4,dataBytesNum);
     return RVP_NO_ERR;
 }
 
@@ -516,7 +519,7 @@ int RVP900::RVP9Initialize(){
     //采集的数据是否包含 头部TAG，默认为true
     noHeader = true;
     //距离量程 distance range,目前仅设置六个距离范围
-    disRange = RANGE_FIRST;
+    disRange = RANGE_10;
     //脉冲重复频率
     PRF = PRF_FIRST;
     /*数据采集方式 collect mode,有三种Synchronous，
@@ -541,6 +544,11 @@ int RVP900::RVP9Initialize(){
     avgDistance = 0x0;
     //距离分辨率 125m
     resolution = 125;
+    //雷达工作波长 λ = 0.032m
+    waveLen = 0.032;
+    //socket
+    clientSocket = -1;
+    isWorking = false;
     return 0;
 }
 /*返回数据的头的长度**/
@@ -593,3 +601,386 @@ int RVP900::getHeaderLength(){
 int RVP900::getDataLength(){
     return dataBytesNum = hdrBytesNum + binsNum * dataTypeNums ;
 }
+/*计算最大不模糊速度*/
+int RVP900::calculateVmax(){
+    Vmax = 0.25 * PRF * waveLen;
+    //2:3
+    if(DPRF_2TO3 == PRF_Ratio){
+        Vmax *= 2;
+    }
+    else if(DPRF_3TO4 == PRF_Ratio){
+        Vmax *= 3;
+    }
+    else if(DPRF_4TO5 == PRF_Ratio){
+        Vmax *= 4;
+    }
+    return Vmax;
+}
+
+
+/*get 、  set 方法**/
+
+
+const char* RVP900::getAntennaBuf() const {
+        return antennaBuf;
+    }
+
+    unsigned char RVP900::getAvgDistance() const {
+        return avgDistance;
+    }
+
+    void RVP900::setAvgDistance(unsigned char avgDistance) {
+        this->avgDistance = avgDistance;
+    }
+
+    double RVP900::getAzimuth() const {
+        return azimuth;
+    }
+
+    void RVP900::setAzimuth(double azimuth) {
+        this->azimuth = azimuth;
+    }
+
+    int RVP900::getBinsNum() const {
+        return binsNum;
+    }
+
+    void RVP900::setBinsNum(int binsNum) {
+        this->binsNum = binsNum;
+    }
+
+    float RVP900::getCcorThreshold() const {
+        return CCOR_Threshold;
+    }
+
+    void RVP900::setCcorThreshold(float ccorThreshold) {
+        CCOR_Threshold = ccorThreshold;
+    }
+
+     RVP900::enum_colMode RVP900::getColMode() const {
+        return colMode;
+    }
+
+    void RVP900::setColMode(enum_colMode colMode) {
+        this->colMode = colMode;
+    }
+
+    bool RVP900::isDataAll() const {
+        return dataALL;
+    }
+
+    void RVP900::setDataAll(bool dataAll) {
+        dataALL = dataAll;
+    }
+
+    bool RVP900::isDataArcBit() const {
+        return dataARC_BIT;
+    }
+
+    void RVP900::setDataArcBit(bool dataArcBit) {
+        dataARC_BIT = dataArcBit;
+    }
+
+    int RVP900::getDataBytesNum() const {
+        return dataBytesNum;
+    }
+
+    void RVP900::setDataBytesNum(int dataBytesNum) {
+        this->dataBytesNum = dataBytesNum;
+    }
+
+    bool RVP900::isDataKdpBit() const {
+        return dataKDP_BIT;
+    }
+
+    void RVP900::setDataKdpBit(bool dataKdpBit) {
+        dataKDP_BIT = dataKdpBit;
+    }
+
+    bool RVP900::isDataTBit() const {
+        return dataT_BIT;
+    }
+
+    void RVP900::setDataTBit(bool dataTBit) {
+        dataT_BIT = dataTBit;
+    }
+
+    int RVP900::getDataTypeNums() const {
+        return dataTypeNums;
+    }
+
+    void RVP900::setDataTypeNums(int dataTypeNums) {
+        this->dataTypeNums = dataTypeNums;
+    }
+
+    bool RVP900::isDataVBit() const {
+        return dataV_BIT;
+    }
+
+    void RVP900::setDataVBit(bool dataVBit) {
+        dataV_BIT = dataVBit;
+    }
+
+    bool RVP900::isDataWBit() const {
+        return dataW_BIT;
+    }
+
+    void RVP900::setDataWBit(bool dataWBit) {
+        dataW_BIT = dataWBit;
+    }
+
+    bool RVP900::isDataZBit() const {
+        return dataZ_BIT;
+    }
+
+    void RVP900::setDataZBit(bool dataZBit) {
+        dataZ_BIT = dataZBit;
+    }
+
+    bool RVP900::isDataZdrBit() const {
+        return dataZDR_BIT;
+    }
+
+    void RVP900::setDataZdrBit(bool dataZdrBit) {
+        dataZDR_BIT = dataZdrBit;
+    }
+
+     RVP900::enum_disRange getDisRange() const {
+        return disRange;
+    }
+
+    void RVP900::setDisRange( enum_disRange disRange) {
+        this->disRange = disRange;
+    }
+
+     RVP900::enum_dopFilter RVP900::getDopFilter() const {
+        return dopFilter;
+    }
+
+    void RVP900::setDopFilter( enum_dopFilter dopFilter) {
+        this->dopFilter = dopFilter;
+    }
+
+    double RVP900::getElevation() const {
+        return elevation;
+    }
+
+    void RVP900::setElevation(double elevation) {
+        this->elevation = elevation;
+    }
+
+    const unsigned char* RVP900::getElevationBuff() const {
+        return elevationBuff;
+    }
+
+    int RVP900::getHdrBytesNum() const {
+        return hdrBytesNum;
+    }
+
+    void RVP900::setHdrBytesNum(int hdrBytesNum) {
+        this->hdrBytesNum = hdrBytesNum;
+    }
+
+    bool RVP900::isHdrFlgBit() const {
+        return hdrFlg_BIT;
+    }
+
+    void RVP900::setHdrFlgBit(bool hdrFlgBit) {
+        hdrFlg_BIT = hdrFlgBit;
+    }
+
+    bool RVP900::isHdrGpmBit() const {
+        return hdrGpm_BIT;
+    }
+
+    void RVP900::setHdrGpmBit(bool hdrGpmBit) {
+        hdrGpm_BIT = hdrGpmBit;
+    }
+
+    bool RVP900::isHdrMmtBit() const {
+        return hdrMMT_BIT;
+    }
+
+    void RVP900::setHdrMmtBit(bool hdrMmtBit) {
+        hdrMMT_BIT = hdrMmtBit;
+    }
+
+    bool RVP900::isHdrPbnBit() const {
+        return hdrPBN_BIT;
+    }
+
+    void RVP900::setHdrPbnBit(bool hdrPbnBit) {
+        hdrPBN_BIT = hdrPbnBit;
+    }
+
+    bool RVP900::isHdrPrtBit() const {
+        return hdrPRT_BIT;
+    }
+
+    void RVP900::setHdrPrtBit(bool hdrPrtBit) {
+        hdrPRT_BIT = hdrPrtBit;
+    }
+
+    bool RVP900::isHdrPulBit() const {
+        return hdrPul_BIT;
+    }
+
+    void RVP900::setHdrPulBit(bool hdrPulBit) {
+        hdrPul_BIT = hdrPulBit;
+    }
+
+    bool RVP900::isHdrSytBit() const {
+        return hdrSYT_BIT;
+    }
+
+    void RVP900::setHdrSytBit(bool hdrSytBit) {
+        hdrSYT_BIT = hdrSytBit;
+    }
+
+    bool RVP900::isHdrTagBit() const {
+        return hdrTag_BIT;
+    }
+
+    void RVP900::setHdrTagBit(bool hdrTagBit) {
+        hdrTag_BIT = hdrTagBit;
+    }
+
+    bool RVP900::isHdrTidBit() const {
+        return hdrTID_BIT;
+    }
+
+    void RVP900::setHdrTidBit(bool hdrTidBit) {
+        hdrTID_BIT = hdrTidBit;
+    }
+
+    bool RVP900::isHdrTimBit() const {
+        return hdrTim_BIT;
+    }
+
+    void RVP900::setHdrTimBit(bool hdrTimBit) {
+        hdrTim_BIT = hdrTimBit;
+    }
+
+    bool RVP900::isHdrUtcBit() const {
+        return hdrUTC_BIT;
+    }
+
+    void RVP900::setHdrUtcBit(bool hdrUtcBit) {
+        hdrUTC_BIT = hdrUtcBit;
+    }
+
+    bool RVP900::isIsWorking() const {
+        return isWorking;
+    }
+
+    void RVP900::setIsWorking(bool isWorking) {
+        this->isWorking = isWorking;
+    }
+
+    float RVP900::getLogThreshold() const {
+        return LOG_Threshold;
+    }
+
+    void RVP900::setLogThreshold(float logThreshold) {
+        LOG_Threshold = logThreshold;
+    }
+
+    bool RVP900::isNoHeader() const {
+        return noHeader;
+    }
+
+    void RVP900::setNoHeader(bool noHeader) {
+        this->noHeader = noHeader;
+    }
+
+     RVP900::enum_PRF  RVP900::getPrf() const {
+        return PRF;
+    }
+
+    void RVP900::setPrf( enum_PRF  prf) {
+        PRF = prf;
+    }
+
+     RVP900::enum_PRF_Ratio RVP900:: getPrfRatio() const {
+        return PRF_Ratio;
+    }
+
+    void RVP900::setPrfRatio( enum_PRF_Ratio  prfRatio) {
+        PRF_Ratio = prfRatio;
+    }
+
+    RVP900:: enum_proMode RVP900:: getProMode() const {
+        return proMode;
+    }
+
+    void RVP900::setProMode( enum_proMode proMode) {
+        this->proMode = proMode;
+    }
+
+    int RVP900::getPulseWidth() const {
+        return pulseWidth;
+    }
+
+    void RVP900::setPulseWidth(int pulseWidth) {
+        this->pulseWidth = pulseWidth;
+    }
+
+    int RVP900::getResolution() const {
+        return resolution;
+    }
+
+    void RVP900::setResolution(int resolution) {
+        this->resolution = resolution;
+    }
+
+    int RVP900::getRf() const {
+        return rf;
+    }
+
+    void RVP900::setRf(int rf) {
+        this->rf = rf;
+    }
+
+    bool RVP900::isTwoEnable() const {
+        return RTwoEnable;
+    }
+
+    void RVP900::setTwoEnable(bool twoEnable) {
+        RTwoEnable = twoEnable;
+    }
+
+    float RVP900::getSigThreshold() const {
+        return SIG_Threshold;
+    }
+
+    void RVP900::setSigThreshold(float sigThreshold) {
+        SIG_Threshold = sigThreshold;
+    }
+
+    float RVP900::getSqiThreshold() const {
+        return SQI_Threshold;
+    }
+
+    void RVP900::setSqiThreshold(float sqiThreshold) {
+        SQI_Threshold = sqiThreshold;
+    }
+
+    const char* RVP900::getTrstatus() const {
+        return trstatus;
+    }
+
+    float RVP900::getVmax() const {
+        return Vmax;
+    }
+
+    void RVP900::setVmax(float vmax) {
+        Vmax = vmax;
+    }
+
+    float RVP900::getWaveLen() const {
+        return waveLen;
+    }
+
+    void RVP900::setWaveLen(float waveLen) {
+        this->waveLen = waveLen;
+    }
