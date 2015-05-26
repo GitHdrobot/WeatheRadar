@@ -643,5 +643,365 @@ int RVP900::calHdrBytes(){
 
 /*get 、  set 方法**/
 
+inline const char* RVP900::getAntennaBuf() const {
+	return antennaBuf;
+}
+
+inline double RVP900::getAzimuth() const {
+	return azimuth;
+}
+
+inline void RVP900::setAzimuth(double azimuth) {
+	this->azimuth = azimuth;
+}
+
+inline int RVP900::getClientSocket() const {
+	return clientSocket;
+}
+
+inline void RVP900::setClientSocket(int clientSocket) {
+	this->clientSocket = clientSocket;
+}
+
+inline int RVP900::getDataBytesNum() const {
+	return dataBytesNum;
+}
+
+inline void RVP900::setDataBytesNum(int dataBytesNum) {
+	this->dataBytesNum = dataBytesNum;
+}
+
+inline int RVP900::getDistance() const {
+	return distance;
+}
+
+inline void RVP900::setDistance(int distance = 10) {
+	this->distance = distance;
+}
+
+inline unsigned short RVP900::getDopFilter() const {
+	return dopFilter;
+}
+
+inline void RVP900::setDopFilter(unsigned short dopFilter) {
+	this->dopFilter = dopFilter;
+}
+
+inline double RVP900::getElevation() const {
+	return elevation;
+}
+
+inline void RVP900::setElevation(double elevation) {
+	this->elevation = elevation;
+}
+
+inline const unsigned char* RVP900::getElevationBuff() const {
+	return elevationBuff;
+}
+
+inline const char* RVP900::getFormatBuffer() const {
+	return formatBuffer;
+}
+
+inline int RVP900::getHdrBytesNum() const {
+	return hdrBytesNum;
+}
+
+inline void RVP900::setHdrBytesNum(int hdrBytesNum) {
+	this->hdrBytesNum = hdrBytesNum;
+}
+
+inline unsigned char RVP900::getHigh8Bits() const {
+	return high8Bits;
+}
+
+inline void RVP900::setHigh8Bits(unsigned char high8Bits) {
+	this->high8Bits = high8Bits;
+}
+
+inline unsigned char RVP900::getInputNBuff() const {
+	return inputNBuff;
+}
+
+inline void RVP900::setInputNBuff(unsigned char inputNBuff) {
+	this->inputNBuff = inputNBuff;
+}
+
+inline bool RVP900::isIsWorking() const {
+	return isWorking;
+}
+
+inline void RVP900::setIsWorking(bool isWorking) {
+	this->isWorking = isWorking;
+}
+
+inline unsigned char RVP900::getLow8Bits() const {
+	return low8Bits;
+}
+
+inline void RVP900::setLow8Bits(unsigned char low8Bits) {
+	this->low8Bits = low8Bits;
+}
+
+inline int RVP900::getLrmskBinsNum() const {
+	return lrmskBinsNum;
+}
+
+inline void RVP900::setLrmskBinsNum(int lrmskBinsNum) {
+	this->lrmskBinsNum = lrmskBinsNum;
+}
+
+inline unsigned char RVP900::getLrmskRangeAvg() const {
+	return lrmskRangeAvg;
+}
+
+inline void RVP900::setLrmskRangeAvg(unsigned char lrmskRangeAvg) {
+	this->lrmskRangeAvg = lrmskRangeAvg;
+}
+
+inline const unsigned char* RVP900::getOutbuff() const {
+	return outbuff;
+}
+
+inline bool RVP900::isProcArc() const {
+	return procArc;
+}
+
+inline void RVP900::setProcArc(bool procArc) {
+	this->procArc = procArc;
+}
+
+inline bool RVP900::isProcKdp() const {
+	return procKDP;
+}
+
+inline void RVP900::setProcKdp(bool procKdp) {
+	procKDP = procKdp;
+}
+
+inline unsigned char RVP900::getProcMode() const {
+	return procMode;
+}
+
+inline void RVP900::setProcMode(unsigned char procMode) {
+	this->procMode = procMode;
+}
+
+inline bool RVP900::isProcT() const {
+	return procT;
+}
+
+inline void RVP900::setProcT(bool procT) {
+	this->procT = procT;
+}
+
+inline unsigned char RVP900::getProcTsout() const {
+	return procTSOUT;
+}
+
+inline void RVP900::setProcTsout(unsigned char procTsout) {
+	procTSOUT = procTsout;
+}
+
+inline unsigned char RVP900::getProcTsSubType() const {
+	return procTSSubType;
+}
+
+inline void RVP900::setProcTsSubType(unsigned char procTsSubType) {
+	procTSSubType = procTsSubType;
+}
+
+inline unsigned char RVP900::getProcUnfold() const {
+	return procUnfold;
+}
+
+inline void RVP900::setProcUnfold(unsigned char procUnfold) {
+	this->procUnfold = procUnfold;
+}
+
+inline bool RVP900::isProcV() const {
+	return procV;
+}
+
+inline void RVP900::setProcV(bool procV) {
+	this->procV = procV;
+}
+
+inline bool RVP900::isProcW() const {
+	return procW;
+}
+
+inline void RVP900::setProcW(bool procW) {
+	this->procW = procW;
+}
+
+inline bool RVP900::isProcZ() const {
+	return procZ;
+}
+
+inline void RVP900::setProcZ(bool procZ) {
+	this->procZ = procZ;
+}
+
+inline bool RVP900::isProcZdr() const {
+	return procZDR;
+}
+
+inline void RVP900::setProcZdr(bool procZdr) {
+	procZDR = procZdr;
+}
+
+inline int RVP900::getRadioFrequency() const {
+	return radioFrequency;
+}
+
+inline void RVP900::setRadioFrequency(int radioFrequency) {
+	this->radioFrequency = radioFrequency;
+}
+
+inline const char* RVP900::getRcverStatus() const {
+	return rcverStatus;
+}
+
+inline const char* RVP900::getRecvBuffer() const {
+	return recvBuffer;
+}
+
+inline int RVP900::getResolution() const {
+	return resolution;
+}
+
+inline void RVP900::setResolution(int resolution) {
+	this->resolution = resolution;
+}
+
+inline const char* RVP900::getSendBuffer() const {
+	return sendBuffer;
+}
+
+inline int RVP900::getSetpwfPrf() const {
+	return setpwfPRF;
+}
+
+inline void RVP900::setSetpwfPrf(int setpwfPrf = 300) {
+	setpwfPRF = setpwfPrf;
+}
+
+inline int RVP900::getSetpwfPulseWidth() const {
+	return setpwfPulseWidth;
+}
+
+inline void RVP900::setSetpwfPulseWidth(int setpwfPulseWidth = 1) {
+	this->setpwfPulseWidth = setpwfPulseWidth;
+}
+
+inline const unsigned char* RVP900::getSoprm() const {
+	return soprm;
+}
+
+inline float RVP900::getSoprmCcorThr() const {
+	return soprmCCORThr;
+}
+
+inline void RVP900::setSoprmCcorThr(float soprmCcorThr) {
+	soprmCCORThr = soprmCcorThr;
+}
+
+inline float RVP900::getSoprmLogThr() const {
+	return soprmLOGThr;
+}
+
+inline void RVP900::setSoprmLogThr(float soprmLogThr) {
+	soprmLOGThr = soprmLogThr;
+}
+
+inline bool RVP900::isSoprmNhd() const {
+	return soprmNHD;
+}
+
+inline void RVP900::setSoprmNhd(bool soprmNhd) {
+	soprmNHD = soprmNhd;
+}
+
+inline bool RVP900::isSoprmNth() const {
+	return soprmNth;
+}
+
+inline void RVP900::setSoprmNth(bool soprmNth) {
+	this->soprmNth = soprmNth;
+}
+
+inline unsigned short RVP900::getSoprmProcessMode() const {
+	return soprmProcessMode;
+}
+
+inline void RVP900::setSoprmProcessMode(unsigned short soprmProcessMode) {
+	this->soprmProcessMode = soprmProcessMode;
+}
+
+inline unsigned short RVP900::getSoprmPulseAcc() const {
+	return soprmPulseAcc;
+}
+
+inline void RVP900::setSoprmPulseAcc(unsigned short soprmPulseAcc) {
+	this->soprmPulseAcc = soprmPulseAcc;
+}
+
+inline bool RVP900::isSoprmR2Enable() const {
+	return soprmR2Enable;
+}
+
+inline void RVP900::setSoprmR2Enable(bool soprmR2Enable) {
+	this->soprmR2Enable = soprmR2Enable;
+}
+
+inline float RVP900::getSoprmSigThr() const {
+	return soprmSIGThr;
+}
+
+inline void RVP900::setSoprmSigThr(float soprmSigThr) {
+	soprmSIGThr = soprmSigThr;
+}
+
+inline float RVP900::getSoprmSqi() const {
+	return soprmSQI;
+}
+
+inline void RVP900::setSoprmSqi(float soprmSqi = 0.4) {
+	soprmSQI = soprmSqi;
+}
+
+inline float RVP900::getSoprmSqiThr() const {
+	return soprmSQIThr;
+}
+
+inline void RVP900::setSoprmSqiThr(float soprmSqiThr) {
+	soprmSQIThr = soprmSqiThr;
+}
+
+inline bool RVP900::isThreadFlag() const {
+	return ThreadFlag;
+}
+
+inline void RVP900::setThreadFlag(bool threadFlag = false) {
+	ThreadFlag = threadFlag;
+}
+
+inline float RVP900::getVmax() const {
+	return Vmax;
+}
+
+inline void RVP900::setVmax(float vmax) {
+	Vmax = vmax;
+}
+
+inline float RVP900::getWaveLen() const {
+	return waveLen;
+}
+
+inline void RVP900::setWaveLen(float waveLen) {
+	this->waveLen = waveLen;
+}
+
 
 

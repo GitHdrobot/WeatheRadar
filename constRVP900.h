@@ -252,11 +252,11 @@ const unsigned short disrange_150 = 150;
 const unsigned short disrange_300 = 300;
 
 //processing mode PPP,FFT,RPP,DPRT_1,DPRT_2
-const unsigned short processModePPP = 1;
-const unsigned short processModeFFT = 2;
-const unsigned short processModeRPP = 3;
-const unsigned short processModeDPRT_1 = 4;
-const unsigned short processModeDPRT_2 = 5;
+const unsigned short soprmProcessModePPP = 1;
+const unsigned short soprmProcessModeFFT = 2;
+const unsigned short soprmProcessModeRPP = 3;
+const unsigned short soprmProcessModeDPRT_1 = 4;
+const unsigned short soprmProcessModeDPRT_2 = 5;
 
 
 #endif // CONSTRVP900_H

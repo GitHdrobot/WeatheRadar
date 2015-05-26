@@ -91,6 +91,9 @@ public :
     float soprmLOGThr,soprmSIGThr,soprmCCORThr,soprmSQIThr;
     //采集的数据是否包含 头部TAG，默认为false
     bool soprmNHD;
+    //处理模式 processing mode
+    unsigned short soprmProcessMode;
+
     //暂未使用
     //  unsigned char LDRNV[504]={0x15,0,0};
 
@@ -109,8 +112,8 @@ public :
     //CFGHDR
     /*|TID|PBN|SYT|MMT|UTC|Flg|Gpm|Tim|Pul|PRT|Tag|
     采集数据的头信息*/
-    bool cfghdrTID,cfghdrPBN,cfghdrSYT,cfghdrMMT,cfghdrUTC,
-    cfghdrFlg,cfghdrGpm,cfghdrTim,cfghdrPul,cfghdrPRT,cfghdrTag;
+   // bool cfghdrTID,cfghdrPBN,cfghdrSYT,cfghdrMMT,cfghdrUTC,
+   // cfghdrFlg,cfghdrGpm,cfghdrTim,cfghdrPul,cfghdrPRT,cfghdrTag;
 
 
     //SETPWF  设置脉冲宽度和触发速度
@@ -120,6 +123,11 @@ public :
      *脉冲宽度 1us,5us,10us,20us
      */
     int setpwfPulseWidth = 1;
+
+
+    //LFILT Load Clutter Filter Flags
+    //多普勒滤波器 doppler filter
+    unsigned  short dopFilter;
 
 
 
@@ -139,29 +147,19 @@ public :
 
 
 
-
-
     //数据头、数据的长度 以字节计
     int hdrBytesNum,dataBytesNum ;
-    //距离量程 distance range,目前仅设置六个距离范围
-    unsigned  short disrange;
 
-    //多普勒滤波器 doppler filter
-    unsigned  short dopFilter;
-    //处理模式 processing mode
-    unsigned short processMode;
 
 
 
     /*天线相位角 方位角 仰角*/
     double azimuth,elevation;
-    //以下参数有待查阅
-    /*杂项控制 1、距离订正通断 2、r2使能 3、单库杂波消除 4、强度斑点消除 5、速度斑点消除 6、3x3平滑输出**/
 
     //距离分辨率25-1000 米，默认125米，通过TTY设置
     int resolution;
     /*发射机发射、接收、伺服状态*/
-    char trstatus[8];
+    char rcverStatus[8];
     /*RVP900的工作状态*/
     bool isWorking;
 
@@ -173,15 +171,16 @@ public :
     unsigned char elevationBuff[2]={0x00,0x00};
 
     /*雷达射频频率(工作频率) 频率与波长的关系式：c=λf*/
-    int rf;
+    int radioFrequency;
 
     /*socket to RVP9*/
     int  clientSocket;
 
+    //以下参数有待查阅
+       /*杂项控制 1、距离订正通断 2、r2使能 3、单库杂波消除 4、强度斑点消除 5、速度斑点消除 6、3x3平滑输出**/
 
 
-    /*get 、set方法*/
-public:
+
 
 
 
@@ -359,6 +358,98 @@ public:
     /*计算输出数据中 头数据所占的字节数**/
     int calHdrBytes();
 
+
+    /*get 、set方法*/
+	const char* getAntennaBuf() const;
+	double getAzimuth() const;
+	void setAzimuth(double azimuth);
+	int getClientSocket() const;
+	void setClientSocket(int clientSocket);
+	int getDataBytesNum() const;
+	void setDataBytesNum(int dataBytesNum);
+	int getDistance() const;
+	void setDistance(int distance = 10);
+	unsigned short getDopFilter() const;
+	void setDopFilter(unsigned short dopFilter);
+	double getElevation() const;
+	void setElevation(double elevation);
+	const unsigned char* getElevationBuff() const;
+	const char* getFormatBuffer() const;
+	int getHdrBytesNum() const;
+	void setHdrBytesNum(int hdrBytesNum);
+	unsigned char getHigh8Bits() const;
+	void setHigh8Bits(unsigned char high8Bits);
+	unsigned char getInputNBuff() const;
+	void setInputNBuff(unsigned char inputNBuff);
+	bool isIsWorking() const;
+	void setIsWorking(bool isWorking);
+	unsigned char getLow8Bits() const;
+	void setLow8Bits(unsigned char low8Bits);
+	int getLrmskBinsNum() const;
+	void setLrmskBinsNum(int lrmskBinsNum);
+	unsigned char getLrmskRangeAvg() const;
+	void setLrmskRangeAvg(unsigned char lrmskRangeAvg);
+	const unsigned char* getOutbuff() const;
+	bool isProcArc() const;
+	void setProcArc(bool procArc);
+	bool isProcKdp() const;
+	void setProcKdp(bool procKdp);
+	unsigned char getProcMode() const;
+	void setProcMode(unsigned char procMode);
+	bool isProcT() const;
+	void setProcT(bool procT);
+	unsigned char getProcTsout() const;
+	void setProcTsout(unsigned char procTsout);
+	unsigned char getProcTsSubType() const;
+	void setProcTsSubType(unsigned char procTsSubType);
+	unsigned char getProcUnfold() const;
+	void setProcUnfold(unsigned char procUnfold);
+	bool isProcV() const;
+	void setProcV(bool procV);
+	bool isProcW() const;
+	void setProcW(bool procW);
+	bool isProcZ() const;
+	void setProcZ(bool procZ);
+	bool isProcZdr() const;
+	void setProcZdr(bool procZdr);
+	int getRadioFrequency() const;
+	void setRadioFrequency(int radioFrequency);
+	const char* getRcverStatus() const;
+	const char* getRecvBuffer() const;
+	int getResolution() const;
+	void setResolution(int resolution);
+	const char* getSendBuffer() const;
+	int getSetpwfPrf() const;
+	void setSetpwfPrf(int setpwfPrf = 300);
+	int getSetpwfPulseWidth() const;
+	void setSetpwfPulseWidth(int setpwfPulseWidth = 1);
+	const unsigned char* getSoprm() const;
+	float getSoprmCcorThr() const;
+	void setSoprmCcorThr(float soprmCcorThr);
+	float getSoprmLogThr() const;
+	void setSoprmLogThr(float soprmLogThr);
+	bool isSoprmNhd() const;
+	void setSoprmNhd(bool soprmNhd);
+	bool isSoprmNth() const;
+	void setSoprmNth(bool soprmNth);
+	unsigned short getSoprmProcessMode() const;
+	void setSoprmProcessMode(unsigned short soprmProcessMode);
+	unsigned short getSoprmPulseAcc() const;
+	void setSoprmPulseAcc(unsigned short soprmPulseAcc);
+	bool isSoprmR2Enable() const;
+	void setSoprmR2Enable(bool soprmR2Enable);
+	float getSoprmSigThr() const;
+	void setSoprmSigThr(float soprmSigThr);
+	float getSoprmSqi() const;
+	void setSoprmSqi(float soprmSqi = 0.4);
+	float getSoprmSqiThr() const;
+	void setSoprmSqiThr(float soprmSqiThr);
+	bool isThreadFlag() const;
+	void setThreadFlag(bool threadFlag = false);
+	float getVmax() const;
+	void setVmax(float vmax);
+	float getWaveLen() const;
+	void setWaveLen(float waveLen);
 };
 
 #endif // RVP900_H
