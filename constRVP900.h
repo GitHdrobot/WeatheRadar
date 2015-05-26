@@ -28,8 +28,11 @@
 
 #define COMMAND_PREFIX_LEN 8 //指令前缀长度
 #define COMMAND_WRITE "WRIT" //写指令字符
+const unsigned char commandWrite[] = "WRIT";
 #define COMMAND_READ "READ" //读指令字符
+const unsigned char commandRead[] = "READ";
 #define COMMAND_SEP "|"     //分隔字符
+const unsigned char commandSep = '|';
 #define COMM_WRIT_LEN 4+1+2  //写命令长度 WIRT 4个，| 1个，命令字 2两个
 
 #define SET_ZERO 0 //置0
@@ -122,7 +125,6 @@
 #define SOPRM_N "SOPRM"
 #define SOPRM_PREFIX "00000057"
 
-
 /*
 *CFGHDR command const，configure Ray header words
 *配置射线头信息
@@ -150,6 +152,10 @@
 #define LRMSK_PREFIX "00000007"
 #define LRMSK_N "LRMSK"
 #define LRMSK_OPCODE 0x01
+const unsigned char lrmskOpCode = 0x01;
+//lrmsk 1 word;input#1 - input#512 512 word;
+const unsigned char lrmskCommLen[] = "00001031";
+
 #define LRMSK_L8BIT LRMSK_OPCODE
 #define LRMSK_H8BIT_Z 0x0   //表示距离平均因子
 #define LRMSK_H8BIT_O 0x1   //表示距离平均因子
@@ -191,20 +197,6 @@
 */
 #define PROC_N "PROC"
 #define PROC_FREFIX "00000007"
-#define PROC_BS_OPCODE 0x06
-#define PROC_SYNCHRONOUS 0x20 //synchronous mode
-#define PROC_FREE_RUNNING 0x40 //free running mode
-#define PROC_KDP 0x80   //？？？
-#define PROC_UNFOLD_NONE 0x00   //none
-#define PROC_UNFOLD_2TO3 0x100  //双PRF为2：3
-#define PROC_UNFOLD_3TO4 0x200
-#define PROC_UNFOLD_4TO5 0x300
-#define PROC_ZDR 0x400  //zdr
-#define PROC_W 0x800  //W
-#define PROC_V 0x1000  //V
-#define PROC_T 0x2000  //T
-#define PROC_Z 0x4000  //Z
-#define PROC_ARC 0x8000  //ARC
 
 /*
 *GPARM command const,get processor parameters
@@ -236,9 +228,17 @@
 //#define SYNCHRONOUS 1
 
 /*双脉冲重复比常量  设置的是PROC命令的8、9位*/
-#define DPRF_NONE 0   //none
+#define DPRF_NONE 0x0   //none
 #define DPRF_2TO3 1  //双PRF为2：3
 #define DPRF_3TO4 2  //双PRF为3:4
 #define DPRF_4TO5 3   //双PRF为4:5
+//双PRF 比 常量
+const unsigned char procUnfoldNone = 0x00;
+const unsigned char procUnfold2To3 = 0x01;
+const unsigned char procUnfold3To4 = 0x10;
+const unsigned char procUnfold4To5 = 0x11;
 
+const unsigned char procSyncModec = 0x01;
+const unsigned char procFreeRunModec = 0x10;
+const unsigned char procTimeSerisModec = 0x11;
 #endif // CONSTRVP900_H

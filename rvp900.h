@@ -26,53 +26,136 @@ class RVP900
 public :
 
     //PROC命令   标志位
-    //|ARC| Z | T | V | W |ZDR|Unfold |KDP
-    //采集数据种类 dBz,dBt,dBw,v
-    bool dataARC_BIT,dataZ_BIT,dataT_BIT,dataV_BIT,dataW_BIT,dataZDR_BIT;
-    unsigned char dataUnfold;
-    bool dataKDP_BIT;
+    /*input#1 |ARC| Z | T | V | W |ZDR|Unfold |KDP
+    *XARG#1 |HCL|FLG|Phi Rho Ldr|Phi Rho Ldr|SQI|RHV|PDP|
+    *采集数据种类 dBz,dBt,dBw,v……
+    * 该命令有三种模式，不同模式参数不同
+    */
+    /*同步多普勒、自由运行多普勒模式的输入参数缓冲区7-15  9bit,xarg 0-10bit*/
+    bool procArc,procZ,,procT,procV,procW,procKDP,procZDR;
+    /*procUnfold
+    *00 : No Unfolding 01 : Ratio of 2:3
+    *10 : Ratio of 3:4 11: Ratio of 4:5
+    * procTSOUT
+    * Selects type of data to be output
+    * 00 : 8-bit Time Series 01 : Power Spectrum
+    * 10 : 16-bit Time Series 11 : Unused
+    * 数据采集方式 collect mode,有三种Synchronous(01)，
+    * free running(10)，time series(11)，默认是Synchronous
+    */
+    unsigned char procMode,procUnfold,procTSOUT,procTSSubType;
+    /*通过XARG命令设置的参数*/
+    //bool procXarg_HCL,procXarg_FLG,procXarg_Phi,procXarg_Rho,procXarg_Ldr;
+    //bool procXarg_Phi,procXarg_Rho,procXarg_Ldr,procXarg_SQI,procXarg_RHV,procXarg_PDP;
 
 
-    //距离库个数 与距离掩码设置位个数相同
-    int binsNum;
-    int dataTypeNums;
-    //采集的数据是否包含 头部TAG，默认为true
-    bool noHeader;
-    //采集数据的头信息
-    bool hdrTag_BIT,hdrPRT_BIT,hdrPul_BIT,hdrTim_BIT,hdrGpm_BIT,
-    hdrFlg_BIT,hdrUTC_BIT,hdrMMT_BIT,hdrSYT_BIT,hdrPBN_BIT,hdrTID_BIT;
+    //SOPRM参数配置命令 input1-20,XARG1-9，7、8共用,
+    //该命令参数太多 只添加几个常用到的参数变量
+    /*Nth,No Threshold；
+    If 1, then no threshold values are set. This means ignore input words
+    4, 5, 6, 7, 11, 12, 13, 14, and 18
+    */
+    bool soprmNth;
+    //    /*input#1 The sample size is continually adjustable from 1 to 256 pulses*/
+    //    unsigned short soprmSampleSize;
+    //    /*input#2|ZNS| Polar |NHD|ASZ|16B|CMS| R2| |3x3|CCB| |Lsr|Dsr|Rnv|*/
+    //    bool soprmZNS;
+    //    unsigned char soprmPolar;
+    //    bool soprmNHD,soprmASZ,soprm16B,soprmCMS,soprmR2,soprm3x3,soprmCCB,soprmLsr,soprmRnv;
+    //    /*input#3-9 */
+    //    unsigned short soprmLSB,soprmLOGTh,soprmCCOR,soprmSQITh,soprmSIG,soprmClbrtnReflcty,soprmTopMode;
+    //    /*input #10 */
+    //    bool soprmUVD,soprmPCT;
+    //    unsigned char soprmWindow;
+    //    bool soprmZER;
+    //    unsigned char soprmcFtrStbDelay;
+    unsigned char soprm[52];
+    /*
+    *An important feature of the RVP900 is its ability to eliminate signals which
+    *are either too weak to be useful, or which have widths too large to justify
+    *further analysis. This is done through SQI, which is defined as:
+    *SQI = |R1| / R0
+    *RVP900 的一个重要特性是，它可以消除那些太弱而不能使用的信号，或者那些谱宽太大不能作进一步分析的信号
+    *这是通过SQI完成的，SQI的等式如下：
+    *SQI的高斯模型
+    *
+    *SQI = (SNR / (SNR+1)) * (e^(-PI^2 * W^2) / 2)
+    *当SNR很大时 ，SQI是谱宽W的函数，当谱宽 W = 0 时，SQI是信噪比SNR的函数
+    */
+    float soprmSQI = 0.4;//signal quality index，信号质量指标
+    //R2使能 r2 enable
+    bool soprmR2Enable;
+    //脉冲累积数 pulse accummunate
+    unsigned short soprmPulseAcc;
+    //Threshold of LOG、SIG、CCOR、SQI,门限值
+    float soprmLOGThr,soprmSIGThr,soprmCCORThr,soprmSQIThr;
+    //采集的数据是否包含 头部TAG，默认为false
+    bool soprmNHD;
+    //暂未使用
+    //  unsigned char LDRNV[504]={0x15,0,0};
+    //LRMSK  载入距离掩码  设置在哪写距离采集数据
+    /*距离库的个数与设置的位和距离平均有关 binN = bitN/(avg+1)  */
+    int lrmskBinsNum;
+    //距离平均 distance averaging
+    unsigned char lrmskRangeAvg;
+
+
+
+    //CFGHDR
+    /*|TID|PBN|SYT|MMT|UTC|Flg|Gpm|Tim|Pul|PRT|Tag|
+    采集数据的头信息*/
+    bool cfghdrTID,cfghdrPBN,cfghdrSYT,cfghdrMMT,cfghdrUTC,
+    cfghdrFlg,cfghdrGpm,cfghdrTim,cfghdrPul,cfghdrPRT,cfghdrTag;
+
+
+    //SETPWF  设置脉冲宽度和触发速度
+    //脉冲重复频率
+    int setpwfPRF=300,PRF=300;
+    /*pulseWIdth表示脉宽，默认1us 1*10^-3*3*10^8,
+     *脉冲宽度 1us,5us,10us,20us
+     */
+    int setpwfPulseWidth = 1;
+
+
+
+    /*
+    *For a radar of wavelength λ operating at a fixed sampling period τs =
+    *1/PRF, the unambiguous velocity and range intervals are given by:
+    *Vu = λ /(4*τs) and Ru = τs * c / 2
+    *对于一个波长为λ，固定采样周期τs = 1/PRF，不模糊速度和不模糊范围由下式计算
+    *
+    */
+    /*最大不模糊速度velocity unambiguous,雷达射频波长*/
+    float Vmax ,waveLen ;
+
+
+    //线程标识
+    bool ThreadFlag=false;
+
+
+
+    //距离量程 与设置的距离分辨率 距离掩码有关 distance = Res * (Nth - 1),默认10km
+    int distance = 10;
+
+
     //数据头、数据的长度 以字节计
     int hdrBytesNum,dataBytesNum ;
     //距离量程 distance range,目前仅设置六个距离范围
     enum enum_disRange
     {RANGE_10=10,RANGE_20=20,RANGE_30=30,
         RANGE_50=50,RANGE_150=150,RANGE_300=300} disRange;
-    //脉冲重复频率
-    enum enum_PRF
-    {PRF_FIRST=300,PRF_SECOND=500,PRF_THIRD=1000,
-        PRF_FOURTH=2000,PRF_FIFTH=3000,PRF_SIXTH=4000,PRF_SEVENTH=5000} PRF;
 
-    /*数据采集方式 collect mode,有三种Synchronous，
-    *free running，time series，默认是time series
-    */
-    enum enum_colMode {SYNCHRONOUS,FREE_RUNNING,TIME_SERIES} colMode;
-    //脉冲宽度 1us,5us,10us,20us,默认1us
-    int pulseWidth;
-    //双PRF，脉冲重复比,此处不是真实比率
-    enum enum_PRF_Ratio{PRF_NONE,PRF_2TO3,PRF_3TO4,PRF_4TO5} PRF_Ratio;
+
+
+
     //多普勒滤波器 doppler filter
     enum enum_dopFilter {DF_NONE,DF_ONE,DF_TWO,DF_THREE,DF_FOUTH,
                          DF_FIVE,DF_SIX,DF_SEVEN} dopFilter;
     //处理模式 processing mode
     enum enum_proMode {PPP,FFT,RPP,DPRT_1,DPRT_2} proMode;
-    //脉冲累积数 pulse accummunate
-    enum enum_pulAccumulate {};
-    //Threshold of LOG、SIG、CCOR、SQI,门限值
-    float LOG_Threshold,SIG_Threshold,CCOR_Threshold,SQI_Threshold;
-    //R2使能 r2 enable
-    bool RTwoEnable;
-    //距离平均 distance averaging
-    unsigned char avgDistance;
+
+
+
     /*天线相位角 方位角 仰角*/
     double azimuth,elevation;
     //以下参数有待查阅
@@ -91,8 +174,7 @@ public :
     char antennaBuf[7]={0x53,0x04,0x53,0xF2,0x00,0x00,0x00};
     /*天线仰角buffer 两个字节 一个字*/
     unsigned char elevationBuff[2]={0x00,0x00};
-    /*最大不模糊速度,雷达射频波长*/
-    float Vmax ,waveLen;
+
     /*雷达射频频率(工作频率) 频率与波长的关系式：c=λf*/
     int rf;
 
@@ -110,32 +192,13 @@ public:
     void setAzimuth(double azimuth) ;
     int getBinsNum() const ;
     void setBinsNum(int binsNum) ;
-    float getCcorThreshold() const ;
-    void setCcorThreshold(float ccorThreshold) ;
-    enum enum_colMode {
-        SYNCHRONOUS, FREE_RUNNING, TIME_SERIES
-    } getColMode() const ;
-    void setColMode(enum_colMode colMode ) ;
-    bool isDataAll() const ;
-    void setDataAll(bool dataAll);
-    bool isDataArcBit() const ;
-    void setDataArcBit(bool dataArcBit) ;
+
+    float getSoprmCCORThr() const ;
+    void setSoprmCCORThr(float soprmCCORThr) ;
+
     int getDataBytesNum() const ;
     void setDataBytesNum(int dataBytesNum) ;
-    bool isDataKdpBit() const ;
-    void setDataKdpBit(bool dataKdpBit) ;
-    bool isDataTBit() const ;
-    void setDataTBit(bool dataTBit) ;
-    int getDataTypeNums() const ;
-    void setDataTypeNums(int dataTypeNums) ;
-    bool isDataVBit() const ;
-    void setDataVBit(bool dataVBit) ;
-    bool isDataWBit() const ;
-    void setDataWBit(bool dataWBit) ;
-    bool isDataZBit() const ;
-    void setDataZBit(bool dataZBit) ;
-    bool isDataZdrBit() const ;
-    void setDataZdrBit(bool dataZdrBit);
+
     enum enum_disRange {
         RANGE_10 = 10,
         RANGE_20 = 20,
@@ -154,34 +217,10 @@ public:
     const unsigned char* getElevationBuff() const ;
     int getHdrBytesNum() const;
     void setHdrBytesNum(int hdrBytesNum) ;
-    bool isHdrFlgBit() const;
-    void setHdrFlgBit(bool hdrFlgBit) ;
-    bool isHdrGpmBit() const ;
-    void setHdrGpmBit(bool hdrGpmBit);
-    bool isHdrMmtBit() const;
-    void setHdrMmtBit(bool hdrMmtBit) ;
-    bool isHdrPbnBit() const;
-    void setHdrPbnBit(bool hdrPbnBit) ;
-    bool isHdrPrtBit() const ;
-    void setHdrPrtBit(bool hdrPrtBit) ;
-    bool isHdrPulBit() const ;
-    void setHdrPulBit(bool hdrPulBit);
-    bool isHdrSytBit() const;
-    void setHdrSytBit(bool hdrSytBit);
-    bool isHdrTagBit() const ;
-    void setHdrTagBit(bool hdrTagBit);
-    bool isHdrTidBit() const;
-    void setHdrTidBit(bool hdrTidBit) ;
-    bool isHdrTimBit() const ;
-    void setHdrTimBit(bool hdrTimBit) ;
-    bool isHdrUtcBit() const ;
-    void setHdrUtcBit(bool hdrUtcBit) ;
+
     bool isIsWorking() const ;
     void setIsWorking(bool isWorking) ;
-    float getLogThreshold() const ;
-    void setLogThreshold(float logThreshold) ;
-    bool isNoHeader() const ;
-    void setNoHeader(bool noHeader);
+
     enum enum_PRF {
         PRF_FIRST = 300,
         PRF_SECOND = 500,
@@ -192,26 +231,26 @@ public:
         PRF_SEVENTH = 5000
     } getPrf() const ;
     void setPrf( enum enum_PRF prf) ;
-    enum enum_PRF_Ratio {
+    enum enum_procUnfold {
         PRF_NONE, PRF_2TO3, PRF_3TO4, PRF_4TO5
     } getPrfRatio() const ;
-    void setPrfRatio( enum_PRF_Ratio prfRatio) ;
+    void setPrfRatio( enum_procUnfold prfRatio) ;
     enum enum_proMode {
         PPP, FFT, RPP, DPRT_1, DPRT_2
     } getProMode() const ;
     void setProMode( enum_proMode proMode);
-    int getPulseWidth() const ;
-    void setPulseWidth(int pulseWidth) ;
+    int getetpwfPulseWidthh() const ;
+    void setSetpwfPulseWidth(int setpwfPulseWidth) ;
     int getResolution() const ;
     void setResolution(int resolution) ;
     int getRf() const ;
     void setRf(int rf) ;
-    bool isTwoEnable() const ;
-    void setTwoEnable(bool twoEnable) ;
-    float getSigThreshold() const ;
-    void setSigThreshold(float sigThreshold) ;
-    float getSqiThreshold() const ;
-    void setSqiThreshold(float sqiThreshold);
+    bool isSoprmR2Enable() const ;
+    void setSoprmR2Enable(bool soprmR2Enable) ;
+    float getSoprmSIGThr() const ;
+    void setSoprmSIGThr(float soprmSIGThr) ;
+    float getSoprmSQIThr() const ;
+    void setSoprmSQIThr(float soprmSQIThr);
     const char* getTrstatus() const ;
     float getVmax() const;
     void setVmax(float vmax);
@@ -234,11 +273,11 @@ public:
 
     unsigned char outbuff[1024*16];//存放执行PROC指令后 读取到的数据
 
-//    unsigned char binsZBuff[1024];//dbZ bins buff
-//    unsigned char binsWBuff[1024];//W bins buff
-//    unsigned char binsVBuff[1024];//V bins buff
-//    unsigned char binsTBuff[1024];//dBT bins buff
-//    unsigned char binsTAGBuff[1024];//TAG Buff
+    //    unsigned char binsZBuff[1024];//dbZ bins buff
+    //    unsigned char binsWBuff[1024];//W bins buff
+    //    unsigned char binsVBuff[1024];//V bins buff
+    //    unsigned char binsTBuff[1024];//dBT bins buff
+    //    unsigned char binsTAGBuff[1024];//TAG Buff
 
     //暂不需要这些数据
     /*
@@ -247,19 +286,13 @@ public:
     unsigned char binsKDPBuff[1024*6];//ARC bins buff
     */
 
-    /*predefined parameter variable of command ，预定义的指令参数*/
-public:
-    unsigned char SOPRM[52]={
-        0x98,0,0,0,0,0,0,0,0,0,0x2,0,0x20,0,0xa6,0x5,
-        0xae,0x7,0x30,0,0x40,0xfe,0x5,0,0x22,0,0x92,
-        0x0,0,0x1,0xa,0x2,0xaa,0xaa,0x88,0x88,0xa0,0xa0,
-        0xa0,0xa0,0,0,0,0,0x40,0x6,0,0,0,0,0x80,0xc};
-    unsigned char LDRNV[504]={0x15,0,0};
+
 
     /*RVP900 Methods   方法*/
 public:
     RVP900();
     ~RVP900();
+    int iniCommand();//对命令进行必要的初始化
     int connectRVP();//连接到server socket
     int openRVP900();//发送一组命令 打开RVP900
     int readSocketResp();//读取rvp900响应信息
@@ -317,7 +350,7 @@ public:
     *该命令指示信号处理器在哪些位置收集数据。通过8192个掩码位来选择一个任意的距离库集合
     *距离库产生公式：RES*（N-1），N表示第N位，RES表示距离分辨率
     */
-    int loadRanMsk(int ranMark);
+    int loadRanMsk(int rangeMark);
     /*
     *LFILT:Load Clutter Filter Flags
     *A special feature of the RVP9 processor is that any of the available clutter
@@ -395,8 +428,10 @@ public:
     /*计算返回的数据长度*/
     int getDataLength();
 
-    /*计算最大不模糊速度 prf:脉冲重复频率，prf_ratio 脉冲重复比，wavelength 射频波长*/
+    /*计算最大不模糊速度 prf:脉冲重复频率，procUnfold 脉冲重复比，wavelength 射频波长*/
     int calculateVmax();
+    /*计算输出数据中 头数据所占的字节数**/
+    int calHdrBytes();
 
 };
 

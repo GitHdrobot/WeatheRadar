@@ -13,15 +13,15 @@ FetchDataThread::FetchDataThread(QObject *parent) :
 void FetchDataThread::run() {
     int i = 0;
     while (threadFlag) {
-        rvp9.PROC();
+        MainWindow::rvp9.PROC();
 //        if (rvp9.PROC(rvp9.outbuff) == RVP_NO_ERR) {
 //            threadFlag = false;
 //            break;
 //        }
         //header of each ray
-        if(rvp9.hdrTag_BIT){
-            for(i=0;i<rvp9.hdrBytesNum;i++) {
-                rvp9.binsTAGBuff[i] = rvp9.outbuff[i];
+        if(MainWindow::rvp9.hdrTag_BIT){
+            for(i=0;i<MainWindow::rvp9.hdrBytesNum;i++) {
+                MainWindow::rvp9.binsTAGBuff[i] = MainWindow::rvp9.outbuff[i];
             }
         }
         //目前不需要这些数据

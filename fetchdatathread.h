@@ -7,9 +7,8 @@
 #define FETCHDATATHREAD_H
 
 #include <QObject>
-#include "rvp900.h"
+#include "mainwindow.h"
 
-extern RVP900 rvp9;
 //extern char outbuff[16000];
 extern int Sum,PRF1,PULSE_MARK;
 extern char rBuffer[16000];

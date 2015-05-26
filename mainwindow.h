@@ -8,10 +8,8 @@
 
 
 #include "headerctrl.h"
+#include "fetchdatathread.h"
 
-
-extern DispDevice dispDev;
-extern QextSerialPort serialPort;
 
 namespace Ui {
 class MainWindow;
@@ -27,6 +25,13 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    static RVP900 rvp9;//rvp9控制对象
+
+    QextSerialPort serialPort;//串口控制对象
+
+    DispDevice dispDev;//存放显示设备信息
+
+    FetchDataThread fetchDataThread;//获取数据线程
 
 
 public slots:
@@ -34,10 +39,30 @@ public slots:
     void dispFourPicSlot();//显示四图槽函数
 
 
+    //getter,setter
+public :
+    DispDevice getDispDev() const {
+        return dispDev;
+    }
+    QextSerialPort getSerialPort() const {
+        return serialPort;
+    }
+    static RVP900 getRvp900() const {
+        return rvp9;
+    }
 
-//public :
-   // void paintEvent(QPaintEvent *);
-   // RVP900 rvp900;
+    void setDispDev( DispDevice dispDev) {
+        this->dispDev = dispDev;
+    }
+
+    void setSerialPort( QextSerialPort serialPort) {
+        this->serialPort = serialPort;
+    }
+
+    void setRvp900(static RVP900 rvp9) {
+        this->rvp9 = rvp9;
+    }
+
 public:
     int collectData();
 

@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "rvp900.h"
-extern RVP900 rvp9;
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -273,26 +273,26 @@ void MainWindow::on_comboBoxPRF_activated(int index)
 void MainWindow::on_comboBoxDPrf_activated(int index)
 {
     if(0 == index){
-        rvp9.PRF_Ratio =DPRF_NONE;
+        rvp9.procUnfold =procUnfoldNone;
     }else if(1 == index){
-        rvp9.PRF_Ratio =DPRF_2TO3;
+        rvp9.procUnfold =procUnfold2To3;
     }else if(2 == index){
-        rvp9.PRF_Ratio =DPRF_3TO4;
+        rvp9.procUnfold =procUnfold3To4;
     }else if(3 == index){
-        rvp9.PRF_Ratio =DPRF_4TO5;
+        rvp9.procUnfold =procUnfold4To5;
     }
 }
 /*脉宽  改变*/
 void MainWindow::on_comboBoxPulseWidth_activated(int index)
 {
     if(0 == index){
-        rvp9.pulseWidth = 1;
+        rvp9.setpwfPulseWidth = 1;
     }else if(1 == index){
-        rvp9.pulseWidth = 5;
+        rvp9.setpwfPulseWidth = 5;
     }else if(2 == index){
-        rvp9.pulseWidth = 10;
+        rvp9.setpwfPulseWidth = 10;
     }else if(3 == index){
-        rvp9.pulseWidth = 20;
+        rvp9.setpwfPulseWidth = 20;
     }
 }
 /*多普勒滤波器  改变*/
@@ -314,6 +314,7 @@ void MainWindow::on_doubleSpinBoxElevation_valueChanged(double arg1)
 int MainWindow::collectData(){
     rvp9.calculateVmax();
     rvp9.isWorking = true;
+    fetchDataThread.start();
     while(rvp9.isWorking)
     {
         QApplication::processEvents();
