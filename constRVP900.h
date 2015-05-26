@@ -197,6 +197,7 @@ const unsigned char lrmskCommLen[] = "00001031";
 */
 #define PROC_N "PROC"
 #define PROC_FREFIX "00000007"
+const unsigned char procOpCode = 0x06 ;
 
 /*
 *GPARM command const,get processor parameters
@@ -241,4 +242,21 @@ const unsigned char procUnfold4To5 = 0x11;
 const unsigned char procSyncModec = 0x01;
 const unsigned char procFreeRunModec = 0x10;
 const unsigned char procTimeSerisModec = 0x11;
+
+const unsigned short disrange_10 = 10;
+const unsigned short disrange_20 = 20;
+const unsigned short disrange_30 = 30;
+const unsigned short disrange_50 = 50;
+const unsigned short disrange_100 = 100;
+const unsigned short disrange_150 = 150;
+const unsigned short disrange_300 = 300;
+
+//processing mode PPP,FFT,RPP,DPRT_1,DPRT_2
+const unsigned short processModePPP = 1;
+const unsigned short processModeFFT = 2;
+const unsigned short processModeRPP = 3;
+const unsigned short processModeDPRT_1 = 4;
+const unsigned short processModeDPRT_2 = 5;
+
+
 #endif // CONSTRVP900_H

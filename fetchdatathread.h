@@ -7,6 +7,7 @@
 #define FETCHDATATHREAD_H
 
 #include <QObject>
+#include <QThread>
 #include "mainwindow.h"
 
 //extern char outbuff[16000];
@@ -23,7 +24,7 @@ unsigned char binsKDPBuff[1024*6];//ARC bins buff
 extern unsigned char binsTAGBuff[8];//TAG buff
 
 
-class FetchDataThread : public QObject
+class FetchDataThread : public QThread
 {
     Q_OBJECT
 public:

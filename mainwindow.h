@@ -47,7 +47,7 @@ public :
     QextSerialPort getSerialPort() const {
         return serialPort;
     }
-    static RVP900 getRvp900() const {
+    static RVP900 getRvp900() {
         return rvp9;
     }
 
@@ -57,10 +57,6 @@ public :
 
     void setSerialPort( QextSerialPort serialPort) {
         this->serialPort = serialPort;
-    }
-
-    void setRvp900(static RVP900 rvp9) {
-        this->rvp9 = rvp9;
     }
 
 public:

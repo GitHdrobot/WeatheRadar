@@ -18,9 +18,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->menuParaSetting,SIGNAL(aboutToShow()),this,SLOT(paraSetSlot()));
     connect(ui->action4_Pic,SIGNAL(triggered()),this,SLOT(dispFourPicSlot()));
-    connect(ui->doubleSpinBoxAzimuth,SIGNAL(valueChanged(double)),SLOT(on_doubleSpinBoxAzimuth_valueChanged(double));
-            connect(ui->doubleSpinBoxElevation,SIGNAL(valueChanged(double)),SLOT(on_doubleSpinBoxElevation_valueChanged(double));
-            connect(ui->pbtnOpenTransmit,SIGNAL(clicked()),SLOT(on_pbtnOpenTransmit_clicked()));
+    connect(ui->spinBoxAzimuthSet,SIGNAL(valueChanged(double)),SLOT(on_doubleSpinBoxAzimuth_valueChanged(double)));
+    connect(ui->spinBoxElevationSet,SIGNAL(valueChanged(double)),SLOT(on_doubleSpinBoxElevation_valueChanged(double)));
+    connect(ui->pbtnOpenTransmit,SIGNAL(clicked()),SLOT(on_pbtnOpenTransmit_clicked()));
     connect(ui->pbtnCloseTransmit,SIGNAL(clicked()),SLOT(on_pbtnCloseTransmit_clicked()));
     connect(ui->pbtnSweep,SIGNAL(clicked()),SLOT(on_pbtnSweep_clicked()));
     connect(ui->pbtnStopSweep,SIGNAL(clicked()),SLOT(on_pbtnStopSweep_clicked()));
@@ -150,7 +150,7 @@ void MainWindow::on_pbtnSweep_clicked()
         elevationf=rvp9.elevation*4096.0/360.0;
     }
     else{//角度为负
-        elevationf=(360+antenna_el)*4096.0/360.0;
+        elevationf=(360+rvp9.elevation)*4096.0/360.0;
     }
     //强制转换
     elevationi = elevationf;
@@ -166,7 +166,7 @@ void MainWindow::on_pbtnSweep_clicked()
     if(true == rvp9.isWorking )
     {
         //开始采集数据
-        collect_Slot();
+        collectData();
     }
 }
 //处理 天线停止扫描按钮 发出的点击信号
@@ -220,16 +220,16 @@ void MainWindow::on_comboBoxMode_activated(int index)
 {
     if(0 == index){
         //同步模式
-        rvp9.enum_colMode = rvp9.SYNCHRONOUS;
+        rvp9.procMode = procSyncModec;
         //不同扫描模式 下的天线扫描命令
         rvp9.antennaBuf[3] = 0xF1;
     }else if(1 == index){
         //free running模式
-        rvp9.enum_colMode = rvp9.FREE_RUNNING;
+        rvp9.procMode = procFreeRunModec;
         rvp9.antennaBuf[3] = 0xF2;
         //时间序列模式
     }else if(2 == index){
-        rvp9.enum_colMode = rvp9.TIME_SERIES;
+        rvp9.procMode = procTimeSerisModec;
         rvp9.antennaBuf[3] = 0xF3;
     }
 }
@@ -237,36 +237,36 @@ void MainWindow::on_comboBoxMode_activated(int index)
 void MainWindow::on_comboBoxLmsk_activated(int index)
 {
     if(0 == index){
-        rvp9.disRange = rvp9.RANGE_10;
+        rvp9.distance = disrange_10;
     }else if(1 == index){
-        rvp9.disRange = rvp9.RANGE_20;
+        rvp9.distance = disrange_20;
     }else if(2 == index){
-        rvp9.disRange = rvp9.RANGE_30;
+        rvp9.distance = disrange_30;
     }else if(3 == index){
-        rvp9.disRange = rvp9.RANGE_50;
+        rvp9.distance = disrange_50;
     }else if(4 == index){
-        rvp9.disRange = rvp9.RANGE_150;
+        rvp9.distance = disrange_150;
     }else if(5 == index){
-        rvp9.disRange = rvp9.RANGE_300;
+        rvp9.distance = disrange_300;
     }
 }
 /*RPF 脉冲重复频率 改变*/
 void MainWindow::on_comboBoxPRF_activated(int index)
 {
     if(0 == index){
-        rvp9.PRF = 300;
+        rvp9.setpwfPRF = 300;
     }else if(1 == index){
-        rvp9.PRF = 500;
+        rvp9.setpwfPRF = 500;
     }else if(2 == index){
-        rvp9.PRF = 1000;
+        rvp9.setpwfPRF = 1000;
     }else if(3 == index){
-        rvp9.PRF = 2000;
+        rvp9.setpwfPRF = 2000;
     }else if(4 == index){
-        rvp9.PRF = 3000;
+        rvp9.setpwfPRF = 3000;
     }else if(5 == index){
-        rvp9.PRF = 4000;
+        rvp9.setpwfPRF = 4000;
     }else if(6 == index){
-        rvp9.PRF = 5000;
+        rvp9.setpwfPRF = 5000;
     }
 }
 /*双脉冲重复比 改变   改变后仍需对PROC命令的8、9位进行设置*/

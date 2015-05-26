@@ -32,7 +32,7 @@ public :
     * 该命令有三种模式，不同模式参数不同
     */
     /*同步多普勒、自由运行多普勒模式的输入参数缓冲区7-15  9bit,xarg 0-10bit*/
-    bool procArc,procZ,,procT,procV,procW,procKDP,procZDR;
+    bool procArc,procZ,procT,procV,procW,procKDP,procZDR;
     /*procUnfold
     *00 : No Unfolding 01 : Ratio of 2:3
     *10 : Ratio of 3:4 11: Ratio of 4:5
@@ -93,11 +93,16 @@ public :
     bool soprmNHD;
     //暂未使用
     //  unsigned char LDRNV[504]={0x15,0,0};
+
+
+
     //LRMSK  载入距离掩码  设置在哪写距离采集数据
     /*距离库的个数与设置的位和距离平均有关 binN = bitN/(avg+1)  */
     int lrmskBinsNum;
     //距离平均 distance averaging
     unsigned char lrmskRangeAvg;
+    //距离量程 与设置的距离分辨率 距离掩码有关 distance = Res * (Nth - 1),默认10km
+    int distance = 10;
 
 
 
@@ -110,7 +115,7 @@ public :
 
     //SETPWF  设置脉冲宽度和触发速度
     //脉冲重复频率
-    int setpwfPRF=300,PRF=300;
+    int setpwfPRF=300;
     /*pulseWIdth表示脉宽，默认1us 1*10^-3*3*10^8,
      *脉冲宽度 1us,5us,10us,20us
      */
@@ -134,25 +139,17 @@ public :
 
 
 
-    //距离量程 与设置的距离分辨率 距离掩码有关 distance = Res * (Nth - 1),默认10km
-    int distance = 10;
 
 
     //数据头、数据的长度 以字节计
     int hdrBytesNum,dataBytesNum ;
     //距离量程 distance range,目前仅设置六个距离范围
-    enum enum_disRange
-    {RANGE_10=10,RANGE_20=20,RANGE_30=30,
-        RANGE_50=50,RANGE_150=150,RANGE_300=300} disRange;
-
-
-
+    unsigned  short disrange;
 
     //多普勒滤波器 doppler filter
-    enum enum_dopFilter {DF_NONE,DF_ONE,DF_TWO,DF_THREE,DF_FOUTH,
-                         DF_FIVE,DF_SIX,DF_SEVEN} dopFilter;
+    unsigned  short dopFilter;
     //处理模式 processing mode
-    enum enum_proMode {PPP,FFT,RPP,DPRT_1,DPRT_2} proMode;
+    unsigned short processMode;
 
 
 
@@ -185,77 +182,6 @@ public :
 
     /*get 、set方法*/
 public:
-    const char* getAntennaBuf() const ;
-    unsigned char getAvgDistance() const ;
-    void setAvgDistance(unsigned char avgDistance) ;
-    double getAzimuth() const ;
-    void setAzimuth(double azimuth) ;
-    int getBinsNum() const ;
-    void setBinsNum(int binsNum) ;
-
-    float getSoprmCCORThr() const ;
-    void setSoprmCCORThr(float soprmCCORThr) ;
-
-    int getDataBytesNum() const ;
-    void setDataBytesNum(int dataBytesNum) ;
-
-    enum enum_disRange {
-        RANGE_10 = 10,
-        RANGE_20 = 20,
-        RANGE_30 = 30,
-        RANGE_50 = 50,
-        RANGE_150 = 150,
-        RANGE_300 = 300
-    } getDisRange() const;
-    void setDisRange( enum_disRange disRange) ;
-    enum enum_dopFilter {
-        DF_NONE, DF_ONE, DF_TWO, DF_THREE, DF_FOUTH, DF_FIVE, DF_SIX, DF_SEVEN
-    } getDopFilter() const ;
-    void setDopFilter( enum_dopFilter dopFilter) ;
-    double getElevation() const ;
-    void setElevation(double elevation);
-    const unsigned char* getElevationBuff() const ;
-    int getHdrBytesNum() const;
-    void setHdrBytesNum(int hdrBytesNum) ;
-
-    bool isIsWorking() const ;
-    void setIsWorking(bool isWorking) ;
-
-    enum enum_PRF {
-        PRF_FIRST = 300,
-        PRF_SECOND = 500,
-        PRF_THIRD = 1000,
-        PRF_FOURTH = 2000,
-        PRF_FIFTH = 3000,
-        PRF_SIXTH = 4000,
-        PRF_SEVENTH = 5000
-    } getPrf() const ;
-    void setPrf( enum enum_PRF prf) ;
-    enum enum_procUnfold {
-        PRF_NONE, PRF_2TO3, PRF_3TO4, PRF_4TO5
-    } getPrfRatio() const ;
-    void setPrfRatio( enum_procUnfold prfRatio) ;
-    enum enum_proMode {
-        PPP, FFT, RPP, DPRT_1, DPRT_2
-    } getProMode() const ;
-    void setProMode( enum_proMode proMode);
-    int getetpwfPulseWidthh() const ;
-    void setSetpwfPulseWidth(int setpwfPulseWidth) ;
-    int getResolution() const ;
-    void setResolution(int resolution) ;
-    int getRf() const ;
-    void setRf(int rf) ;
-    bool isSoprmR2Enable() const ;
-    void setSoprmR2Enable(bool soprmR2Enable) ;
-    float getSoprmSIGThr() const ;
-    void setSoprmSIGThr(float soprmSIGThr) ;
-    float getSoprmSQIThr() const ;
-    void setSoprmSQIThr(float soprmSQIThr);
-    const char* getTrstatus() const ;
-    float getVmax() const;
-    void setVmax(float vmax);
-    float getWaveLen() const;
-    void setWaveLen(float waveLen);
 
 
 

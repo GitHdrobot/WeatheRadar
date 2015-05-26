@@ -315,7 +315,7 @@ int RVP900::PROC(){
     strcat(sendBuffer,PROC_FREFIX);
     strcat(sendBuffer,COMMAND_WRITE);
     strcat(sendBuffer,COMMAND_SEP);
-    low8Bits = PROC_BS_OPCODE;  //PROC command opcode0x06   0-4
+    low8Bits = procOpCode;  //PROC command opcode0x06   0-4
 
     //8-9
     high8Bits  = +procUnfold;
@@ -539,7 +539,7 @@ int RVP900::RVP9Initialize(){
     //采集的数据是否包含 头部TAG，默认为true
     soprmNHD = true;
     //距离量程 distance range,目前仅设置六个距离范围
-    disRange = RANGE_10;
+    distance = disrange_10;
     //脉冲重复频率
     setpwfPRF = 300;
     /*数据采集方式 collect mode,有三种Synchronous，
@@ -547,13 +547,13 @@ int RVP900::RVP9Initialize(){
     */
     procMode = procSyncModec;
     //脉冲宽度
-    pulseWidth = 1;
+    setpwfPulseWidth = 1;
     //双PRF，脉冲重复比,此处不是真实比率
     procUnfold = procUnfoldNone;
     //多普勒滤波器 doppler filter
-    dopFilter = DF_NONE;
+    dopFilter = 0;
     //处理模式 processing mode
-    proMode = PPP;
+    processMode = PPP;
     //脉冲累积数 pulse accummunate
     soprmPulseAcc = 16;
     //Threshold of LOG、SIG、CCOR、SQI,门限值
@@ -575,7 +575,7 @@ int RVP900::RVP9Initialize(){
     clientSocket = -1;
     isWorking = false;
     //soprm参数初始化设置
-    soprm = {
+    soprm[] = {
         0x98,0,0,0,0,0,0,0,0,0,//XARG指令操作码即4个可选参数1
         0x2,0,//soprm指令操作码
         0x20,0,0xa6,0x5,0xae,0x7,0x30,0,0x40,0xfe,// input#1 - input#20
@@ -644,246 +644,4 @@ int RVP900::calHdrBytes(){
 /*get 、  set 方法**/
 
 
-const char* RVP900::getAntennaBuf() const {
-    return antennaBuf;
-}
 
-unsigned char RVP900::getAvgDistance() const {
-    return avgDistance;
-}
-
-void RVP900::setAvgDistance(unsigned char avgDistance) {
-    this->avgDistance = avgDistance;
-}
-
-double RVP900::getAzimuth() const {
-    return azimuth;
-}
-
-void RVP900::setAzimuth(double azimuth) {
-    this->azimuth = azimuth;
-}
-
-int RVP900::getBinsNum() const {
-    return binsNum;
-}
-
-void RVP900::setBinsNum(int binsNum) {
-    this->binsNum = binsNum;
-}
-
-float RVP900::getCcorThreshold() const {
-    return CCOR_Threshold;
-}
-
-void RVP900::setCcorThreshold(float ccorThreshold) {
-    CCOR_Threshold = ccorThreshold;
-}
-
-bool RVP900::isDataAll() const {
-    return dataALL;
-}
-
-void RVP900::setDataAll(bool dataAll) {
-    dataALL = dataAll;
-}
-
-bool RVP900::isDataArcBit() const {
-    return procArc;
-}
-
-void RVP900::setProArc(bool procArc) {
-    this->procArc = procArc;
-}
-
-int RVP900::getDataBytesNum() const {
-    return dataBytesNum;
-}
-
-void RVP900::setDataBytesNum(int dataBytesNum) {
-    this->dataBytesNum = dataBytesNum;
-}
-
-bool RVP900::isProcKDP() const {
-    return procKDP;
-}
-
-void RVP900::setProcKDP(bool procKDP) {
-    this->procKDP = procKDP;
-}
-
-bool RVP900::isProcT() const {
-    return procT;
-}
-
-void RVP900::setProcT(bool procT) {
-    this->ProcT = procT;
-}
-
-bool RVP900::isProcT() const {
-    return procT;
-}
-
-void RVP900::setProcV(bool procV) {
-    this->procV = procV;
-}
-
-bool RVP900::isProcW() const {
-    return procW;
-}
-
-void RVP900::setProcW(bool procW) {
-    this->procW = procW;
-}
-
-bool RVP900::isProcZ() const {
-    return procZ;
-}
-
-void RVP900::setProcZ(bool procZ) {
-    this->procZ = procZ;
-}
-
-bool RVP900::isProcZDR() const {
-    return procZDR;
-}
-
-void RVP900::setProcZDR(bool procZDR) {
-    this->procZDR = procZDR;
-}
-
-RVP900::enum_disRange getDisRange() const {
-    return disRange;
-}
-
-void RVP900::setDisRange( enum_disRange disRange) {
-    this->disRange = disRange;
-}
-
-RVP900::enum_dopFilter RVP900::getDopFilter() const {
-    return dopFilter;
-}
-
-void RVP900::setDopFilter( enum_dopFilter dopFilter) {
-    this->dopFilter = dopFilter;
-}
-
-double RVP900::getElevation() const {
-    return elevation;
-}
-
-void RVP900::setElevation(double elevation) {
-    this->elevation = elevation;
-}
-
-const unsigned char* RVP900::getElevationBuff() const {
-    return elevationBuff;
-}
-
-int RVP900::getHdrBytesNum() const {
-    return hdrBytesNum;
-}
-
-void RVP900::setHdrBytesNum(int hdrBytesNum) {
-    this->hdrBytesNum = hdrBytesNum;
-}
-
-
-bool RVP900::isIsWorking() const {
-    return isWorking;
-}
-
-void RVP900::setIsWorking(bool isWorking) {
-    this->isWorking = isWorking;
-}
-
-bool RVP900::isSoprmNHD() const {
-    return soprmNHD;
-}
-
-void RVP900::setSoprmNHD(bool soprmNHD) {
-    this->soprmNHD = soprmNHD;
-}
-int RVP900::getSetpwfPRF() const {
-    return setpwfPRF;
-}
-
-void RVP900::setSetpwfPRF( int  setpwfPRF) {
-    this->PRF = setpwfPRF;
-}
-
-RVP900:: enum_proMode RVP900:: getProMode() const {
-    return proMode;
-}
-
-void RVP900::setProMode( enum_proMode proMode) {
-    this->proMode = proMode;
-}
-
-int RVP900::getSetpwfPulseWidth() const {
-    return setpwfPulseWidth;
-}
-
-void RVP900::setSetpwfPulseWidth(int setpwfPulseWidth) {
-    this->setpwfPulseWidth = setpwfPulseWidth;
-}
-
-int RVP900::getResolution() const {
-    return resolution;
-}
-
-void RVP900::setResolution(int resolution) {
-    this->resolution = resolution;
-}
-
-int RVP900::getRf() const {
-    return rf;
-}
-
-void RVP900::setRf(int rf) {
-    this->rf = rf;
-}
-
-bool RVP900::isSoprmR2Enable() const {
-    return soprmR2Enable;
-}
-
-void RVP900::setSoprmR2Enable(bool soprmR2Enable) {
-    this->soprmR2Enable = soprmR2Enable;
-}
-
-float RVP900::getSoprmSIGThr() const {
-    return soprmSIGThr;
-}
-
-void RVP900::setSoprmSIGThr(float  soprmSIGThr) {
-    this->soprmSIGThr =  soprmSIGThr;
-}
-
-float RVP900::getSoprmSQIThr() const {
-    return soprmSQIThr;
-}
-
-void RVP900::setSoprmSQIThr(float soprmSQIThr) {
-    this->soprmSQIThr = soprmSQIThr;
-}
-
-const char* RVP900::getTrstatus() const {
-    return trstatus;
-}
-
-float RVP900::getVmax() const {
-    return Vmax;
-}
-
-void RVP900::setVmax(float vmax) {
-    Vmax = vmax;
-}
-
-float RVP900::getWaveLen() const {
-    return waveLen;
-}
-
-void RVP900::setWaveLen(float waveLen) {
-    this->waveLen = waveLen;
-}
