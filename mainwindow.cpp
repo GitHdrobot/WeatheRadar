@@ -97,6 +97,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete rvp9;
 }
 
 void MainWindow::paraSetSlot()
@@ -249,6 +250,8 @@ void MainWindow::on_comboBoxLmsk_activated(int index)
     }else if(5 == index){
         rvp9.distance = disrange_300;
     }
+    //根据选择的距离 设置距离掩码
+    rvp9.loadRangeMsk();
 }
 /*RPF 脉冲重复频率 改变*/
 void MainWindow::on_comboBoxPRF_activated(int index)
@@ -337,5 +340,27 @@ int MainWindow::collectData(){
         }
         //更新仰角控件的值
         ui->spinBoxElevationDisp->setValue(elevationf);
+    }
+}
+
+void MainWindow::closeEvent(QCloseEvent * closeEvent){
+    switch( QMessageBox::information( this, tr("关闭应用程序"),
+                                      tr("是否确定要关闭应用程序？"),
+                                      tr("确定"), tr("取消"), 0, 1 ) )
+    {
+    case 0:
+        if(rvp9.isWorking)
+        {
+            rvp9.isWorking = false;
+            fetchDataThread.threadFlag = false;
+            fetchDataThread->wait();
+            delete fetchDataThread;
+        }
+        closeEvent->accept();
+        break;
+    case 1:
+    default:
+        closeEvent->ignore();
+        break;
     }
 }

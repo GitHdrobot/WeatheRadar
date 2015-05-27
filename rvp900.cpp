@@ -209,10 +209,10 @@ int RVP900::CFGHDR(){
     return RVP_NO_ERR;
 }
 //load range mask
-int RVP900::loadRanMsk(int rangeMark){
+int RVP900::loadRangeMsk(){
     sendBuffer[0]=0;
     //距离掩码设置的掩码位个数
-    int markNums = (rangeMark % resolution ==0)?(rangeMark/resolution):(rangeMark/resolution+1);
+    int markNums = (distance % resolution ==0)?(distance/resolution):(distance/resolution+1);
     strcat (sendBuffer,lrmskCommLen);//lrmsk指令的长度
     strcat (sendBuffer,commandWrite);
     strcat (sendBuffer,commandSep);
@@ -1003,5 +1003,92 @@ inline void RVP900::setWaveLen(float waveLen) {
 	this->waveLen = waveLen;
 }
 
+inline bool RVP900::isCfghdrFlg() const {
+	return cfghdrFlg;
+}
+
+inline void RVP900::setCfghdrFlg(bool cfghdrFlg) {
+	this->cfghdrFlg = cfghdrFlg;
+}
+
+inline bool RVP900::isCfghdrGpm() const {
+	return cfghdrGpm;
+}
+
+inline void RVP900::setCfghdrGpm(bool cfghdrGpm) {
+	this->cfghdrGpm = cfghdrGpm;
+}
+
+inline bool RVP900::isCfghdrMmt() const {
+	return cfghdrMMT;
+}
+
+inline void RVP900::setCfghdrMmt(bool cfghdrMmt) {
+	cfghdrMMT = cfghdrMmt;
+}
+
+inline bool RVP900::isCfghdrPbn() const {
+	return cfghdrPBN;
+}
+
+inline void RVP900::setCfghdrPbn(bool cfghdrPbn) {
+	cfghdrPBN = cfghdrPbn;
+}
+
+inline bool RVP900::isCfghdrPrt() const {
+	return cfghdrPRT;
+}
+
+inline void RVP900::setCfghdrPrt(bool cfghdrPrt) {
+	cfghdrPRT = cfghdrPrt;
+}
+
+inline bool RVP900::isCfghdrPul() const {
+	return cfghdrPul;
+}
+
+inline void RVP900::setCfghdrPul(bool cfghdrPul) {
+	this->cfghdrPul = cfghdrPul;
+}
+
+inline bool RVP900::isCfghdrSyt() const {
+	return cfghdrSYT;
+}
+
+inline void RVP900::setCfghdrSyt(bool cfghdrSyt) {
+	cfghdrSYT = cfghdrSyt;
+}
+
+inline bool RVP900::isCfghdrTag() const {
+	return cfghdrTag;
+}
+
+inline void RVP900::setCfghdrTag(bool cfghdrTag) {
+	this->cfghdrTag = cfghdrTag;
+}
+
+inline bool RVP900::isCfghdrTid() const {
+	return cfghdrTID;
+}
+
+inline void RVP900::setCfghdrTid(bool cfghdrTid) {
+	cfghdrTID = cfghdrTid;
+}
+
+inline bool RVP900::isCfghdrTim() const {
+	return cfghdrTim;
+}
+
+inline void RVP900::setCfghdrTim(bool cfghdrTim) {
+	this->cfghdrTim = cfghdrTim;
+}
+
+inline bool RVP900::isCfghdrUtc() const {
+	return cfghdrUTC;
+}
+
+inline void RVP900::setCfghdrUtc(bool cfghdrUtc) {
+	cfghdrUTC = cfghdrUtc;
+}
 
 

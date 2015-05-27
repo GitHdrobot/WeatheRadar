@@ -9,13 +9,7 @@
 #include <QDateTime>
 #include <QDesktopWidget>
 
-#include "constcode.h"
-
-#include "palette.h"
-#include "sector.h"
-
-/*调用RVP900中的成员函数*/
-#include "rvp900.h"
+#include "headerctrl.h"
 
 
 class MainDisplay : public QWidget

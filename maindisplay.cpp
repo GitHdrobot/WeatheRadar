@@ -1,5 +1,6 @@
 #include "maindisplay.h"
 
+extern RVP900 rvp9;
 
 MainDisplay::MainDisplay(QWidget *parent) : QWidget(parent)
 {

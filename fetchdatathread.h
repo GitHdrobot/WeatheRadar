@@ -10,26 +10,13 @@
 #include <QThread>
 #include "mainwindow.h"
 
-//extern char outbuff[16000];
-extern int Sum,PRF1,PULSE_MARK;
-extern char rBuffer[16000];
-extern char pBuffer[968];
-
-//暂不需要这些数据
-/*
-unsigned char binsZDRBuff[1024];//ZDR bins buff
-unsigned char binsKDPBuff[1024];//KDP bins buff
-unsigned char binsKDPBuff[1024*6];//ARC bins buff
-*/
-extern unsigned char binsTAGBuff[8];//TAG buff
-
+extern RVP900 rvp9;//rvp9控制对象
 
 class FetchDataThread : public QThread
 {
     Q_OBJECT
 public:
     explicit FetchDataThread(QObject *parent = 0);
-    int  flag;
     bool threadFlag;
 protected :
     void run();

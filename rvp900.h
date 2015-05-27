@@ -112,8 +112,8 @@ public :
     //CFGHDR
     /*|TID|PBN|SYT|MMT|UTC|Flg|Gpm|Tim|Pul|PRT|Tag|
     采集数据的头信息*/
-   // bool cfghdrTID,cfghdrPBN,cfghdrSYT,cfghdrMMT,cfghdrUTC,
-   // cfghdrFlg,cfghdrGpm,cfghdrTim,cfghdrPul,cfghdrPRT,cfghdrTag;
+    bool cfghdrTID,cfghdrPBN,cfghdrSYT,cfghdrMMT,cfghdrUTC,
+    cfghdrFlg,cfghdrGpm,cfghdrTim,cfghdrPul,cfghdrPRT,cfghdrTag;
 
 
     //SETPWF  设置脉冲宽度和触发速度
@@ -177,7 +177,7 @@ public :
     int  clientSocket;
 
     //以下参数有待查阅
-       /*杂项控制 1、距离订正通断 2、r2使能 3、单库杂波消除 4、强度斑点消除 5、速度斑点消除 6、3x3平滑输出**/
+    /*杂项控制 1、距离订正通断 2、r2使能 3、单库杂波消除 4、强度斑点消除 5、速度斑点消除 6、3x3平滑输出**/
 
 
 
@@ -198,11 +198,11 @@ public:
 
     unsigned char outbuff[1024*16];//存放执行PROC指令后 读取到的数据
 
-    //    unsigned char binsZBuff[1024];//dbZ bins buff
-    //    unsigned char binsWBuff[1024];//W bins buff
-    //    unsigned char binsVBuff[1024];//V bins buff
-    //    unsigned char binsTBuff[1024];//dBT bins buff
-    //    unsigned char binsTAGBuff[1024];//TAG Buff
+    unsigned char binsZBuff[1024];//dbZ bins buff
+    unsigned char binsWBuff[1024];//W bins buff
+    unsigned char binsVBuff[1024];//V bins buff
+    unsigned char binsTBuff[1024];//dBT bins buff
+    unsigned char binsTAGBuff[1024];//TAG Buff 存放指令PROC执行后的tag数据
 
     //暂不需要这些数据
     /*
@@ -275,7 +275,7 @@ public:
     *该命令指示信号处理器在哪些位置收集数据。通过8192个掩码位来选择一个任意的距离库集合
     *距离库产生公式：RES*（N-1），N表示第N位，RES表示距离分辨率
     */
-    int loadRanMsk(int rangeMark);
+    int loadRangeMsk();
     /*
     *LFILT:Load Clutter Filter Flags
     *A special feature of the RVP9 processor is that any of the available clutter
@@ -360,96 +360,119 @@ public:
 
 
     /*get 、set方法*/
-	const char* getAntennaBuf() const;
-	double getAzimuth() const;
-	void setAzimuth(double azimuth);
-	int getClientSocket() const;
-	void setClientSocket(int clientSocket);
-	int getDataBytesNum() const;
-	void setDataBytesNum(int dataBytesNum);
-	int getDistance() const;
-	void setDistance(int distance = 10);
-	unsigned short getDopFilter() const;
-	void setDopFilter(unsigned short dopFilter);
-	double getElevation() const;
-	void setElevation(double elevation);
-	const unsigned char* getElevationBuff() const;
-	const char* getFormatBuffer() const;
-	int getHdrBytesNum() const;
-	void setHdrBytesNum(int hdrBytesNum);
-	unsigned char getHigh8Bits() const;
-	void setHigh8Bits(unsigned char high8Bits);
-	unsigned char getInputNBuff() const;
-	void setInputNBuff(unsigned char inputNBuff);
-	bool isIsWorking() const;
-	void setIsWorking(bool isWorking);
-	unsigned char getLow8Bits() const;
-	void setLow8Bits(unsigned char low8Bits);
-	int getLrmskBinsNum() const;
-	void setLrmskBinsNum(int lrmskBinsNum);
-	unsigned char getLrmskRangeAvg() const;
-	void setLrmskRangeAvg(unsigned char lrmskRangeAvg);
-	const unsigned char* getOutbuff() const;
-	bool isProcArc() const;
-	void setProcArc(bool procArc);
-	bool isProcKdp() const;
-	void setProcKdp(bool procKdp);
-	unsigned char getProcMode() const;
-	void setProcMode(unsigned char procMode);
-	bool isProcT() const;
-	void setProcT(bool procT);
-	unsigned char getProcTsout() const;
-	void setProcTsout(unsigned char procTsout);
-	unsigned char getProcTsSubType() const;
-	void setProcTsSubType(unsigned char procTsSubType);
-	unsigned char getProcUnfold() const;
-	void setProcUnfold(unsigned char procUnfold);
-	bool isProcV() const;
-	void setProcV(bool procV);
-	bool isProcW() const;
-	void setProcW(bool procW);
-	bool isProcZ() const;
-	void setProcZ(bool procZ);
-	bool isProcZdr() const;
-	void setProcZdr(bool procZdr);
-	int getRadioFrequency() const;
-	void setRadioFrequency(int radioFrequency);
-	const char* getRcverStatus() const;
-	const char* getRecvBuffer() const;
-	int getResolution() const;
-	void setResolution(int resolution);
-	const char* getSendBuffer() const;
-	int getSetpwfPrf() const;
-	void setSetpwfPrf(int setpwfPrf = 300);
-	int getSetpwfPulseWidth() const;
-	void setSetpwfPulseWidth(int setpwfPulseWidth = 1);
-	const unsigned char* getSoprm() const;
-	float getSoprmCcorThr() const;
-	void setSoprmCcorThr(float soprmCcorThr);
-	float getSoprmLogThr() const;
-	void setSoprmLogThr(float soprmLogThr);
-	bool isSoprmNhd() const;
-	void setSoprmNhd(bool soprmNhd);
-	bool isSoprmNth() const;
-	void setSoprmNth(bool soprmNth);
-	unsigned short getSoprmProcessMode() const;
-	void setSoprmProcessMode(unsigned short soprmProcessMode);
-	unsigned short getSoprmPulseAcc() const;
-	void setSoprmPulseAcc(unsigned short soprmPulseAcc);
-	bool isSoprmR2Enable() const;
-	void setSoprmR2Enable(bool soprmR2Enable);
-	float getSoprmSigThr() const;
-	void setSoprmSigThr(float soprmSigThr);
-	float getSoprmSqi() const;
-	void setSoprmSqi(float soprmSqi = 0.4);
-	float getSoprmSqiThr() const;
-	void setSoprmSqiThr(float soprmSqiThr);
-	bool isThreadFlag() const;
-	void setThreadFlag(bool threadFlag = false);
-	float getVmax() const;
-	void setVmax(float vmax);
-	float getWaveLen() const;
-	void setWaveLen(float waveLen);
+    const char* getAntennaBuf() const;
+    double getAzimuth() const;
+    void setAzimuth(double azimuth);
+    int getClientSocket() const;
+    void setClientSocket(int clientSocket);
+    int getDataBytesNum() const;
+    void setDataBytesNum(int dataBytesNum);
+    int getDistance() const;
+    void setDistance(int distance = 10);
+    unsigned short getDopFilter() const;
+    void setDopFilter(unsigned short dopFilter);
+    double getElevation() const;
+    void setElevation(double elevation);
+    const unsigned char* getElevationBuff() const;
+    const char* getFormatBuffer() const;
+    int getHdrBytesNum() const;
+    void setHdrBytesNum(int hdrBytesNum);
+    unsigned char getHigh8Bits() const;
+    void setHigh8Bits(unsigned char high8Bits);
+    unsigned char getInputNBuff() const;
+    void setInputNBuff(unsigned char inputNBuff);
+    bool isIsWorking() const;
+    void setIsWorking(bool isWorking);
+    unsigned char getLow8Bits() const;
+    void setLow8Bits(unsigned char low8Bits);
+    int getLrmskBinsNum() const;
+    void setLrmskBinsNum(int lrmskBinsNum);
+    unsigned char getLrmskRangeAvg() const;
+    void setLrmskRangeAvg(unsigned char lrmskRangeAvg);
+    const unsigned char* getOutbuff() const;
+    bool isProcArc() const;
+    void setProcArc(bool procArc);
+    bool isProcKdp() const;
+    void setProcKdp(bool procKdp);
+    unsigned char getProcMode() const;
+    void setProcMode(unsigned char procMode);
+    bool isProcT() const;
+    void setProcT(bool procT);
+    unsigned char getProcTsout() const;
+    void setProcTsout(unsigned char procTsout);
+    unsigned char getProcTsSubType() const;
+    void setProcTsSubType(unsigned char procTsSubType);
+    unsigned char getProcUnfold() const;
+    void setProcUnfold(unsigned char procUnfold);
+    bool isProcV() const;
+    void setProcV(bool procV);
+    bool isProcW() const;
+    void setProcW(bool procW);
+    bool isProcZ() const;
+    void setProcZ(bool procZ);
+    bool isProcZdr() const;
+    void setProcZdr(bool procZdr);
+    int getRadioFrequency() const;
+    void setRadioFrequency(int radioFrequency);
+    const char* getRcverStatus() const;
+    const char* getRecvBuffer() const;
+    int getResolution() const;
+    void setResolution(int resolution);
+    const char* getSendBuffer() const;
+    int getSetpwfPrf() const;
+    void setSetpwfPrf(int setpwfPrf = 300);
+    int getSetpwfPulseWidth() const;
+    void setSetpwfPulseWidth(int setpwfPulseWidth = 1);
+    const unsigned char* getSoprm() const;
+    float getSoprmCcorThr() const;
+    void setSoprmCcorThr(float soprmCcorThr);
+    float getSoprmLogThr() const;
+    void setSoprmLogThr(float soprmLogThr);
+    bool isSoprmNhd() const;
+    void setSoprmNhd(bool soprmNhd);
+    bool isSoprmNth() const;
+    void setSoprmNth(bool soprmNth);
+    unsigned short getSoprmProcessMode() const;
+    void setSoprmProcessMode(unsigned short soprmProcessMode);
+    unsigned short getSoprmPulseAcc() const;
+    void setSoprmPulseAcc(unsigned short soprmPulseAcc);
+    bool isSoprmR2Enable() const;
+    void setSoprmR2Enable(bool soprmR2Enable);
+    float getSoprmSigThr() const;
+    void setSoprmSigThr(float soprmSigThr);
+    float getSoprmSqi() const;
+    void setSoprmSqi(float soprmSqi = 0.4);
+    float getSoprmSqiThr() const;
+    void setSoprmSqiThr(float soprmSqiThr);
+    bool isThreadFlag() const;
+    void setThreadFlag(bool threadFlag = false);
+    float getVmax() const;
+    void setVmax(float vmax);
+    float getWaveLen() const;
+    void setWaveLen(float waveLen);
+    bool isCfghdrFlg() const;
+    void setCfghdrFlg(bool cfghdrFlg);
+    bool isCfghdrGpm() const;
+    void setCfghdrGpm(bool cfghdrGpm);
+    bool isCfghdrMmt() const;
+    void setCfghdrMmt(bool cfghdrMmt);
+    bool isCfghdrPbn() const;
+    void setCfghdrPbn(bool cfghdrPbn);
+    bool isCfghdrPrt() const;
+    void setCfghdrPrt(bool cfghdrPrt);
+    bool isCfghdrPul() const;
+    void setCfghdrPul(bool cfghdrPul);
+    bool isCfghdrSyt() const;
+    void setCfghdrSyt(bool cfghdrSyt);
+    bool isCfghdrTag() const;
+    void setCfghdrTag(bool cfghdrTag);
+    bool isCfghdrTid() const;
+    void setCfghdrTid(bool cfghdrTid);
+    bool isCfghdrTim() const;
+    void setCfghdrTim(bool cfghdrTim);
+    bool isCfghdrUtc() const;
+    void setCfghdrUtc(bool cfghdrUtc);
 };
+
 
 #endif // RVP900_H

@@ -10,6 +10,7 @@
 #include "headerctrl.h"
 #include "fetchdatathread.h"
 
+RVP900 rvp9;//rvp9控制对象
 
 namespace Ui {
 class MainWindow;
@@ -25,7 +26,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    static RVP900 rvp9;//rvp9控制对象
+
 
     QextSerialPort serialPort;//串口控制对象
 
@@ -37,6 +38,7 @@ private:
 public slots:
     void paraSetSlot();//参数设置槽函数
     void dispFourPicSlot();//显示四图槽函数
+    void closeEvent(QCloseEvent *);
 
 
     //getter,setter
