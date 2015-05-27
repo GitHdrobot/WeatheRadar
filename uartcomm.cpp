@@ -16,7 +16,7 @@ fuction:     char *get_ptty(pportinfo_t pportinfo)
 description: get thd uart name
 return：     ptty
 **************************************************/
-static char *UartComm::get_ptty(pportinfo_t pportinfo)
+ char *UartComm::get_ptty(pportinfo_t pportinfo)
 {
     char *ptty=NULL;
     switch(pportinfo->tty)
@@ -47,7 +47,7 @@ fuction:     convbaud(unsigned long int baudrate)
 description: baud change
 return：     ptty
 **************************************************/
-static int UartComm::convbaud(unsigned long int baudrate)
+ int UartComm::convbaud(unsigned long int baudrate)
 {
     switch(baudrate){
     case 2400:

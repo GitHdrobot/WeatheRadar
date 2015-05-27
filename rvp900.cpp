@@ -213,9 +213,9 @@ int RVP900::loadRangeMsk(){
     sendBuffer[0]=0;
     //距离掩码设置的掩码位个数
     int markNums = (distance % resolution ==0)?(distance/resolution):(distance/resolution+1);
-    strcat (sendBuffer,lrmskCommLen);//lrmsk指令的长度
-    strcat (sendBuffer,commandWrite);
-    strcat (sendBuffer,commandSep);
+    strcat (sendBuffer,(char*)lrmskCommLen);//lrmsk指令的长度
+    strcat (sendBuffer,(char*)commandWrite);
+    strcat (sendBuffer,(char*)commandSep);
     sendBuffer[13]=lrmskOpCode; //距离掩码指令操作码
     sendBuffer[14]= lrmskRangeAvg;    //距离平均
     lrmskBinsNum = markNums / (lrmskRangeAvg+1);//计算出输出的库个数
@@ -553,7 +553,7 @@ int RVP900::RVP9Initialize(){
     //多普勒滤波器 doppler filter
     dopFilter = 0;
     //处理模式 processing mode
-    processMode = PPP;
+    soprmProcessMode = soprmProcessModePPP;
     //脉冲累积数 pulse accummunate
     soprmPulseAcc = 16;
     //Threshold of LOG、SIG、CCOR、SQI,门限值
@@ -574,15 +574,7 @@ int RVP900::RVP9Initialize(){
 
     clientSocket = -1;
     isWorking = false;
-    //soprm参数初始化设置
-    soprm[] = {
-        0x98,0,0,0,0,0,0,0,0,0,//XARG指令操作码即4个可选参数1
-        0x2,0,//soprm指令操作码
-        0x20,0,0xa6,0x5,0xae,0x7,0x30,0,0x40,0xfe,// input#1 - input#20
-        0x5,0,0x22,0,0x92,0x0,0,0x1,0xa,0x2,
-        0xaa,0xaa,0x88,0x88,0xa0,0xa0,0xa0,0xa0,0,0,
-        0,0,0x40,0x6,0,0,0,0,0x80,0xc
-    };
+
     return 0;
 }
 //对命令进行必要的初始化
@@ -675,7 +667,7 @@ inline int RVP900::getDistance() const {
 	return distance;
 }
 
-inline void RVP900::setDistance(int distance = 10) {
+inline void RVP900::setDistance(int distance) {
 	this->distance = distance;
 }
 
@@ -883,7 +875,7 @@ inline int RVP900::getSetpwfPrf() const {
 	return setpwfPRF;
 }
 
-inline void RVP900::setSetpwfPrf(int setpwfPrf = 300) {
+inline void RVP900::setSetpwfPrf(int setpwfPrf ) {
 	setpwfPRF = setpwfPrf;
 }
 
@@ -891,7 +883,7 @@ inline int RVP900::getSetpwfPulseWidth() const {
 	return setpwfPulseWidth;
 }
 
-inline void RVP900::setSetpwfPulseWidth(int setpwfPulseWidth = 1) {
+inline void RVP900::setSetpwfPulseWidth(int setpwfPulseWidth) {
 	this->setpwfPulseWidth = setpwfPulseWidth;
 }
 
@@ -967,7 +959,7 @@ inline float RVP900::getSoprmSqi() const {
 	return soprmSQI;
 }
 
-inline void RVP900::setSoprmSqi(float soprmSqi = 0.4) {
+inline void RVP900::setSoprmSqi(float soprmSqi ) {
 	soprmSQI = soprmSqi;
 }
 
@@ -983,7 +975,7 @@ inline bool RVP900::isThreadFlag() const {
 	return ThreadFlag;
 }
 
-inline void RVP900::setThreadFlag(bool threadFlag = false) {
+inline void RVP900::setThreadFlag(bool threadFlag ) {
 	ThreadFlag = threadFlag;
 }
 

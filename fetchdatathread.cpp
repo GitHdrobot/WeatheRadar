@@ -1,10 +1,11 @@
 #include "fetchdatathread.h"
 
+extern RVP900 rvp9;//rvp9控制对象
 
 /*构造函数*/
 
-FetchDataThread::FetchDataThread(QObject *parent) :
-    QObject(parent) {
+FetchDataThread::FetchDataThread()
+{
     threadFlag = false;
 }
 

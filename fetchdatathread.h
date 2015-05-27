@@ -6,23 +6,19 @@
 #ifndef FETCHDATATHREAD_H
 #define FETCHDATATHREAD_H
 
-#include <QObject>
 #include <QThread>
-#include "mainwindow.h"
+#include <stdio.h>
+#include "rvp900.h"
 
-extern RVP900 rvp9;//rvp9控制对象
 
 class FetchDataThread : public QThread
 {
-    Q_OBJECT
-public:
-    explicit FetchDataThread(QObject *parent = 0);
-    bool threadFlag;
-protected :
-    void run();
-signals:
 
-public slots:
+public:
+    FetchDataThread();
+    bool threadFlag;
+    void run();
+
 
 };
 

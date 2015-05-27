@@ -2,15 +2,16 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include <QMessageBox>
+#include "fetchdatathread.h"
 #include "dialogsetting.h"  //参数设置对话框头文件
 #include "dialogsample.h"   //采样设置对话框
 
 
 #include "headerctrl.h"
-#include "fetchdatathread.h"
 
-RVP900 rvp9;//rvp9控制对象
+
+
 
 namespace Ui {
 class MainWindow;
@@ -48,9 +49,6 @@ public :
     }
     QextSerialPort getSerialPort() const {
         return serialPort;
-    }
-    static RVP900 getRvp900() {
-        return rvp9;
     }
 
     void setDispDev( DispDevice dispDev) {

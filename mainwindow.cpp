@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "rvp900.h"
 
+extern RVP900 rvp9;//rvp9控制对象
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -97,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete rvp9;
+    delete &rvp9;
 }
 
 void MainWindow::paraSetSlot()
@@ -124,7 +125,7 @@ void MainWindow::on_pbtnOpenTransmit_clicked()
 {
     char openbuf[]={0x54,0x01,0xAA,0x01,0};
     serialPort.write(openbuf);
-    serialPort.read(rvp9.trstatus,8);
+    serialPort.read(rvp9.rcverStatus,8);
     //改变相关显示状态
 }
 //处理 关闭发射按钮 发出的点击信号
@@ -132,7 +133,7 @@ void MainWindow::on_pbtnCloseTransmit_clicked()
 {
     char closebuf[]={0x54,0x01,0x55,0x56,0};
     serialPort.write(closebuf);
-    serialPort.read(rvp9.trstatus,8);
+    serialPort.read(rvp9.rcverStatus,8);
     //改变相关显示状态
 }
 //处理 天线扫描按钮 发出的点击信号
@@ -343,7 +344,7 @@ int MainWindow::collectData(){
     }
 }
 
-void MainWindow::closeEvent(QCloseEvent * closeEvent){
+void MainWindow::closeEvent(QCloseEvent* qCloseEvent){
     switch( QMessageBox::information( this, tr("关闭应用程序"),
                                       tr("是否确定要关闭应用程序？"),
                                       tr("确定"), tr("取消"), 0, 1 ) )
@@ -353,14 +354,14 @@ void MainWindow::closeEvent(QCloseEvent * closeEvent){
         {
             rvp9.isWorking = false;
             fetchDataThread.threadFlag = false;
-            fetchDataThread->wait();
-            delete fetchDataThread;
+            fetchDataThread.wait();
+            delete &fetchDataThread;
         }
-        closeEvent->accept();
+       // qCloseEvent->accept();
         break;
     case 1:
     default:
-        closeEvent->ignore();
+        //qCloseEvent->ignore();
         break;
     }
 }

@@ -51,6 +51,15 @@ public :
 
     //SOPRM参数配置命令 input1-20,XARG1-9，7、8共用,
     //该命令参数太多 只添加几个常用到的参数变量
+    //soprm参数初始化设置
+    unsigned char soprm[52] = {
+        0x98,0,0,0,0,0,0,0,0,0,//XARG指令操作码即4个可选参数1
+        0x2,0,//soprm指令操作码
+        0x20,0,0xa6,0x5,0xae,0x7,0x30,0,0x40,0xfe,// input#1 - input#20
+        0x5,0,0x22,0,0x92,0x0,0,0x1,0xa,0x2,
+        0xaa,0xaa,0x88,0x88,0xa0,0xa0,0xa0,0xa0,0,0,
+        0,0,0x40,0x6,0,0,0,0,0x80,0xc
+    };
     /*Nth,No Threshold；
     If 1, then no threshold values are set. This means ignore input words
     4, 5, 6, 7, 11, 12, 13, 14, and 18
@@ -69,7 +78,8 @@ public :
     //    unsigned char soprmWindow;
     //    bool soprmZER;
     //    unsigned char soprmcFtrStbDelay;
-    unsigned char soprm[52];
+
+
     /*
     *An important feature of the RVP900 is its ability to eliminate signals which
     *are either too weak to be useful, or which have widths too large to justify
@@ -368,7 +378,7 @@ public:
     int getDataBytesNum() const;
     void setDataBytesNum(int dataBytesNum);
     int getDistance() const;
-    void setDistance(int distance = 10);
+    void setDistance(int distance );
     unsigned short getDopFilter() const;
     void setDopFilter(unsigned short dopFilter);
     double getElevation() const;
@@ -420,9 +430,9 @@ public:
     void setResolution(int resolution);
     const char* getSendBuffer() const;
     int getSetpwfPrf() const;
-    void setSetpwfPrf(int setpwfPrf = 300);
+    void setSetpwfPrf(int setpwfPrf);
     int getSetpwfPulseWidth() const;
-    void setSetpwfPulseWidth(int setpwfPulseWidth = 1);
+    void setSetpwfPulseWidth(int setpwfPulseWidth);
     const unsigned char* getSoprm() const;
     float getSoprmCcorThr() const;
     void setSoprmCcorThr(float soprmCcorThr);
@@ -441,11 +451,11 @@ public:
     float getSoprmSigThr() const;
     void setSoprmSigThr(float soprmSigThr);
     float getSoprmSqi() const;
-    void setSoprmSqi(float soprmSqi = 0.4);
+    void setSoprmSqi(float soprmSqi);
     float getSoprmSqiThr() const;
     void setSoprmSqiThr(float soprmSqiThr);
     bool isThreadFlag() const;
-    void setThreadFlag(bool threadFlag = false);
+    void setThreadFlag(bool threadFlag );
     float getVmax() const;
     void setVmax(float vmax);
     float getWaveLen() const;

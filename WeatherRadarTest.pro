@@ -11,12 +11,14 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = WeatherRadarTest
 TEMPLATE = app
 
-LIBS    += -L ./lib/qextserialport -llibqextserialportd.a
 
-#DEPENDPATH += ./lib
-#DEPENDPATH += ./lib/qextserialport
-#INCLUDEPATH += ./lib
-#INCLUDEPATH += ./lib/qextserialport
+
+DEPENDPATH += ./lib
+DEPENDPATH += ./lib/qextserialport
+INCLUDEPATH += ./lib
+INCLUDEPATH += ./lib/qextserialport
+LIBS    += -L$${PWD}  -llibqextserialportd.a
+LIBS    += -L$${PWD}  -llibqextserialport.a
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -47,7 +49,7 @@ HEADERS  += mainwindow.h \
     lib/qextserialport/qextserialbase.h \
     lib/qextserialport/qextserialenumerator.h \
     lib/qextserialport/qextserialport.h \
-    lib/qextserialport/win_qextserialport.h
+   #lib/qextserialport/win_qextserialport.h
 
 FORMS    += mainwindow.ui \
     dialogsetting.ui \
