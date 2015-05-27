@@ -1,8 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QWidget>
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QCloseEvent>
+
 #include "fetchdatathread.h"
 #include "dialogsetting.h"  //参数设置对话框头文件
 #include "dialogsample.h"   //采样设置对话框

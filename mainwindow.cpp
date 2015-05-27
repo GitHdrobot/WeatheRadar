@@ -344,24 +344,18 @@ int MainWindow::collectData(){
     }
 }
 
-void MainWindow::closeEvent(QCloseEvent* qCloseEvent){
-    switch( QMessageBox::information( this, tr("关闭应用程序"),
-                                      tr("是否确定要关闭应用程序？"),
-                                      tr("确定"), tr("取消"), 0, 1 ) )
-    {
-    case 0:
-        if(rvp9.isWorking)
-        {
-            rvp9.isWorking = false;
-            fetchDataThread.threadFlag = false;
-            fetchDataThread.wait();
-            delete &fetchDataThread;
-        }
-       // qCloseEvent->accept();
-        break;
-    case 1:
-    default:
-        //qCloseEvent->ignore();
-        break;
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    QMessageBox::StandardButton button;
+    button = QMessageBox::question(this, tr("退出程序"),
+                                   QString(tr("警告：程序有一个任务正在运行中，是否结束操作退出?")),
+                                   QMessageBox::Yes | QMessageBox::No);
+
+    if (button == QMessageBox::No) {
+        event->ignore();  //忽略退出信号，程序继续运行
+    }
+    else if (button == QMessageBox::Yes) {
+        event->accept();  //接受退出信号，程序退出
     }
 }
