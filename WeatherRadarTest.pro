@@ -17,8 +17,8 @@ DEPENDPATH += ./lib
 DEPENDPATH += ./lib/qextserialport
 INCLUDEPATH += ./lib
 INCLUDEPATH += ./lib/qextserialport
-LIBS    += -L$${PWD}  -llibqextserialportd.a
-LIBS    += -L$${PWD}  -llibqextserialport.a
+LIBS    += -L$${PWD}/lib/qextserialport  -llibqextserialportd
+LIBS    += -L$${PWD}/lib/qextserialport  -llibqextserialport
 
 SOURCES += main.cpp\
         mainwindow.cpp \
