@@ -11,15 +11,12 @@
 #include <stdlib.h>
 #include <qstring.h>
 
-//rvp900 控制类
-#include "constRVP900.h"
-#include "dispdevice.h"
+#include "headerctrl.h"
 
-#include "constcode.h"
 
 extern DispDevice dispDev;
 extern int dispMode;
-
+extern int sectorWidth;
 class RVP900
 {
     //RVP900 Properties
@@ -190,6 +187,7 @@ public :
     /*杂项控制 1、距离订正通断 2、r2使能 3、单库杂波消除 4、强度斑点消除 5、速度斑点消除 6、3x3平滑输出**/
 
 
+    /*其他的参数**/
 
 
 

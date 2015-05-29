@@ -575,6 +575,7 @@ int RVP900::RVP9Initialize(){
     clientSocket = -1;
     isWorking = false;
 
+
     return 0;
 }
 //对命令进行必要的初始化

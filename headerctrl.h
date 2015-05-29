@@ -12,6 +12,7 @@
 
 #include "./lib/qextserialport/qextserialport.h"
 
+#include "utils.h"
 
 #endif // HEADERCTRL
 

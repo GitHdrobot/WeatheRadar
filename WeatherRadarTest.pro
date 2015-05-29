@@ -34,6 +34,7 @@ SOURCES += main.cpp\
     sector.cpp \
     palette.cpp \
     uartcomm.cpp \
+    utils.cpp
 
 HEADERS  += mainwindow.h \
     dialogsetting.h \
@@ -53,6 +54,7 @@ HEADERS  += mainwindow.h \
     lib/qextserialport/qextserialenumerator.h \
     lib/qextserialport/qextserialport.h \
    #lib/qextserialport/win_qextserialport.h
+    utils.h
 
 FORMS    += mainwindow.ui \
     dialogsetting.ui \

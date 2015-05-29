@@ -217,3 +217,19 @@ void Sector::setNumSystem(int numSystem) {
     this->numSystem = numSystem;
 }
 
+
+QPoint Sector::getCenter() const{
+    return center ;
+}
+
+void Sector:: setCenter(QPoint center){
+    this->center = center;
+}
+
+QPoint Sector::calculateCenter(){
+    QPoint p ;
+    p.setX(xloc + width / 2);
+    p.setY(yloc + height / 2);
+    this->setCenter(p);
+    return center;
+}

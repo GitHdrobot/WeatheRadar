@@ -15,6 +15,7 @@ Palette::Palette()
     xloc = 0;
     yloc = 0;
     comTxt = "";
+    internal = 1;
 }
 
 Palette::~Palette()
@@ -24,11 +25,12 @@ Palette::~Palette()
 
 
 char* Palette::getComTxt() const {
-    return comTxt;
+    return &comTxt;
 }
 
 void Palette::setComTxt(char* comTxt) {
-    this->comTxt = comTxt;
+    strcpy(this->comTxt,comTxt);
+   //this->comTxt = comTxt;
 }
 
 int Palette::getFillBlue() const {

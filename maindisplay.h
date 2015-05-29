@@ -43,12 +43,8 @@ public:
     void paintWPal(Palette pal[],int palLenth);
     void paintDBTPal(Palette pal[],int palLenth);
     void paintDBZPal(Palette pal[],int palLenth);
-    /*该方法生成的颜色不便于选取*/
-    /*颜色库构造 R、G、B，Y = x*x*x,x = 16,Y = 16^3
-    *RGB的变化范围为0-255，共256个颜色，取16个颜色，隔16取1
-    */
-    void colorPalFactory();
-    /*生成颜色库 Y = 3*x*x + 6*6*6 +16*3 ,x=16,RG,GB,RB,RGB*/
+
+    /*生成颜色库 R，G，B，RG,GB,RB,RGB*/
     int colorBinFactory();
     /*绘制调色板*/
     int paintPal(Palette pal);
@@ -58,6 +54,15 @@ public:
 
     /*控制扇形的绘制*/
     int paintSectorManager();
+
+    /*绘制数据点*/
+    int paintDBZ();
+
+    int paintDBT();
+
+    int paintV();
+
+    int paintW();
 };
 
 #endif // MAINDISPLAY_H

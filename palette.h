@@ -17,7 +17,9 @@ public:
     //填充颜色
     int fillRed,fillGreen,fillBlue;
     //文字说明
-    char *comTxt;
+    char comTxt[10];
+    //显示文字与矩形之间的距离
+    int internal;
 
 public:
     Palette();
@@ -48,6 +50,9 @@ public:
     void setXloc(int xloc) ;
     int getYloc() const ;
     void setYloc(int yloc) ;
+    int getInternal() const ;
+    void setInternal(int internal) ;
+
 
 };
 

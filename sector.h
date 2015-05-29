@@ -11,6 +11,7 @@ public:
 public:
     int xloc,yloc;//X，Y坐标
     int width,height;//宽、高
+
     int startAngle,endAngle,spanAngle;//起始角度、跨度
     int rotateAngle;//圆弧上刻度线 旋转的刻度
     int numSystem;//刻度进制 即多少个小刻度组成一个大刻度
@@ -23,6 +24,9 @@ public:
     int radStartVal,radValPerScale,radSpaceScale;
     //扇形边框颜色
     int rgb_Red,rgb_Blue,rgb_Green;
+
+
+    QPoint center;
 
 public :
 
@@ -111,6 +115,12 @@ public :
     int getNumSystem() const ;
 
     void setNumSystem(int numSystem) ;
+
+    QPoint getCenter() const;
+
+    void setCenter(QPoint center);
+    //计算扇形的中心点
+    QPoint calculateCenter();
 };
 
 

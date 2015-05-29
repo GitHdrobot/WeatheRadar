@@ -4,6 +4,8 @@
 
 extern RVP900 rvp9;//rvp9控制对象
 
+//扇形半径
+int sectorWidth ,colorTotal;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -253,6 +255,8 @@ void MainWindow::on_comboBoxLmsk_activated(int index)
     }
     //根据选择的距离 设置距离掩码
     rvp9.loadRangeMsk();
+    //计算出最大的公约数
+    rvp9.gcd = utils.gcd(rvp9.lrmskBinsNum,sector.getHeight());
 }
 /*RPF 脉冲重复频率 改变*/
 void MainWindow::on_comboBoxPRF_activated(int index)

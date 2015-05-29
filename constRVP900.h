@@ -258,5 +258,9 @@ const unsigned short soprmProcessModeRPP = 3;
 const unsigned short soprmProcessModeDPRT_1 = 4;
 const unsigned short soprmProcessModeDPRT_2 = 5;
 
+//最大的反射率因子
+const  short dBZMax = 70;
+//最小的反射率因子
+const  short dBZMin = -10;
 
 #endif // CONSTRVP900_H
