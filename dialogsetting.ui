@@ -26,7 +26,7 @@
     <string>处理模式</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox">
+  <widget class="QComboBox" name="comboBoxProcMode">
    <property name="geometry">
     <rect>
      <x>90</x>
@@ -61,7 +61,7 @@
     </property>
    </item>
   </widget>
-  <widget class="QComboBox" name="comboBox_2">
+  <widget class="QComboBox" name="comboBoxPulseAccu">
    <property name="geometry">
     <rect>
      <x>320</x>
@@ -119,7 +119,7 @@
     <string>脉冲累积数</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_3">
+  <widget class="QComboBox" name="comboBoxRangeAvg">
    <property name="geometry">
     <rect>
      <x>90</x>
@@ -142,7 +142,7 @@
     <string>距离平均</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_4">
+  <widget class="QComboBox" name="comboBoxWidthAvg">
    <property name="geometry">
     <rect>
      <x>320</x>
@@ -165,7 +165,7 @@
     <string>谱平均</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_5">
+  <widget class="QComboBox" name="comboBoxWinType">
    <property name="geometry">
     <rect>
      <x>90</x>
@@ -213,7 +213,7 @@
     <string>窗口类型</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="comboBox_6">
+  <widget class="QComboBox" name="comboBoxBinNum">
    <property name="geometry">
     <rect>
      <x>320</x>
@@ -241,7 +241,7 @@
     <string>数据库长</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_rvn">
+  <widget class="QCheckBox" name="checkBoxRangeNorm">
    <property name="geometry">
     <rect>
      <x>60</x>
@@ -254,7 +254,7 @@
     <string>距离订正通断</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_R2Enable">
+  <widget class="QCheckBox" name="checkBoxR2Enable">
    <property name="geometry">
     <rect>
      <x>230</x>
@@ -267,7 +267,7 @@
     <string>R2使能</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_CMS">
+  <widget class="QCheckBox" name="checkBoxCMS">
    <property name="geometry">
     <rect>
      <x>60</x>
@@ -280,7 +280,7 @@
     <string>单库杂波消除</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_4">
+  <widget class="QCheckBox" name="checkBoxDsr">
    <property name="geometry">
     <rect>
      <x>60</x>
@@ -293,7 +293,7 @@
     <string>速度斑点消除</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_5">
+  <widget class="QCheckBox" name="checkBoxLsr">
    <property name="geometry">
     <rect>
      <x>230</x>
@@ -306,7 +306,7 @@
     <string>强度斑点消除</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_6">
+  <widget class="QCheckBox" name="checkBox3x3">
    <property name="geometry">
     <rect>
      <x>230</x>

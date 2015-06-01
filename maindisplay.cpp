@@ -255,6 +255,22 @@ int MainDisplay:: colorBinFactory(){
 }
 
 int MainDisplay::paintDBZ(){
+    startPaint(rvp9.binsZBuff);
+}
+
+int MainDisplay::paintDBT(){
+    startPaint(rvp9.binsTBuff);
+}
+
+int MainDisplay::paintV(){
+    startPaint(rvp9.binsVBuff);
+}
+
+int MainDisplay::paintW(){
+    startPaint(rvp9.binsWBuff);
+}
+
+int MainDisplay::startPaint(unsigned char buff){
     unsigned short azimuthus ;
     //dbz坐标位置的计算
     QPoint dbzPoint;
@@ -268,6 +284,9 @@ int MainDisplay::paintDBZ(){
     int radius = sector.getWidth()/2;
     float azimuthIncf;
     QPoint center = sector.calculateCenter();
+    //dbz颜色均分
+    QPen pen ;
+    float colorPerDBZ = colorTotal / dBZMax;
     //<1 度范围内的绘制
     for(int j =0;j< 1 ;j+=0.2){
         azimuthIncf = azimuthf + i;
@@ -295,10 +314,12 @@ int MainDisplay::paintDBZ(){
                 dbzPoint.setY(center.y() + radius*cos(azimuthIncf*PI/180));
                 break;
             }
+
+            //计算颜色
+            int  colorIndex = buff[i] * colorPerDBZ;
+            //设置画笔颜色
+            pen.setColor(PalColorMat[colorIndex]);
+            painter.drawPoint(dbzPoint);
         }
     }
-
-    //dbz颜色的计算
-    float colorPerDBZ = colorTotal / dBZMax;
-
 }

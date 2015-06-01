@@ -100,7 +100,6 @@ public :
     bool soprmNHD;
     //处理模式 processing mode
     unsigned short soprmProcessMode;
-
     //暂未使用
     //  unsigned char LDRNV[504]={0x15,0,0};
 
@@ -452,6 +451,8 @@ public:
     void setSoprmSqi(float soprmSqi);
     float getSoprmSqiThr() const;
     void setSoprmSqiThr(float soprmSqiThr);
+    unsigned short getSoprmWinType()const;
+    void setSoprmWinType();
     bool isThreadFlag() const;
     void setThreadFlag(bool threadFlag );
     float getVmax() const;
@@ -480,6 +481,8 @@ public:
     void setCfghdrTim(bool cfghdrTim);
     bool isCfghdrUtc() const;
     void setCfghdrUtc(bool cfghdrUtc);
+
+
 };
 
 

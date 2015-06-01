@@ -263,4 +263,12 @@ const  short dBZMax = 70;
 //最小的反射率因子
 const  short dBZMin = -10;
 
+//Rnv  "距离订正通断" ;
+//R2_Enable  "R2使能"  ;
+//CMS  "单库杂波消除";
+//Lsr "强度斑点消除";
+//Dsr "速度斑点消除";
+//窗口类型
+//0:Rectangular, 1:Hamming, 2:Blackman, 3:Exact
+//Blackman, 4:VonHann.
 #endif // CONSTRVP900_H

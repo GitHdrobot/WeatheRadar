@@ -56,13 +56,15 @@ public:
     int paintSectorManager();
 
     /*绘制数据点*/
-    int paintDBZ();
+    int startPaint(unsigned char *buff);
 
-    int paintDBT();
+    int paintDBZ( );
 
-    int paintV();
+    int paintDBT( );
 
-    int paintW();
+    int paintV( );
+
+    int paintW( );
 };
 
 #endif // MAINDISPLAY_H
