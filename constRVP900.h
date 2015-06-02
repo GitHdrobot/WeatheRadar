@@ -150,7 +150,6 @@ const unsigned char commandSep = '|';
 * 载入距离掩码，距离掩码的作用主要是更加灵活的设置收集数据的距离库
 */
 #define LRMSK_PREFIX "00000007"
-#define LRMSK_N "LRMSK"
 #define LRMSK_OPCODE 0x01
 const unsigned char lrmskOpCode = 0x01;
 //lrmsk 1 word;input#1 - input#512 512 word;
@@ -167,7 +166,6 @@ const unsigned char lrmskCommLen[] = "00001031";
 *设置杂波滤波器
 */
 #define LFILT_PREFIX "00000007"
-#define LFILT_N "LFILT"
 #define LFILT_OPCODE 0x28
 #define LFILT_L8BIT LFILT_OPCODE
 #define LFILT_H8BIT 0x0
@@ -179,23 +177,23 @@ const unsigned char lrmskCommLen[] = "00001031";
 *设置脉冲宽度和脉冲重复频率
 */
 #define SETPWF_PREFIX "00000009"
-#define SETPWF_OPCODE 0x10 //指令SETPWF操作码
-#define SETPWF_L8BIT SETPWF_OPCODE
-#define SETPWF_H8BIT 0x0
+
+const unsigned char setpwfOpCode = 0x10;//指令SETPWF操作码
+const unsigned char setpwfL8Bit = setpwfOpCode;
+const unsigned char setpwfH8Bit = 0x0;
 
 /*
 *SNOISE commd const,sample noise level
 *估计接收机的噪声级
 */
 #define SNOISE_PREFIX "00000011"
-#define SNOISE_OPCODE 0x05
-#define SNOISE_L8BIT SETPWF_OPCODE
+const unsigned char snoiseOpCode = 0x05;
+const unsigned char snoiseL8Bit = snoiseOpCode;
 
 /*
 *PROC command const,initiate processing
 *初始化数据处理
 */
-#define PROC_N "PROC"
 #define PROC_FREFIX "00000007"
 const unsigned char procOpCode = 0x06 ;
 
@@ -204,36 +202,17 @@ const unsigned char procOpCode = 0x06 ;
 *获取处理器状态信息
 */
 #define GPARM_PREFIX "00000007"
-#define GPARM_N "GPARM"
 #define GPARM_L8BIT 0x09
 #define GPARM_H8BIT 0x00
 
+const unsigned char gparmL8bit = 0x09;
+const unsigned char gparmH8bit = 0x00;
 
-/*
- *定义距离库的个数 
- **/
-#define BINS_NUM 200
-/*
- *定义选择输出数据有几种 
- **/
-#define BINS_TYPE_NUM 4
-/*输出数据头的长度*/
-#define BINS_HEADER_LEN 8
-/*定义数据的总长度*/
-#define BINS_LEN BINS_NUM*BINS_TYPE_NUM + BINS_HEADER_LEN
+#define BIT_CLEAR 0x0
+#define BYTE_CLEAR 0x0
 
 
-#define BIT_CLEAR 0
-#define BYTE_CLEAR 0
-
-//#define SYNCHRONOUS 1
-
-/*双脉冲重复比常量  设置的是PROC命令的8、9位*/
-#define DPRF_NONE 0x0   //none
-#define DPRF_2TO3 1  //双PRF为2：3
-#define DPRF_3TO4 2  //双PRF为3:4
-#define DPRF_4TO5 3   //双PRF为4:5
-//双PRF 比 常量
+//双PRF 比 常量 设置的是PROC命令的8、9位
 const unsigned char procUnfoldNone = 0x00;
 const unsigned char procUnfold2To3 = 0x01;
 const unsigned char procUnfold3To4 = 0x10;

@@ -25,10 +25,10 @@ public slots:
 
 public:
     unsigned char PalColorMat[palColorNum][baseColorNum];     //调色板颜色矩阵256*3
-    //调色板
-    Palette pal[palNum];
+    //色标
+    Palette dBZPal[palNum],dBTPal[palNum],vPal[palNum],wPal[palNum];
     //扇形
-    Sector sector;
+    Sector dBZSector,dBTSector,vSector,wSector;
 
     int colorNums;
 
@@ -50,7 +50,7 @@ public:
     int paintPal(Palette pal);
 
     /*绘制扇形*/
-    int paintSector();
+    int paintSector(Sector *pSector);
 
     /*控制扇形的绘制*/
     int paintSectorManager();

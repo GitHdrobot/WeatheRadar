@@ -211,13 +211,7 @@ public:
     unsigned char binsTBuff[1024];//dBT bins buff
     unsigned char binsTAGBuff[1024];//TAG Buff 存放指令PROC执行后的tag数据
 
-    //暂不需要这些数据
-    /*
-    unsigned char binsZDRBuff[1024];//ZDR bins buff
-    unsigned char binsKDPBuff[1024];//KDP bins buff
-    unsigned char binsKDPBuff[1024*6];//ARC bins buff
-    */
-
+    unsigned char statusBuff[128];//rvp900的状态buffer
 
 
     /*RVP900 Methods   方法*/
@@ -230,7 +224,6 @@ public:
     int readSocketResp();//读取rvp900响应信息
     int assembleCmdMsg(int length,char *cmd,char *data);//构造要发送的命令的信息
     int sendMsg(char *buffer,int length);//向RVP900发送数据
-    int getRvp900status(char *buffer);//获取RVP900的状态信息
     /*
     *构造发送的指令信息
     */
@@ -303,7 +296,7 @@ public:
     *该命令用来选择脉冲宽度和触发频率。一个4位的脉冲宽度码在该命令字的（13，12,9,8）位设置，
     *正如PWINFO命令的描述，选择1/16的脉冲宽度
     */
-    int setPulWidth(char *buffer);
+    int setPulWidth(char pulseWidth,char *pPRT);  //脉宽 脉冲重复周期
     /*
     *SNOISE :sample noise level
     *This command is used to estimate the current noise level from the receiver,
@@ -315,8 +308,29 @@ public:
     *对噪声电平采样
     *该命令用来估计当前接收机的噪声大小，这样就可以从随后测量值中减去该噪声。256个脉冲在256个距离
     *处采样，在可选距离处开始，。。。
+    *
+    * Rng: If 1, then the range in input word 1 is taken as the starting
+    *noise range for this and all subsequent SNOISE calls.
+    * Rng:如果置1，Input#1将作为本次和后面 调用 的噪声范围的起始值
+    *Rat: If 1, then the trigger rate in input word 2 is taken as the
+    *noise rate for this and all subsequent SNOISE calls.
+    * 如果置1，input#2作为本次和后面 调用 的噪声比率
+    *Action: Specifies what action is carried out by the command.
+    * 指定该命令将进行的操作
+    *0 Compute a new noise sample based on the present IFD
+    *input signals.0 ,基于当前的 IFD 输入信号计算一个新的噪声样本
+    *1 Do not compute a noise sample, but rather, read new noise
+    *values from the host computer and use them for subsequent
+    *processing. Four additional input words supply the noise
+    *information, and GPARM words 6, 9, and 44 to 50 are
+    *changed to reflect the new noise settings.
+    *If the current transmit pulse is a hybrid pulse, and XARGS
+    *arguments are supplied, then the additional arguments set
+    *the noise level for the second pulse.
+    *2 Do not compute a noise sample, but rather, restore the
+    *powerup noise defaults.
     */
-    int samNoise();
+    int sampleNoise();
     /*
     *PROC : initate processing command
     *The PROC command controls the actual processing and output of radar
@@ -352,7 +366,7 @@ public:
     *该命令用来访问RVP900处理器的状态信息。一般都传输64位字，出于将来兼容性考虑，
     *保留后面的字，作为0读出
     */
-    int GPARM(char* inBuffer,char *outBuffer);
+    int GPARM();
     /*RVP900初始化函数 对参数进行必要的初始化*/
     int RVP9Initialize();
     /*返回数据头的长度*/

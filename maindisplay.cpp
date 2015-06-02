@@ -35,13 +35,16 @@ void MainDisplay::paintEvent(QPaintEvent *){
     paintShadeGuide();
     paintSectorManager();
 }
-
+//绘制色标卡
 void MainDisplay::paintShadeGuide() {
     int palLenth = 15;
-    paintDBZPal(pal,palLenth);
+    paintDBZPal(dBZPal,palLenth);
+    paintDBTPal(dBTPal,palLenth);
+    paintVPal(vPal,palLenth);
+    paintWPal(wPal,palLenth);
 }
 
-void  MainDisplay::paintDBZPal(Palette pal[],int palLenth){
+void  MainDisplay::paintDBZPal(Palette dbzPal[],int palLenth){
     //计算出每个色标代表的值
     short perdBZ = (dBZMax - dBZMin )/palNum;
     char formatter[10];
@@ -59,12 +62,12 @@ void  MainDisplay::paintDBZPal(Palette pal[],int palLenth){
         pal[i].yloc -= i * pal[i].height;
         sprintf(formatter,"%d",dBZMin + i*perdBZ);
         pal[i].setComTxt(formatter);
-        paintPal(pal[i]);
+        paintPal(dbzPal[i]);
     }
 
 }
 
-void MainDisplay::paintDBTPal(Palette pal[],int palLenth){
+void MainDisplay::paintDBTPal(Palette dbtPal[],int palLenth){
     //计算出每个色标代表的值
     short perdBZ = (dBZMax - dBZMin )/palNum;
     char formatter[10];
@@ -83,11 +86,11 @@ void MainDisplay::paintDBTPal(Palette pal[],int palLenth){
         pal[i].yloc += i * pal[i].height;
         sprintf(formatter,"%d",perdBZ*i+dBZMin);
         pal[i].setComTxt(formatter);
-        paintPal(pal[i]);
+        paintPal(dbtPal[i]);
     }
 }
 
-void  MainDisplay::paintWPal(Palette pal[],int palLenth){
+void  MainDisplay::paintWPal(Palette wPal[],int palLenth){
     float Vmax = rvp9.getVmax();
     //计算出每个色标表示多少
     float perVmax = Vmax / palNum;
@@ -107,11 +110,11 @@ void  MainDisplay::paintWPal(Palette pal[],int palLenth){
         pal[i].yloc += i * pal[i].height;
         sprinf(formatter,"%.1f",perVmax*i);
         pal[i].setComTxt(formatter);
-        paintPal(pal[i]);
+        paintPal(wPal[i]);
     }
 }
 
-void  MainDisplay::paintVPal(Palette pal[],int palLenth){
+void  MainDisplay::paintVPal(Palette vPal[],int palLenth){
     float Vmax = rvp9.getVmax();
     //计算出每个色标表示多少
     float perVmax = Vmax*2 / palNum;
@@ -134,7 +137,7 @@ void  MainDisplay::paintVPal(Palette pal[],int palLenth){
         //从最大负数开始 每循环一次增加一个量度的速度
         sprintf(formatter,"%0.1f",Vmaxs + i*perVmax);
         pal[i].setComTxt(formatter);
-        paintPal(pal[i]);
+        paintPal(vPal[i]);
     }
 }
 
@@ -157,55 +160,55 @@ int MainDisplay::paintPal(Palette pal){
     return 1;
 }
 
-int MainDisplay::paintSector(){
+int MainDisplay::paintSector(Sector *pSector){
     painter.save();//save painter status
-    QRectF pieRect(sector.xloc,sector.yloc,sector.width,sector.height);//rectangle of sector
+    QRectF pieRect(pSector->xloc,pSector->yloc,pSector->width,pSector->height);//rectangle of sector
     QPen pen;
     pen.setColor(Qt::white);//set color 、style of pen
     pen.setStyle(Qt::SolidLine);
     painter.setPen(pen);//set pen to painter
     //draw pie
-    painter.drawPie(pieRect,sector.startAngle*angleFactor,sector.spanAngle*angleFactor);
+    painter.drawPie(pieRect,pSector->startAngle*angleFactor,pSector->spanAngle*angleFactor);
     //绘制扇形上的圆弧
-    for(int i=1;i<sector.radCalNum;i++){
+    for(int i=1;i<pSector->radCalNum;i++){
         int x,y,wInc,hInc,w,h;
-        wInc = i * sector.width / sector.radCalNum;
-        hInc = i * sector.height / sector.radCalNum;
-        x = sector.xloc + wInc / 2;
-        y = sector.yloc + hInc / 2;
-        w = sector.width - wInc;
-        h = sector.height-hInc;
-        painter.drawArc(x,y,w,h,sector.startAngle*angleFactor,sector.spanAngle*angleFactor);
+        wInc = i * pSector->width / pSector->radCalNum;
+        hInc = i * pSector->height / pSector->radCalNum;
+        x = pSector->xloc + wInc / 2;
+        y = pSector->yloc + hInc / 2;
+        w = pSector->width - wInc;
+        h = pSector->height-hInc;
+        painter.drawArc(x,y,w,h,pSector->startAngle*angleFactor,pSector->spanAngle*angleFactor);
     }
 
     //painter.setRenderHint(QPainter::Antialiasing, true);//open Antialiasing
     //    进行坐标系变换 从扇形的坐标移动到扇形的中心点处
-    painter.translate(sector.xloc+0.5*sector.width,sector.yloc + 0.5*sector.height);
+    painter.translate(pSector->xloc+0.5*pSector->width,pSector->yloc + 0.5*pSector->height);
     //旋转到起始角度
-    int angle = 180-sector.endAngle;
+    int angle = 180-pSector->endAngle;
     if(angle < 0){
-        angle = 360-sector.endAngle;
+        angle = 360-pSector->endAngle;
     }
     painter.rotate(angle);
-    for(int i=0;i<sector.arcCalNum;i++){
-        painter.rotate(sector.rotateAngle);
+    for(int i=0;i<pSector->arcCalNum;i++){
+        painter.rotate(pSector->rotateAngle);
         //从中心点移动到扇形左边
-        if((i+1) % sector.numSystem == 0){//绘制大刻度线
-            painter.drawLine(-0.5*sector.width,0,0,0);
+        if((i+1) % pSector->numSystem == 0){//绘制大刻度线
+            painter.drawLine(-0.5*pSector->width,0,0,0);
         }
         //绘制一般的小刻度线
-        painter.drawLine(-0.5*sector.width,0,-0.5*sector.width+sector.arcCalWidth,0);
+        painter.drawLine(-0.5*pSector->width,0,-0.5*pSector->width+pSector->arcCalWidth,0);
     }
     painter.restore();
     return 1;
 }
 int MainDisplay:: paintSectorManager(){
     //设置扇形的位置、大小
-    sector.setXloc(100);
-    sector.setYloc(100);
-    sector.setWidth(500);
-    sector.setHeight(500);
-    paintSector();
+    dBZSector.setXloc(100);
+    dBZSector.setYloc(100);
+    dBZSector.setWidth(500);
+    dBZSector.setHeight(500);
+    paintSector(&dBZSector);
 }
 int MainDisplay:: colorBinFactory(){
     int cursor = 0;

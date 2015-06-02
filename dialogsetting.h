@@ -25,6 +25,26 @@ private slots:
 
     void on_comboBoxBinNum_currentIndexChanged(int index);
 
+    void on_checkBoxRangeNorm_clicked();
+
+    void on_checkBoxR2Enable_clicked();
+
+    void on_checkBoxCMS_clicked();
+
+    void on_checkBoxLsr_clicked();
+
+    void on_checkBoxDsr_clicked();
+
+    void on_checkBox3x3_clicked();
+
+    void on_doubleSpinBoxLogThreshold_editingFinished();
+
+    void on_doubleSpinBoxSigThreshold_editingFinished();
+
+    void on_doubleSpinBoxCCORThreshold_editingFinished();
+
+    void on_doubleSpinBoxSQIThreshold_editingFinished();
+
 private:
     Ui::DialogSetting *ui;
 };

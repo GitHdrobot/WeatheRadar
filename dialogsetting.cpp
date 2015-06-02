@@ -6,6 +6,24 @@ DialogSetting::DialogSetting(QWidget *parent) :
     ui(new Ui::DialogSetting)
 {
     ui->setupUi(this);
+    connect(ui->checkBox3x3,SIGNAL(clicked()),this,SLOT(on_checkBox3x3_clicked()));
+    connect(ui->checkBoxCMS,SIGNAL(clicked()),this,SLOT(on_checkBoxCMS_clicked()));
+    connect(ui->checkBoxDsr,SIGNAL(clicked()),this,SLOT(on_checkBoxDsr_clicked()));
+    connect(ui->checkBoxLsr,SIGNAL(clicked()),this,SLOT(on_checkBoxLsr_clicked()));
+    connect(ui->checkBoxR2Enable,SIGNAL(clicked()),this,SLOT(on_checkBoxR2Enable_clicked()));
+    connect(ui->checkBoxRangeNorm,SIGNAL(clicked()),this,SLOT(on_checkBoxRangeNorm_clicked()));
+
+    connect(ui->comboBoxBinNum,SIGNAL(currentIndexChanged(int)),this,SLOT(on_comboBoxBinNum_currentIndexChanged()));
+    connect(ui->comboBoxProcMode,SIGNAL(currentIndexChanged(int)),this,SLOT(on_comboBoxProcMode_currentIndexChanged(int)));
+    connect(ui->comboBoxPulseAccu,SIGNAL(currentIndexChanged(int)),this,SLOT(on_comboBoxPulseAccu_currentIndexChanged(int)));
+    connect(ui->comboBoxProcMode,SIGNAL(currentIndexChanged(int)),this,SLOT(on_comboBoxProcMode_currentIndexChanged(int)));
+
+    connect(ui->doubleSpinBoxCCORThreshold,SIGNAL(editingFinished()),this,SLOT(on_doubleSpinBoxCCORThreshold_editingFinished()));
+    connect(ui->doubleSpinBoxLogThreshold,SIGNAL(editingFinished()),this,SLOT(on_doubleSpinBoxLogThreshold_editingFinished()));
+    connect(ui->doubleSpinBoxSigThreshold,SIGNAL(editingFinished()),this,SLOT(on_doubleSpinBoxSigThreshold_editingFinished()));
+    connect(ui->doubleSpinBoxSQIThreshold,SIGNAL(editingFinished()),this,SLOT(on_doubleSpinBoxSQIThreshold_editingFinished()));
+
+
 }
 
 DialogSetting::~DialogSetting()
@@ -221,7 +239,7 @@ void DialogSetting::on_doubleSpinBoxCCORThreshold_editingFinished()
 
 void DialogSetting::on_doubleSpinBoxSQIThreshold_editingFinished()
 {
-     float sqiThresh = ui->doubleSpinBoxCCORThreshold->value();
+    float sqiThresh = ui->doubleSpinBoxCCORThreshold->value();
     sqiThresh=sqiThresh*256;
     int sqiThreshi;
     sqiThreshi=sqiThresh;

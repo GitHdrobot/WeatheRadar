@@ -275,27 +275,28 @@ int RVP900::setLFILT(char *buffer){
     return RVP_NO_ERR;
 }
 
-int RVP900::setPulWidth(char *buffer)
+int RVP900::setPulWidth(char pulseWidth,char* pPRT)
 {
     sendBuffer[0]=0;
     strcat(sendBuffer,SETPWF_PREFIX);
     strcat(sendBuffer,COMMAND_WRITE);
     strcat(sendBuffer,COMMAND_SEP);
-    sendBuffer[13]=0x10;
-    for(int i=0;i<3;i++)
-        sendBuffer[14+i]=buffer[i];
+    sendBuffer[13]= setpwfOpCode;
+    sendBuffer[14]= pulseWidth;
+    sendBuffer[15]= pPRT[0];
+    sendBuffer[16]= pPRT[1];
     if ((sendMsg(sendBuffer,17))!=RVP_NO_ERR)
         return SOCKET_SEND_ERR;
     if (readSocketResp()!=RVP_NO_ERR)
         return SOCKET_READ_ERR;
     return RVP_NO_ERR;
 }
-int RVP900::samNoise(){
+int RVP900::sampleNoise(){
     sendBuffer[0]=0;
     strcat(sendBuffer,SNOISE_PREFIX);
     strcat(sendBuffer,COMMAND_WRITE);
     strcat(sendBuffer,COMMAND_SEP);
-    sendBuffer[13]=SNOISE_L8BIT;
+    sendBuffer[13]=snoiseL8Bit;
     sendBuffer[14]=0;
     sendBuffer[15]=0;
     sendBuffer[16]=0;
@@ -424,13 +425,13 @@ int RVP900::PROC(){
     return RVP_NO_ERR;
 }
 
-int RVP900::GPARM(char* inBuffer,char *outBuffer){
+int RVP900::GPARM(){
     sendBuffer[0]=0;
     strcat(sendBuffer,GPARM_PREFIX);//构造写命令
     strcat(sendBuffer,COMMAND_SEP);
     strcat(sendBuffer,COMMAND_WRITE);
-    sendBuffer[13]=GPARM_L8BIT;
-    sendBuffer[14]=GPARM_H8BIT;
+    sendBuffer[13]=gparmL8bit;
+    sendBuffer[14]=gparm8bit;
     if ((sendMsg(sendBuffer,15))!=0)
         return SOCKET_SEND_ERR;
     if (readSocketResp()!=0)
@@ -439,8 +440,7 @@ int RVP900::GPARM(char* inBuffer,char *outBuffer){
         return SOCKET_SEND_ERR;
     if (readSocketResp()!=0)
         return SOCKET_READ_ERR;
-    for (int i=0;i<128;i++)
-        inBuffer[i]=recvBuffer[4+i];
+    memcpy(statusBuff,recvBuffer+4,128);
     return RVP_NO_ERR;
 }
 int RVP900::sendMsg(char *buffer,int length)//向RVP900发送数据
@@ -449,8 +449,6 @@ int RVP900::sendMsg(char *buffer,int length)//向RVP900发送数据
         return SOCKET_SEND_ERR;
     return RVP_NO_ERR;
 }
-
-
 
 
 int RVP900::connectRVP(){//连接到RVP900
