@@ -24,6 +24,7 @@ DialogSetting::DialogSetting(QWidget *parent) :
     connect(ui->doubleSpinBoxSQIThreshold,SIGNAL(editingFinished()),this,SLOT(on_doubleSpinBoxSQIThreshold_editingFinished()));
 
 
+
 }
 
 DialogSetting::~DialogSetting()
