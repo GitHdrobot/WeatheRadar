@@ -18,7 +18,7 @@ public:
     //填充颜色
     int fillRed,fillGreen,fillBlue;
     //文字说明
-    char comTxt[10];
+    char comTxt[10]  ;
     //显示文字与矩形之间的距离
     int internal;
 
@@ -27,7 +27,7 @@ public:
     ~Palette();
 
 
-    char* getComTxt() const ;
+    const char* getComTxt() const ;
     void setComTxt(char* comTxt);
     int getFillBlue() const ;
     void setFillBlue(int fillBlue) ;

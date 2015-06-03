@@ -982,7 +982,7 @@ inline void RVP900::setThreadFlag(bool threadFlag ) {
     ThreadFlag = threadFlag;
 }
 
-inline float RVP900::getVmax() const {
+float RVP900::getVmax() const {
     return Vmax;
 }
 
