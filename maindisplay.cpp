@@ -203,12 +203,31 @@ int MainDisplay::paintSector(Sector *pSector){
     return 1;
 }
 int MainDisplay:: paintSectorManager(){
-    //设置扇形的位置、大小
+    //设置dBZ的位置、大小
     dBZSector.setXloc(100);
     dBZSector.setYloc(100);
     dBZSector.setWidth(500);
     dBZSector.setHeight(500);
     paintSector(&dBZSector);
+    //设置dBT的位置、大小
+    dBTSector.setXloc(700);
+    dBTSector.setYloc(100);
+    dBTSector.setWidth(500);
+    dBTSector.setHeight(500);
+    paintSector(&dBTSector);
+    //设置V位置、大小
+    vSector.setXloc(100);
+    vSector.setYloc(600);
+    vSector.setWidth(500);
+    vSector.setHeight(500);
+    paintSector(&vSector);
+    //设置W位置、大小
+    wSector.setXloc(700);
+    wSector.setYloc(600);
+    wSector.setWidth(500);
+    wSector.setHeight(500);
+    paintSector(&wSector);
+
 }
 int MainDisplay:: colorBinFactory(){
     int cursor = 0;

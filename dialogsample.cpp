@@ -42,6 +42,7 @@ void DialogSample::on_dSpinBoxdBZCali_editingFinished()
         rvp9.soprm[26]=(s_dbz&0x00ff);
         rvp9.soprm[27]=(s_dbz>>8);
     }
+    rvp9.setOperPRM();
 }
 
 void DialogSample::on_pushButtonNoiseSet_clicked()

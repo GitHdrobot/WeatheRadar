@@ -23,7 +23,7 @@ DialogSetting::DialogSetting(QWidget *parent) :
     connect(ui->doubleSpinBoxSigThreshold,SIGNAL(editingFinished()),this,SLOT(on_doubleSpinBoxSigThreshold_editingFinished()));
     connect(ui->doubleSpinBoxSQIThreshold,SIGNAL(editingFinished()),this,SLOT(on_doubleSpinBoxSQIThreshold_editingFinished()));
 
-
+    connect(ui->pbtnApply,SIGNAL(clicked()),this,SLOT(on_pbtnApply_clicked()));
 
 }
 
@@ -67,11 +67,11 @@ void DialogSetting::on_comboBoxWinType_currentIndexChanged(int index)
     //0:Rectangular, 1:Hamming, 2:Blackman, 3:Exact,Blackman, 4:VonHann.
     switch(index)
     {
-    case 0:  SOPRM[31]=0X0;  break;
-    case 1:  SOPRM[31]=0X02; break;
-    case 2:  SOPRM[31]=0X04; break;
-    case 3:  SOPRM[31]=0X06; break;
-    case 4:  SOPRM[31]=0X08; break;
+    case 0:  rvp9.soprm[31]=0X0;  break;
+    case 1:  rvp9.soprm[31]=0X02; break;
+    case 2:  rvp9.soprm[31]=0X04; break;
+    case 3:  rvp9.soprm[31]=0X06; break;
+    case 4:  rvp9.soprm[31]=0X08; break;
     default: break;
     }
 }
@@ -245,4 +245,9 @@ void DialogSetting::on_doubleSpinBoxSQIThreshold_editingFinished()
     int sqiThreshi;
     sqiThreshi=sqiThresh;
     rvp9.soprm[22]=sqiThreshi;
+}
+
+void DialogSetting::on_pbtnApply_clicked()
+{
+      rvp9.setOperPRM();
 }

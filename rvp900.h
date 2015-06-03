@@ -124,16 +124,18 @@ public :
 
     //SETPWF  设置脉冲宽度和触发速度
     //脉冲重复频率
-    int setpwfPRF=300;
+    int pulsePRF=300;
     /*pulseWIdth表示脉宽，默认1us 1*10^-3*3*10^8,
      *脉冲宽度 1us,5us,10us,20us
      */
-    int setpwfPulseWidth = 1;
+    //脉冲重复周期
+    unsigned char pulsePRT[2];
+    int pulseWidth = 1;
 
 
     //LFILT Load Clutter Filter Flags
     //多普勒滤波器 doppler filter
-    unsigned  short dopFilter;
+    unsigned  char dopFilter;
 
 
 
@@ -286,7 +288,7 @@ public:
     *RVP9处理器的一个特点是可以再每个选择的距离处使用不同的杂波滤波器。
     *该功能在滤除随距离变化的杂波时相当有用。
     */
-    int setLFILT(char *buffer);
+    int setLFILT( );
     /*
     *set pulse width and PRF
     *This command selects the pulse width and trigger rate. A 4-bit pulse width
@@ -296,7 +298,7 @@ public:
     *该命令用来选择脉冲宽度和触发频率。一个4位的脉冲宽度码在该命令字的（13，12,9,8）位设置，
     *正如PWINFO命令的描述，选择1/16的脉冲宽度
     */
-    int setPulWidth(char pulseWidth,char *pPRT);  //脉宽 脉冲重复周期
+    int setPwPrf();  //脉宽 脉冲重复周期
     /*
     *SNOISE :sample noise level
     *This command is used to estimate the current noise level from the receiver,
@@ -391,7 +393,7 @@ public:
     int getDistance() const;
     void setDistance(int distance );
     unsigned short getDopFilter() const;
-    void setDopFilter(unsigned short dopFilter);
+    void setDopFilter(unsigned char dopFilter);
     double getElevation() const;
     void setElevation(double elevation);
     const unsigned char* getElevationBuff() const;
@@ -440,10 +442,10 @@ public:
     int getResolution() const;
     void setResolution(int resolution);
     const char* getSendBuffer() const;
-    int getSetpwfPrf() const;
-    void setSetpwfPrf(int setpwfPrf);
-    int getSetpwfPulseWidth() const;
-    void setSetpwfPulseWidth(int setpwfPulseWidth);
+    int getPulsePRF() const;
+    void setPulsePRF(int pulsePRF);
+    int getPulseWidth() const;
+    void setPulseWidth(int pulseWidth);
     const unsigned char* getSoprm() const;
     float getSoprmCcorThr() const;
     void setSoprmCcorThr(float soprmCcorThr);

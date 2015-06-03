@@ -37,7 +37,7 @@ int RVP900::reset(){
     strcat(sendBuffer,COMMAND_WRITE);//4bit
     strcat(sendBuffer,COMMAND_SEP);//1bit
     sendBuffer[13] = RESET_LOW8BIT;
-    sendBuffer[13] = RESET_HIGH8BIT;
+    sendBuffer[14] = RESET_HIGH8BIT;
     sendBuffer[RESET_LEN] = 0;
     if(int s = sendMsg(sendBuffer,RESET_LEN) !=RVP_NO_ERR){
         return s ;
@@ -248,13 +248,13 @@ int RVP900::loadRangeMsk(){
     return RVP_NO_ERR;
 }
 
-int RVP900::setLFILT(char *buffer){
+int RVP900::setLFILT( ){
     sendBuffer[0]=0;
     strcat(sendBuffer,LFILT_PREFIX);
     strcat(sendBuffer,COMMAND_WRITE);
     strcat(sendBuffer,COMMAND_SEP);
-    sendBuffer[13]=LFILT_L8BIT;
-    sendBuffer[14]=LFILT_H8BIT;
+    sendBuffer[13]=lfiltL8Bit;
+    sendBuffer[14]=lfiltH8Bit;
     if ((sendMsg(sendBuffer,15))!=0)
         return SOCKET_SEND_ERR;
     if (readSocketResp()!=0)
@@ -263,28 +263,31 @@ int RVP900::setLFILT(char *buffer){
     strcat (sendBuffer,LFILT_INP_PRE);//OP_LRFILT
     strcat (sendBuffer,COMMAND_WRITE);
     strcat (sendBuffer,COMMAND_SEP);
-    for (int i=0;i<LFILT_INP_LEN;i++)
+    for (int i=0;i<lfiltInptLength;i++)
     {
-        sendBuffer[13+i*2+0]=buffer[1];
+        sendBuffer[13+i*2+0]=dopFilter;
         sendBuffer[13+i*2+1]=0;
     }
-    if ((sendMsg(sendBuffer,LFILT_MSG_LEN))!=0)
+    if ((sendMsg(sendBuffer,lfiltLength))!=0)
         return SOCKET_SEND_ERR;
     if (readSocketResp()!=0)
         return SOCKET_READ_ERR;
     return RVP_NO_ERR;
 }
 
-int RVP900::setPulWidth(char pulseWidth,char* pPRT)
+int RVP900::setPwPrf()
 {
+    unsigned char pw_c;
+    sprintf(pw_c,"%0x",pulseWidth);
+
     sendBuffer[0]=0;
     strcat(sendBuffer,SETPWF_PREFIX);
     strcat(sendBuffer,COMMAND_WRITE);
     strcat(sendBuffer,COMMAND_SEP);
     sendBuffer[13]= setpwfOpCode;
-    sendBuffer[14]= pulseWidth;
-    sendBuffer[15]= pPRT[0];
-    sendBuffer[16]= pPRT[1];
+    sendBuffer[14]= pw_c;
+    sendBuffer[15]= pulsePRT[0];
+    sendBuffer[16]= pulsePRT[1];
     if ((sendMsg(sendBuffer,17))!=RVP_NO_ERR)
         return SOCKET_SEND_ERR;
     if (readSocketResp()!=RVP_NO_ERR)
@@ -545,7 +548,7 @@ int RVP900::RVP9Initialize(){
     */
     procMode = procSyncModec;
     //脉冲宽度
-    setpwfPulseWidth = 1;
+    pulseWidth = 1;
     //双PRF，脉冲重复比,此处不是真实比率
     procUnfold = procUnfoldNone;
     //多普勒滤波器 doppler filter
@@ -670,11 +673,11 @@ inline void RVP900::setDistance(int distance) {
     this->distance = distance;
 }
 
-inline unsigned short RVP900::getDopFilter() const {
+inline unsigned char RVP900::getDopFilter() const {
     return dopFilter;
 }
 
-inline void RVP900::setDopFilter(unsigned short dopFilter) {
+inline void RVP900::setDopFilter(unsigned char dopFilter) {
     this->dopFilter = dopFilter;
 }
 
@@ -874,16 +877,16 @@ inline int RVP900::getSetpwfPrf() const {
     return setpwfPRF;
 }
 
-inline void RVP900::setSetpwfPrf(int setpwfPrf ) {
-    setpwfPRF = setpwfPrf;
+inline void RVP900::setPulePrf(int pwfPrf ) {
+    pulseWidth = pwfPrf;
 }
 
-inline int RVP900::getSetpwfPulseWidth() const {
-    return setpwfPulseWidth;
+inline int RVP900::getPulseWidth() const {
+    return pulseWidth;
 }
 
-inline void RVP900::setSetpwfPulseWidth(int setpwfPulseWidth) {
-    this->setpwfPulseWidth = setpwfPulseWidth;
+inline void RVP900::setpulseWidth(int pulseWidth) {
+    this->pulseWidth = pulseWidth;
 }
 
 inline const unsigned char* RVP900::getSoprm() const {

@@ -166,12 +166,15 @@ const unsigned char lrmskCommLen[] = "00001031";
 *设置杂波滤波器
 */
 #define LFILT_PREFIX "00000007"
-#define LFILT_OPCODE 0x28
-#define LFILT_L8BIT LFILT_OPCODE
-#define LFILT_H8BIT 0x0
-#define LFILT_INP_PRE "00006149"  //LFILT输入参数前缀
-#define LFILT_INP_LEN 3072  //LFILT输入长度
-#define LFILT_MSG_LEN LFILT_INP_LEN * 2 + COMMAND_PREFIX_LEN + 5  //LFILT输入长度
+#define LFILT_INP_PRE "00006149"  //LFILT输入参数前缀,指明长度
+
+const unsigned char lfiltOpCode = 0x28;
+const unsigned char lfiltL8Bit = lfiltOpCode;
+const unsigned char lfiltH8Bit = 0x00;
+const unsigned char lfiltInptLength = 3072;//LFILT输入参数长度
+const unsigned char lfiltLength = lfiltInptLength*2+13;//LFILT 长度
+
+
 /*
 *SETPWF command const,set pulse width and prf
 *设置脉冲宽度和脉冲重复频率

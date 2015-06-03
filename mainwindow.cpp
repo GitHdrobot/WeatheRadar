@@ -56,45 +56,6 @@ MainWindow::MainWindow(QWidget *parent) :
     serialPort.setDataBits(DATA_8);
     serialPort.setStopBits(STOP_1);
 
-    //    /*多普勒滤波器选项添加*/
-    //    ui->comboBoxDopFilter->addItem("None");
-    //    ui->comboBoxDopFilter->addItem("1");
-    //    ui->comboBoxDopFilter->addItem("2");
-    //    ui->comboBoxDopFilter->addItem("3");
-    //    ui->comboBoxDopFilter->addItem("4");
-    //    ui->comboBoxDopFilter->addItem("5");
-    //    ui->comboBoxDopFilter->addItem("6");
-    //    ui->comboBoxDopFilter->addItem("7");
-
-    //    /*脉宽选项添加*/
-    //    ui->comboBoxPulseWidth->addItem(tr("1us"));
-    //    ui->comboBoxPulseWidth->addItem(tr("5us"));
-    //    ui->comboBoxPulseWidth->addItem(tr("10us"));
-    //    ui->comboBoxPulseWidth->addItem(tr("20us"));
-
-    //    /*脉冲重复频率选项添加*/
-    //    ui->comboBoxPRF->addItem("300");
-    //    ui->comboBoxPRF->addItem("500");
-    //    ui->comboBoxPRF->addItem("1000");
-    //    ui->comboBoxPRF->addItem("2000");
-    //    ui->comboBoxPRF->addItem("3000");
-    //    ui->comboBoxPRF->addItem("4000");
-    //    ui->comboBoxPRF->addItem("5000");
-
-    //    /*双脉冲重复比选项添加*/
-    //    ui->comboBoxDPrf->addItem("None");
-    //    ui->comboBoxDPrf->addItem("2:3");
-    //    ui->comboBoxDPrf->addItem("3:4");
-    //    ui->comboBoxDPrf->addItem("4:5");
-
-    //    /*扫描距离 选项添加*/
-    //    ui->comboBoxLmsk->addItem("10KM");
-    //    ui->comboBoxLmsk->addItem("20KM");
-    //    ui->comboBoxLmsk->addItem("30KM");
-    //    ui->comboBoxLmsk->addItem("50KM");
-    //    ui->comboBoxLmsk->addItem("150KM");
-    //    ui->comboBoxLmsk->addItem("300KM");
-
 }
 
 MainWindow::~MainWindow()
@@ -217,6 +178,8 @@ void MainWindow::on_pbtnCollect_clicked()
         ui->comboBoxLmsk->setEnabled(false);
         ui->comboBoxDPrf->setEnabled(false);
     }
+    rvp9.setpwfPRF();
+    rvp9.setLFILT();
 }
 
 /*扫描方式  改变*/
@@ -255,27 +218,42 @@ void MainWindow::on_comboBoxLmsk_activated(int index)
     }
     //根据选择的距离 设置距离掩码
     rvp9.loadRangeMsk();
-    //计算出最大的公约数
-    rvp9.gcd = utils.gcd(rvp9.lrmskBinsNum,sector.getHeight());
 }
 /*RPF 脉冲重复频率 改变*/
 void MainWindow::on_comboBoxPRF_activated(int index)
 {
+
     if(0 == index){
-        rvp9.setpwfPRF = 300;
+        rvp9.pulsePRF = 300;
+        rvp9.pulsePRT[0] = 0x1f;
+        rvp9.pulsePRT[1] = 0x4e;
     }else if(1 == index){
-        rvp9.setpwfPRF = 500;
+        rvp9.pulsePRF = 500;
+        rvp9.pulsePRT[0] = 0xdf;
+        rvp9.pulsePRT[1] = 0x2e;
     }else if(2 == index){
-        rvp9.setpwfPRF = 1000;
+        rvp9.pulsePRF = 1000;
+        rvp9.pulsePRT[0] = 0x6f;
+        rvp9.pulsePRT[1] = 0x17;
     }else if(3 == index){
-        rvp9.setpwfPRF = 2000;
+        rvp9.pulsePRF = 2000;
+        rvp9.pulsePRT[0] = 0xb7;
+        rvp9.pulsePRT[1] = 0x0b;
     }else if(4 == index){
-        rvp9.setpwfPRF = 3000;
+        rvp9.pulsePRF = 3000;
+        rvp9.pulsePRT[0] = 0xcf;
+        rvp9.pulsePRT[1] = 0x07;
     }else if(5 == index){
-        rvp9.setpwfPRF = 4000;
+        rvp9.pulsePRF = 4000;
+        rvp9.pulsePRT[0] = 0xdb;
+        rvp9.pulsePRT[1] = 0x05;
     }else if(6 == index){
-        rvp9.setpwfPRF = 5000;
+        rvp9.pulsePRF = 5000;
+        rvp9.pulsePRT[0] = 0xaf;
+        rvp9.pulsePRT[1] = 0x04;
     }
+
+    rvp9.setPwPrf();
 }
 /*双脉冲重复比 改变   改变后仍需对PROC命令的8、9位进行设置*/
 void MainWindow::on_comboBoxDPrf_activated(int index)
@@ -294,19 +272,30 @@ void MainWindow::on_comboBoxDPrf_activated(int index)
 void MainWindow::on_comboBoxPulseWidth_activated(int index)
 {
     if(0 == index){
-        rvp9.setpwfPulseWidth = 1;
+        rvp9.pulseWidth = 1;
     }else if(1 == index){
-        rvp9.setpwfPulseWidth = 5;
+        rvp9.pulseWidth = 5;
     }else if(2 == index){
-        rvp9.setpwfPulseWidth = 10;
+        rvp9.pulseWidth = 10;
     }else if(3 == index){
-        rvp9.setpwfPulseWidth = 20;
+        rvp9.pulseWidth = 20;
     }
 }
 /*多普勒滤波器  改变*/
 void MainWindow::on_comboBoxDopFilter_activated(int index)
 {
-    rvp9.dopFilter = index;
+    switch(int(index))
+    {
+    case 0:  rvp9.dopFilter=0x00;  break;
+    case 1:  rvp9.dopFilter=0x01;  break;
+    case 2:  rvp9.dopFilter=0x02;  break;
+    case 3:  rvp9.dopFilter=0x03;  break;
+    case 4:  rvp9.dopFilter=0x04;  break;
+    case 5:  rvp9.dopFilter=0x05;  break;
+    case 6:  rvp9.dopFilter=0x06;  break;
+    case 7:  rvp9.dopFilter=0x07;  break;
+    default:break;
+    }
 }
 /*设置方位角角度*/
 void MainWindow::on_doubleSpinBoxAzimuth_valueChanged(double arg1)
