@@ -90,7 +90,7 @@ void MainDisplay::paintDBTPal(Palette dbtPal[],int palLenth){
         //色标位置
         dbtPal[i].setXloc(100);
         dbtPal[i].setYloc(100);
-        dbtPal[i].yloc += i * pal[i].height;
+        dbtPal[i].yloc += i * dbtpal[i].height;
         sprintf(formatter,"%d",perdBZ*i+dBZMin);
         dbtPal[i].setComTxt(formatter);
         paintPal(dbtPal[i]);
@@ -115,7 +115,7 @@ void  MainDisplay::paintWPal(Palette wPal[],int palLenth){
         wPal[i].setXloc( 150);
         wPal[i].setYloc(150);
         wPal[i].yloc += i * wPal[i].height;
-        sprinf(formatter,"%.1f",perVmax*i);
+        sprintf(formatter,"%.1f",perVmax*i);
         wPal[i].setComTxt(formatter);
         paintPal(wPal[i]);
     }
@@ -299,7 +299,7 @@ int MainDisplay::paintW(){
     startPaint(rvp9.binsWBuff);
 }
 
-int MainDisplay::startPaint(unsigned char buff){
+int MainDisplay::startPaint(unsigned char *pbuff){
     unsigned short azimuthus ;
     //dbz坐标位置的计算
     QPoint dbzPoint;
@@ -310,7 +310,7 @@ int MainDisplay::startPaint(unsigned char buff){
     //计算出该角度在哪一个象限内 根据不同象限 计算出改点的坐标位置
     int quadrant  ;
     //扇形半径
-    int radius = sector.getWidth()/2;
+    int radius = dBZSector.getWidth()/2;
     float azimuthIncf;
     QPoint center = sector.calculateCenter();
     //dbz颜色均分
@@ -347,7 +347,8 @@ int MainDisplay::startPaint(unsigned char buff){
             //计算颜色
             int  colorIndex = buff[i] * colorPerDBZ;
             //设置画笔颜色
-            pen.setColor(PalColorMat[colorIndex]);
+            QColor qcolor(PalColorMat[colorIndex][0],PalColorMat[colorIndex][1],PalColorMat[colorIndex][2]);
+            pen.setColor(qcolor);
             painter.drawPoint(dbzPoint);
         }
     }

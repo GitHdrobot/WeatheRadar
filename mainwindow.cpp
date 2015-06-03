@@ -178,7 +178,7 @@ void MainWindow::on_pbtnCollect_clicked()
         ui->comboBoxLmsk->setEnabled(false);
         ui->comboBoxDPrf->setEnabled(false);
     }
-    rvp9.setpwf();
+    rvp9.setPwPrf();
     rvp9.setLFILT();
 }
 

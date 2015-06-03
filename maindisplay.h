@@ -56,7 +56,7 @@ public:
     int paintSectorManager();
 
     /*绘制数据点*/
-    int startPaint(unsigned char *buff);
+    int startPaint(unsigned char *pbuff);
 
     int paintDBZ( );
 
