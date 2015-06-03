@@ -312,13 +312,13 @@ int MainDisplay::startPaint(unsigned char *pbuff){
     //扇形半径
     int radius = dBZSector.getWidth()/2;
     float azimuthIncf;
-    QPoint center = sector.calculateCenter();
+    QPoint center = dBZSector.calculateCenter();
     //dbz颜色均分
     QPen pen ;
     float colorPerDBZ = colorTotal / dBZMax;
     //<1 度范围内的绘制
     for(int j =0;j< 1 ;j+=0.2){
-        azimuthIncf = azimuthf + i;
+        azimuthIncf = azimuthf + j;
         quadrant = azimuthIncf / 90;
         for(int i=0;i<radius;i++){
             switch(quadrant){
