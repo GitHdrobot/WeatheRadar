@@ -213,26 +213,26 @@ int MainDisplay:: paintSectorManager(){
     //设置dBZ的位置、大小
     dBZSector.setXloc(100);
     dBZSector.setYloc(100);
-    dBZSector.setWidth(500);
-    dBZSector.setHeight(500);
+    dBZSector.setWidth(400);
+    dBZSector.setHeight(400);
     paintSector(&dBZSector);
     //设置dBT的位置、大小
-    dBTSector.setXloc(700);
+    dBTSector.setXloc(550);
     dBTSector.setYloc(100);
-    dBTSector.setWidth(500);
-    dBTSector.setHeight(500);
+    dBTSector.setWidth(400);
+    dBTSector.setHeight(400);
     paintSector(&dBTSector);
     //设置V位置、大小
     vSector.setXloc(100);
-    vSector.setYloc(600);
-    vSector.setWidth(500);
-    vSector.setHeight(500);
+    vSector.setYloc(550);
+    vSector.setWidth(400);
+    vSector.setHeight(400);
     paintSector(&vSector);
     //设置W位置、大小
-    wSector.setXloc(700);
-    wSector.setYloc(600);
-    wSector.setWidth(500);
-    wSector.setHeight(500);
+    wSector.setXloc(550);
+    wSector.setYloc(550);
+    wSector.setWidth(400);
+    wSector.setHeight(400);
     paintSector(&wSector);
 
 }
