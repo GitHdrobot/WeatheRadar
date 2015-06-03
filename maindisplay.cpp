@@ -39,19 +39,11 @@ MainDisplay::~MainDisplay()
 void MainDisplay::paintEvent(QPaintEvent *){
     painter.begin(this);
     setAutoFillBackground(true);
-    paintShadeGuide();
-    paintSectorManager();
-}
-//绘制色标卡
-void MainDisplay::paintShadeGuide() {
-    int palLenth = 15;
-    paintDBZPal(dBZPal,palLenth);
-    paintDBTPal(dBTPal,palLenth);
-    paintVPal(vPal,palLenth);
-    paintWPal(wPal,palLenth);
+    paintManager();
 }
 
-void  MainDisplay::paintDBZPal(Palette dbzPal[],int palLenth){
+
+void  MainDisplay::paintDBZPal(Palette dbzPal[],int palLenth,QPoint slt){
     //计算出每个色标代表的值
     short perdBZ = (dBZMax - dBZMin )/palNum;
     char formatter[10];
@@ -64,8 +56,8 @@ void  MainDisplay::paintDBZPal(Palette dbzPal[],int palLenth){
         dbzPal[i].setFillGreen(PalColorMat[c][1]);
         dbzPal[i].setFillBlue(PalColorMat[c][2]) ;
         //色标位置
-        dbzPal[i].setXloc( 50 );
-        dbzPal[i].setYloc (350);
+        dbzPal[i].setXloc( slt.x()-10 );
+        dbzPal[i].setYloc (slt.y());
         dbzPal[i].yloc -= i * dbzPal[i].height;
         sprintf(formatter,"%d",dBZMin + i*perdBZ);
         dbzPal[i].setComTxt(formatter);
@@ -74,7 +66,7 @@ void  MainDisplay::paintDBZPal(Palette dbzPal[],int palLenth){
 
 }
 
-void MainDisplay::paintDBTPal(Palette dbtPal[],int palLenth){
+void MainDisplay::paintDBTPal(Palette dbtPal[],int palLenth,QPoint slt){
     //计算出每个色标代表的值
     short perdBZ = (dBZMax - dBZMin )/palNum;
     char formatter[10];
@@ -88,8 +80,8 @@ void MainDisplay::paintDBTPal(Palette dbtPal[],int palLenth){
         dbtPal[i].setFillGreen(PalColorMat[c][1]);
         dbtPal[i].setFillBlue(PalColorMat[c][2]) ;
         //色标位置
-        dbtPal[i].setXloc(100);
-        dbtPal[i].setYloc(100);
+        dbtPal[i].setXloc(slt.x()-10);
+        dbtPal[i].setYloc(slt.y());
         dbtPal[i].yloc += i * dbtPal[i].height;
         sprintf(formatter,"%d",perdBZ*i+dBZMin);
         dbtPal[i].setComTxt(formatter);
@@ -97,7 +89,7 @@ void MainDisplay::paintDBTPal(Palette dbtPal[],int palLenth){
     }
 }
 
-void  MainDisplay::paintWPal(Palette wPal[],int palLenth){
+void  MainDisplay::paintWPal(Palette wPal[],int palLenth,QPoint slt){
     float Vmax = rvp9.getVmax();
     //计算出每个色标表示多少
     float perVmax = Vmax / palNum;
@@ -112,8 +104,8 @@ void  MainDisplay::paintWPal(Palette wPal[],int palLenth){
         wPal[i].setFillGreen(PalColorMat[c][1]);
         wPal[i].setFillBlue(PalColorMat[c][2]) ;
         //色标位置
-        wPal[i].setXloc( 150);
-        wPal[i].setYloc(150);
+        wPal[i].setXloc(slt.x()-10);
+        wPal[i].setYloc(slt.y());
         wPal[i].yloc += i * wPal[i].height;
         sprintf(formatter,"%.1f",perVmax*i);
         wPal[i].setComTxt(formatter);
@@ -121,7 +113,7 @@ void  MainDisplay::paintWPal(Palette wPal[],int palLenth){
     }
 }
 
-void  MainDisplay::paintVPal(Palette vPal[],int palLenth){
+void  MainDisplay::paintVPal(Palette vPal[],int palLenth,QPoint slt){
     float Vmax = rvp9.getVmax();
     //计算出每个色标表示多少
     float perVmax = Vmax*2 / palNum;
@@ -138,8 +130,8 @@ void  MainDisplay::paintVPal(Palette vPal[],int palLenth){
         vPal[i].setFillGreen(PalColorMat[c][1]);
         vPal[i].setFillBlue(PalColorMat[c][2]) ;
         //色标位置
-        vPal[i].setXloc(200);
-        vPal[i].setYloc(200);
+        vPal[i].setXloc(slt.x()-10);
+        vPal[i].setYloc(slt.y());
         vPal[i].yloc += i * vPal[i].height;
         //从最大负数开始 每循环一次增加一个量度的速度
         sprintf(formatter,"%0.1f",Vmaxs + i*perVmax);
@@ -209,31 +201,51 @@ int MainDisplay::paintSector(Sector *pSector){
     painter.restore();
     return 1;
 }
-int MainDisplay:: paintSectorManager(){
+int MainDisplay:: paintManager(){
+    int palLenth = 15;
+    QPoint  SLT;// sector left top
     //设置dBZ的位置、大小
     dBZSector.setXloc(100);
     dBZSector.setYloc(100);
     dBZSector.setWidth(400);
     dBZSector.setHeight(400);
     paintSector(&dBZSector);
+    SLT.setX(100);
+    SLT.setY(100);
+    paintDBZPal(dBZPal,palLenth,SLT);//绘制dbz色标卡
     //设置dBT的位置、大小
     dBTSector.setXloc(550);
     dBTSector.setYloc(100);
     dBTSector.setWidth(400);
     dBTSector.setHeight(400);
     paintSector(&dBTSector);
+    SLT.setX(550);
+    SLT.setY(100);
+    paintDBTPal(dBTPal,palLenth,SLT);//绘制dbt色标卡
     //设置V位置、大小
     vSector.setXloc(100);
-    vSector.setYloc(550);
+    vSector.setYloc(200);
     vSector.setWidth(400);
     vSector.setHeight(400);
     paintSector(&vSector);
+    SLT.setX(100);
+    SLT.setY(200);
+    paintVPal(dBTPal,palLenth,SLT);//绘制v色标卡
     //设置W位置、大小
     wSector.setXloc(550);
-    wSector.setYloc(550);
+    wSector.setYloc(200);
     wSector.setWidth(400);
     wSector.setHeight(400);
     paintSector(&wSector);
+    SLT.setX(550);
+    SLT.setY(200);
+    paintWPal(dBTPal,palLenth,SLT);//绘制w色标卡
+
+
+
+    paintDBTPal(dBTPal,palLenth);
+    paintVPal(vPal,palLenth);
+    paintWPal(wPal,palLenth);
 
 }
 int MainDisplay:: colorBinFactory(){

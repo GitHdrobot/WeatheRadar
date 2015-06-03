@@ -39,10 +39,10 @@ public:
 
     //绘制调色板V,W,DBT,DBZ
     void paintShadeGuide();
-    void paintVPal(Palette pal[],int palLenth);
-    void paintWPal(Palette pal[],int palLenth);
-    void paintDBTPal(Palette pal[],int palLenth);
-    void paintDBZPal(Palette pal[],int palLenth);
+    void paintVPal(Palette pal[],int palLenth,QPoint slt);
+    void paintWPal(Palette pal[],int palLenth,QPoint slt);
+    void paintDBTPal(Palette pal[],int palLenth,QPoint slt);
+    void paintDBZPal(Palette pal[],int palLenth,QPoint slt);
 
     /*生成颜色库 R，G，B，RG,GB,RB,RGB*/
     int colorBinFactory();
