@@ -53,7 +53,7 @@ public:
     int paintSector(Sector *pSector);
 
     /*控制扇形的绘制*/
-    int paintSectorManager();
+    int paintManager();
 
     /*绘制数据点*/
     int startPaint(unsigned char *pbuff,Sector *pSector);

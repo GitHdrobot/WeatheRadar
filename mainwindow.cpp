@@ -21,8 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->menuParaSetting,SIGNAL(aboutToShow()),this,SLOT(paraSetSlot()));
     connect(ui->action4_Pic,SIGNAL(triggered()),this,SLOT(dispFourPicSlot()));
-    connect(ui->spinBoxAzimuthSet,SIGNAL(valueChanged(double)),SLOT(on_doubleSpinBoxAzimuth_valueChanged(double)));
-    connect(ui->spinBoxElevationSet,SIGNAL(valueChanged(double)),SLOT(on_doubleSpinBoxElevation_valueChanged(double)));
+    connect(ui->spinBoxAzimuthSet,SIGNAL(valueChanged(int)),SLOT(on_doubleSpinBoxAzimuth_valueChanged(double)));
+    connect(ui->spinBoxElevationSet,SIGNAL(valueChanged(int)),SLOT(on_doubleSpinBoxElevation_valueChanged(double)));
     connect(ui->pbtnOpenTransmit,SIGNAL(clicked()),SLOT(on_pbtnOpenTransmit_clicked()));
     connect(ui->pbtnCloseTransmit,SIGNAL(clicked()),SLOT(on_pbtnCloseTransmit_clicked()));
     connect(ui->pbtnSweep,SIGNAL(clicked()),SLOT(on_pbtnSweep_clicked()));
@@ -298,12 +298,12 @@ void MainWindow::on_comboBoxDopFilter_activated(int index)
     }
 }
 /*设置方位角角度*/
-void MainWindow::on_doubleSpinBoxAzimuth_valueChanged(double arg1)
+void MainWindow::on_doubleSpinBoxAzimuth_valueChanged(int arg1)
 {
     //rvp9.azimuth = arg1;
 }
 /*设置仰角角度*/
-void MainWindow::on_doubleSpinBoxElevation_valueChanged(double arg1)
+void MainWindow::on_doubleSpinBoxElevation_valueChanged(int arg1)
 {
     //rvp9.elevation = arg1;
 }
