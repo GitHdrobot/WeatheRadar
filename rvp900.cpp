@@ -277,7 +277,7 @@ int RVP900::setLFILT( ){
 
 int RVP900::setPwPrf()
 {
-    unsigned char pw_c;
+    char pw_c;
     sprintf(pw_c,"%0x",pulseWidth);
 
     sendBuffer[0]=0;
@@ -873,11 +873,11 @@ inline const char* RVP900::getSendBuffer() const {
     return sendBuffer;
 }
 
-inline int RVP900::getPulsePrf() const {
+inline int RVP900::getPulsePRF() const {
     return pulsePRF;
 }
 
-inline void RVP900::setPulePrf(int pwfPrf ) {
+inline void RVP900::setPulePRF(int pwfPrf ) {
     pulsePRF = pwfPrf;
 }
 
