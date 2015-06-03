@@ -345,7 +345,7 @@ int MainDisplay::startPaint(unsigned char *pbuff){
             }
 
             //计算颜色
-            int  colorIndex = buff[i] * colorPerDBZ;
+            int  colorIndex = pbuff[i] * colorPerDBZ;
             //设置画笔颜色
             QColor qcolor(PalColorMat[colorIndex][0],PalColorMat[colorIndex][1],PalColorMat[colorIndex][2]);
             pen.setColor(qcolor);
