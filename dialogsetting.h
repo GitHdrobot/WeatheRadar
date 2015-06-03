@@ -45,6 +45,8 @@ private slots:
 
     void on_doubleSpinBoxSQIThreshold_editingFinished();
 
+    void on_pbtnApply_clicked();
+    
 private:
     Ui::DialogSetting *ui;
 };

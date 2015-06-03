@@ -122,7 +122,7 @@ void DialogSetting::on_checkBoxCMS_clicked()
 //强度斑点消除
 void DialogSetting::on_checkBoxLsr_clicked()
 {
-    if(Lsr->isChecked())
+    if(ui->checkBoxLsr->isChecked())
     {
         rvp9.soprm[14]=rvp9.soprm[14]|4;
     }
@@ -218,7 +218,7 @@ void DialogSetting::on_doubleSpinBoxCCORThreshold_editingFinished()
     //临时变量 将浮点数转换为二进制数的中间变量
     unsigned short tmps;
     unsigned char stmp[2];
-    if(sigThresh>=0)
+    if(ccorThreshi>=0)
     {
         ccorThreshi=ccorThresh*16.0;
         ccorThreshi=ccorThresh;

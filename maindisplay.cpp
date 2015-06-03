@@ -25,8 +25,15 @@ MainDisplay::MainDisplay(QWidget *parent) : QWidget(parent)
 
 MainDisplay::~MainDisplay()
 {
-    delete []pal;
-    delete &sector;
+    delete []dBZPal;
+    delete []dBTPal;
+    delete []vPal;
+    delete []wPal;
+
+    delete &dBZSector;
+    delete &dBTSector;
+    delete &vSector;
+    delete &wSector;
 }
 
 void MainDisplay::paintEvent(QPaintEvent *){
@@ -53,15 +60,15 @@ void  MainDisplay::paintDBZPal(Palette dbzPal[],int palLenth){
     {
         //颜色
         int c = 16*  i;
-        pal[i].setFillRed(PalColorMat[c][0]);
-        pal[i].setFillGreen(PalColorMat[c][1]);
-        pal[i].setFillBlue(PalColorMat[c][2]) ;
+        dbzPal[i].setFillRed(PalColorMat[c][0]);
+        dbzPal[i].setFillGreen(PalColorMat[c][1]);
+        dbzPal[i].setFillBlue(PalColorMat[c][2]) ;
         //色标位置
-        pal[i].setXloc( 50 );
-        pal[i].setYloc (350);
-        pal[i].yloc -= i * pal[i].height;
+        dbzPal[i].setXloc( 50 );
+        dbzPal[i].setYloc (350);
+        dbzPal[i].yloc -= i * dbzPal[i].height;
         sprintf(formatter,"%d",dBZMin + i*perdBZ);
-        pal[i].setComTxt(formatter);
+        dbzPal[i].setComTxt(formatter);
         paintPal(dbzPal[i]);
     }
 
@@ -77,15 +84,15 @@ void MainDisplay::paintDBTPal(Palette dbtPal[],int palLenth){
     {
         //颜色
         int c =palSpace * i;
-        pal[i].setFillRed(PalColorMat[c][0]);
-        pal[i].setFillGreen(PalColorMat[c][1]);
-        pal[i].setFillBlue(PalColorMat[c][2]) ;
+        dbtPal[i].setFillRed(PalColorMat[c][0]);
+        dbtPal[i].setFillGreen(PalColorMat[c][1]);
+        dbtPal[i].setFillBlue(PalColorMat[c][2]) ;
         //色标位置
-        pal[i].setXloc(100);
-        pal[i].setYloc(100);
-        pal[i].yloc += i * pal[i].height;
+        dbtPal[i].setXloc(100);
+        dbtPal[i].setYloc(100);
+        dbtPal[i].yloc += i * pal[i].height;
         sprintf(formatter,"%d",perdBZ*i+dBZMin);
-        pal[i].setComTxt(formatter);
+        dbtPal[i].setComTxt(formatter);
         paintPal(dbtPal[i]);
     }
 }
@@ -101,15 +108,15 @@ void  MainDisplay::paintWPal(Palette wPal[],int palLenth){
     {
         //颜色
         int c =palSpace * i;
-        pal[i].setFillRed(PalColorMat[c][0]);
-        pal[i].setFillGreen(PalColorMat[c][1]);
-        pal[i].setFillBlue(PalColorMat[c][2]) ;
+        wPal[i].setFillRed(PalColorMat[c][0]);
+        wPal[i].setFillGreen(PalColorMat[c][1]);
+        wPal[i].setFillBlue(PalColorMat[c][2]) ;
         //色标位置
-        pal[i].setXloc( 150);
-        pal[i].setYloc(150);
-        pal[i].yloc += i * pal[i].height;
+        wPal[i].setXloc( 150);
+        wPal[i].setYloc(150);
+        wPal[i].yloc += i * wPal[i].height;
         sprinf(formatter,"%.1f",perVmax*i);
-        pal[i].setComTxt(formatter);
+        wPal[i].setComTxt(formatter);
         paintPal(wPal[i]);
     }
 }
@@ -127,16 +134,16 @@ void  MainDisplay::paintVPal(Palette vPal[],int palLenth){
     {
         //颜色
         int c =palSpace * i;
-        pal[i].setFillRed(PalColorMat[c][0]);
-        pal[i].setFillGreen(PalColorMat[c][1]);
-        pal[i].setFillBlue(PalColorMat[c][2]) ;
+        vPal[i].setFillRed(PalColorMat[c][0]);
+        vPal[i].setFillGreen(PalColorMat[c][1]);
+        vPal[i].setFillBlue(PalColorMat[c][2]) ;
         //色标位置
-        pal[i].setXloc(200);
-        pal[i].setYloc(200);
-        pal[i].yloc += i * pal[i].height;
+        vPal[i].setXloc(200);
+        vPal[i].setYloc(200);
+        vPal[i].yloc += i * vPal[i].height;
         //从最大负数开始 每循环一次增加一个量度的速度
         sprintf(formatter,"%0.1f",Vmaxs + i*perVmax);
-        pal[i].setComTxt(formatter);
+        vPal[i].setComTxt(formatter);
         paintPal(vPal[i]);
     }
 }

@@ -7,7 +7,7 @@ DialogSample::DialogSample(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->dSpinBoxdBZCali,SIGNAL(clicked()),this,SLOT(on_dSpinBoxdBZCali_editingFinished()));
-    connect(ui->dSpinBoxNoiseSet,SIGNAL(clicked()),this,SLOT(on_pushButtonNoiseSet_clicked());
+    connect(ui->dSpinBoxNoiseSet,SIGNAL(clicked()),this,SLOT(on_pushButtonNoiseSet_clicked()));
 }
 
 DialogSample::~DialogSample()
