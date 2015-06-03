@@ -2,6 +2,7 @@
 #define SECTOR_H
 
 #include <qobject.h>
+#include <qpoint.h>
 
 class Sector
 {

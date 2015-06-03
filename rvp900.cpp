@@ -434,7 +434,7 @@ int RVP900::GPARM(){
     strcat(sendBuffer,COMMAND_SEP);
     strcat(sendBuffer,COMMAND_WRITE);
     sendBuffer[13]=gparmL8bit;
-    sendBuffer[14]=gparm8bit;
+    sendBuffer[14]=gparmH8bit;
     if ((sendMsg(sendBuffer,15))!=0)
         return SOCKET_SEND_ERR;
     if (readSocketResp()!=0)
@@ -542,7 +542,7 @@ int RVP900::RVP9Initialize(){
     //距离量程 distance range,目前仅设置六个距离范围
     distance = disrange_10;
     //脉冲重复频率
-    setpwfPRF = 300;
+    pulsePRF = 300;
     /*数据采集方式 collect mode,有三种Synchronous，
     *free running，time series，默认是time series
     */
@@ -586,7 +586,7 @@ int RVP900::iniCommand(){
 
 /*计算最大不模糊速度*/
 int RVP900::calculateVmax(){
-    Vmax = 0.25 * setpwfPRF * waveLen;
+    Vmax = 0.25 * pulsePRF * waveLen;
     //2:3
     if(procUnfold2To3 == procUnfold){
         Vmax *= 2;
@@ -873,19 +873,19 @@ inline const char* RVP900::getSendBuffer() const {
     return sendBuffer;
 }
 
-inline int RVP900::getSetpwfPrf() const {
-    return setpwfPRF;
+inline int RVP900::getPulsePrf() const {
+    return pulsePRF;
 }
 
 inline void RVP900::setPulePrf(int pwfPrf ) {
-    pulseWidth = pwfPrf;
+    pulsePRF = pwfPrf;
 }
 
 inline int RVP900::getPulseWidth() const {
     return pulseWidth;
 }
 
-inline void RVP900::setpulseWidth(int pulseWidth) {
+inline void RVP900::setPulseWidth(int pulseWidth) {
     this->pulseWidth = pulseWidth;
 }
 

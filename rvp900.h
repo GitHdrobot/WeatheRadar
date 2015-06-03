@@ -392,7 +392,7 @@ public:
     void setDataBytesNum(int dataBytesNum);
     int getDistance() const;
     void setDistance(int distance );
-    unsigned short getDopFilter() const;
+    unsigned char getDopFilter() const;
     void setDopFilter(unsigned char dopFilter);
     double getElevation() const;
     void setElevation(double elevation);
