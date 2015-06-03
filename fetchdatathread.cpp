@@ -33,16 +33,16 @@ void FetchDataThread::run() {
         int inumPerPixl = numPerPixl;
         //将数据均分到显示区域中
         for(i=0;i< sectorWidth;i++){
-            rvp9.binsZBuff = rvp9.outbuff[8+i*inumPerPixl];
+            rvp9.binsZBuff[i] = rvp9.outbuff[8+i*inumPerPixl];
         }
         for(i=0;i< sectorWidth;i++){
-            rvp9.binsTBuff = rvp9.outbuff[8+rvp9.lrmskBinsNum+i*inumPerPixl];
+            rvp9.binsTBuff[i] = rvp9.outbuff[8+rvp9.lrmskBinsNum+i*inumPerPixl];
         }
         for(i=0;i< sectorWidth;i++){
-            rvp9.binsVBuff = rvp9.outbuff[8+2*rvp9.lrmskBinsNum+i*inumPerPixl];
+            rvp9.binsVBuff[i] = rvp9.outbuff[8+2*rvp9.lrmskBinsNum+i*inumPerPixl];
         }
         for(i=0;i< sectorWidth;i++){
-            rvp9.binsWBuff = rvp9.outbuff[8+3*rvp9.lrmskBinsNum+i*inumPerPixl];
+            rvp9.binsWBuff[i] = rvp9.outbuff[8+3*rvp9.lrmskBinsNum+i*inumPerPixl];
         }
     }
 }
