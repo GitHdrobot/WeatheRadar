@@ -54,13 +54,13 @@
     <property name="styleSheet">
      <string notr="true">background-color: rgb(0, 0, 0);</string>
     </property>
-    <widget class="QLabel" name="label_18">
+    <widget class="QLabel" name="labelDate">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>660</y>
-       <width>71</width>
-       <height>16</height>
+       <y>655</y>
+       <width>51</width>
+       <height>21</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -70,13 +70,13 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ffffff;&quot;&gt;日期：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_19">
+    <widget class="QLabel" name="labelTime">
      <property name="geometry">
       <rect>
        <x>230</x>
-       <y>660</y>
-       <width>71</width>
-       <height>16</height>
+       <y>655</y>
+       <width>51</width>
+       <height>21</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -86,13 +86,13 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ffffff;&quot;&gt;时间：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_20">
+    <widget class="QLabel" name="labelPRF">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>710</y>
+       <y>705</y>
        <width>111</width>
-       <height>16</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -102,13 +102,13 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ffffff;&quot;&gt;脉冲重复频率：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_21">
+    <widget class="QLabel" name="labelDPRF">
      <property name="geometry">
       <rect>
        <x>230</x>
-       <y>710</y>
+       <y>705</y>
        <width>81</width>
-       <height>16</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -118,13 +118,13 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ffffff;&quot;&gt;双PRF比：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_22">
+    <widget class="QLabel" name="labelAntaElevation">
      <property name="geometry">
       <rect>
        <x>380</x>
-       <y>710</y>
+       <y>705</y>
        <width>71</width>
-       <height>16</height>
+       <height>21</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -134,13 +134,13 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600; color:#ffffff;&quot;&gt;天线仰角：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_23">
+    <widget class="QLabel" name="labelRange">
      <property name="geometry">
       <rect>
        <x>570</x>
-       <y>710</y>
-       <width>71</width>
-       <height>16</height>
+       <y>705</y>
+       <width>51</width>
+       <height>21</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -1095,7 +1095,7 @@
      <x>0</x>
      <y>0</y>
      <width>1376</width>
-     <height>23</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDispMode">

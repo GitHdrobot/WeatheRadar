@@ -2,10 +2,18 @@
 #include "ui_mainwindow.h"
 #include "rvp900.h"
 
+
+
 extern RVP900 rvp9;//rvp9控制对象
+
+
+QRect timeRect,dateRect,freqRect,eleRect,dfreqRatioRect,distanceRect;//save rect of time,date,frequency,elevation
 
 //扇形半径
 int sectorWidth ,colorTotal;
+
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -39,6 +47,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->comboBoxDopFilter,SIGNAL(activated(int)),SLOT(on_comboBoxDopFilter_activated(int)));
 
     this->resize(dispDev.width,dispDev.height);
+    QPoint wCenter(deskrect.width()/8,deskrect.height()/8);
+    this->move(wCenter);
     /*
         this->setMaximumHeight(dispDev.height);
         this->setMaximumWidth(dispDev.width);
@@ -46,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
         this->setMinimumWidth(dispDev.width);
     */
 
-
+    getDispInfo();
 
     /*对串口进行设置*/
     serialPort.setPortName(TTY_DEV4);
@@ -352,3 +362,13 @@ void MainWindow::closeEvent(QCloseEvent *event)
         event->accept();  //接受退出信号，程序退出
     }
 }
+int MainWindow::getDispInfo(){
+    //save rect of time,date,frequency,elevation
+    timeRect = ui->labelTime->rect();
+    dateRect = ui->labelDate->rect();
+    freqRect = ui->labelPRF->rect();
+    eleRect = ui->labelAntaElevation->rect();
+    dfreqRatioRect=ui->labelDPRF->rect();
+    distanceRect = ui->labelRange->rect();
+}
+

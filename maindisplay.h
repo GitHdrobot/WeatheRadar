@@ -12,6 +12,8 @@
 #include "headerctrl.h"
 
 
+extern QRect timeRect,dateRect,freqRect,eleRect,dfreqRatioRect,distanceRect;//save rect of time,date,frequency,elevation
+
 class MainDisplay : public QWidget
 {
     Q_OBJECT
@@ -22,6 +24,8 @@ public:
 signals:
 
 public slots:
+
+    on_paintDispInfo_timeout();
 
 public:
     unsigned char PalColorMat[palColorNum][baseColorNum];     //调色板颜色矩阵256*3
@@ -65,6 +69,10 @@ public:
     int paintV( );
 
     int paintW( );
+
+    /*paint picture title*/
+    int paintTitle(QRect rect,const char*p);
+
 };
 
 #endif // MAINDISPLAY_H

@@ -2,6 +2,7 @@
 #define HEADERCTRL
 
 #include <math.h>
+
 #include "constcode.h"
 #include "constRVP900.h"
 #include "dispdevice.h"

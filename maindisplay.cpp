@@ -21,6 +21,10 @@ MainDisplay::MainDisplay(QWidget *parent) : QWidget(parent)
         }
     }
 
+    QTimer *timer= new QTimer(this);
+    connect(timer,SIGNAL(timeout()),this,SLOT(on_paintDispInfo_timeout()));
+    timer1->start(1000);
+
 }
 
 MainDisplay::~MainDisplay()
@@ -51,7 +55,7 @@ void  MainDisplay::paintDBZPal(Palette dbzPal[],int palLenth,QPoint slt){
     for(int i=0;i<palLenth;i++)
     {
         //颜色
-        int c = 16*  i;
+        int c = 20 *  i;
         dbzPal[i].setFillRed(PalColorMat[c][0]);
         dbzPal[i].setFillGreen(PalColorMat[c][1]);
         dbzPal[i].setFillBlue(PalColorMat[c][2]) ;
@@ -68,14 +72,13 @@ void  MainDisplay::paintDBZPal(Palette dbzPal[],int palLenth,QPoint slt){
 
 void MainDisplay::paintDBTPal(Palette dbtPal[],int palLenth,QPoint slt){
     //计算出每个色标代表的值
-    short perdBZ = (dBZMax - dBZMin )/palNum;
+    short perdBT = (dBTMax - dBTMin )/palNum;
     char formatter[10];
     //设置色标填充颜色,位置
-    int palSpace = colorNums * colorNums * colorNums /15;
     for(int i=0;i<palLenth;i++)
     {
         //颜色
-        int c =palSpace * i;
+        int c =18 * i ;
         dbtPal[i].setFillRed(PalColorMat[c][0]);
         dbtPal[i].setFillGreen(PalColorMat[c][1]);
         dbtPal[i].setFillBlue(PalColorMat[c][2]) ;
@@ -83,7 +86,7 @@ void MainDisplay::paintDBTPal(Palette dbtPal[],int palLenth,QPoint slt){
         dbtPal[i].setXloc(slt.x()-palSectorXInter);
         dbtPal[i].setYloc(slt.y()-palSectorYInter);
         dbtPal[i].yloc -= i * dbtPal[i].height;
-        sprintf(formatter,"%d",perdBZ*i+dBZMin);
+        sprintf(formatter,"%d",perdBT*i+dBTMin);
         dbtPal[i].setComTxt(formatter);
         paintPal(dbtPal[i]);
     }
@@ -95,11 +98,10 @@ void  MainDisplay::paintWPal(Palette wPal[],int palLenth,QPoint slt){
     float perVmax = Vmax / palNum;
     char formatter[10];
     //设置色标填充颜色,位置
-    int palSpace = colorNums * colorNums * colorNums /15;
     for(int i=0;i<palLenth;i++)
     {
         //颜色
-        int c =palSpace * i;
+        int c =17 * i;
         wPal[i].setFillRed(PalColorMat[c][0]);
         wPal[i].setFillGreen(PalColorMat[c][1]);
         wPal[i].setFillBlue(PalColorMat[c][2]) ;
@@ -121,11 +123,10 @@ void  MainDisplay::paintVPal(Palette vPal[],int palLenth,QPoint slt){
     float Vmaxs =Vmax * -1;
     char formatter[10];
     //设置色标填充颜色,位置
-    int palSpace = colorNums * colorNums * colorNums /15;
     for(int i=0;i<palLenth;i++)
     {
         //颜色
-        int c =palSpace * i;
+        int c =15 * i;
         vPal[i].setFillRed(PalColorMat[c][0]);
         vPal[i].setFillGreen(PalColorMat[c][1]);
         vPal[i].setFillBlue(PalColorMat[c][2]) ;
@@ -214,6 +215,7 @@ int MainDisplay:: paintManager(){
     SLB.setX(sectorRect.x());
     SLB.setY(sectorRect.y()+sectorRect.height());
     paintDBZPal(dBZPal,palLenth,SLB);//绘制dbz色标卡
+    paintTitle(sectorRect,"dBZ");
     //设置dBT的位置、大小
     sectorRect = QRect(550,50,500,500);
     dBTSector.setXloc(sectorRect.x());
@@ -224,8 +226,9 @@ int MainDisplay:: paintManager(){
     SLB.setX(sectorRect.x());
     SLB.setY(sectorRect.y()+sectorRect.height());
     paintDBTPal(dBTPal,palLenth,SLB);//绘制dbt色标卡
+    paintTitle(sectorRect,"dBT");
     //设置V位置、大小
-     sectorRect = QRect(50,400,500,500);
+    sectorRect = QRect(50,380,500,500);
     vSector.setXloc(sectorRect.x());
     vSector.setYloc(sectorRect.y());
     vSector.setWidth(sectorRect.width());
@@ -234,8 +237,9 @@ int MainDisplay:: paintManager(){
     SLB.setX(sectorRect.x());
     SLB.setY(sectorRect.y()+sectorRect.height());
     paintVPal(dBTPal,palLenth,SLB);//绘制v色标卡
+    paintTitle(sectorRect,"V");
     //设置W位置、大小
-    sectorRect = QRect(550,400,500,500);
+    sectorRect = QRect(550,380,500,500);
     wSector.setXloc(sectorRect.x());
     wSector.setYloc(sectorRect.y());
     wSector.setWidth(sectorRect.width());
@@ -244,6 +248,7 @@ int MainDisplay:: paintManager(){
     SLB.setX(sectorRect.x());
     SLB.setY(sectorRect.y()+sectorRect.height());
     paintWPal(dBTPal,palLenth,SLB);//绘制w色标卡
+    paintTitle(sectorRect,"W");
 }
 int MainDisplay:: colorBinFactory(){
     int cursor = 0;
@@ -361,4 +366,50 @@ int MainDisplay::startPaint(unsigned char *pbuff,Sector *pSector){
             painter.drawPoint(dbzPoint);
         }
     }
+}
+
+int MainDisplay::paintTitle(QRect rect,const char *p){
+    QPoint rtop(rect.x()+rect.width()*4/5,rect.y());
+    painter.save();
+    QFont font;
+    QPen pen;
+    pen.setColor(Qt::white);
+    font.setBold(true);
+    font.setPixelSize(20);
+    painter.setFont(font);
+    painter.setPen(pen);
+    painter.drawText(rtop,p);
+    painter.restore();
+}
+
+
+int MainDisplay::on_paintDispInfo_timeout(){
+    painter.save();
+    //Date
+    QString str;
+    QDate currentDdate =  QDate::currentDate();
+    currentDdate.toString(str);
+    QPoint point(dateRect.x()+dateRect.width(),dateRect.y()+dateRect.height()/2);
+    painter.drawText(point,str);
+    //Time
+    QTime currentTime = QTime::currentTime();
+    currentTime.toString(str);
+    point.setX(timeRect.x()+timeRect.width());
+    point.setY(timeRect.y()+timeRect.height()/2);
+    painter.drawText(point,str);
+    //prf
+    str = QString::number(rvp9.pulsePRF);
+    point.setX(freqRect.x()+freqRect.width());
+    point.setY(freqRect.y()+freqRect.height()/2);
+    painter.drawText(point,str);
+    //double prf ratio
+    str = QString::number(rvp9.procUnfold);
+    point.setX(dfreqRatioRect.x()+dfreqRatioRect.width());
+    point.setY(dfreqRatioRect.y()+dfreqRatioRect.height()/2);
+    painter.drawText(point,str);
+    //range
+    str = QString::number(rvp9.distance);
+    point.setX(distanceRect.x()+distanceRect.width());
+    point.setY(distanceRect.y()+distanceRect.height()/2);
+    painter.drawText(point,str);
 }

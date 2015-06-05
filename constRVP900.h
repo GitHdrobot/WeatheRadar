@@ -245,6 +245,9 @@ const  short dBZMax = 70;
 //最小的反射率因子
 const  short dBZMin = -10;
 
+const  short dBTMax = 70;
+const  short dBTMin = -10;
+
 //Rnv  "距离订正通断" ;
 //R2_Enable  "R2使能"  ;
 //CMS  "单库杂波消除";

@@ -64,8 +64,10 @@ public :
 
 public:
     int collectData();
+    /* get diaplay info**/
+    int getDispInfo();
 
-private slots:
+public slots:
     /*处理 打开发射按钮 发出的点击信号*/
     void on_pbtnOpenTransmit_clicked();
     /*处理 关闭发射按钮 发出的点击信号*/
@@ -88,8 +90,8 @@ private slots:
     /*脉宽  改变*/
     void on_comboBoxPulseWidth_activated(int index);
     void on_comboBoxDopFilter_activated(int index);
-    void on_doubleSpinBoxAzimuth_valueChanged(double arg1);
-    void on_doubleSpinBoxElevation_valueChanged(double arg1);
+    void on_doubleSpinBoxAzimuth_valueChanged(int arg1);
+    void on_doubleSpinBoxElevation_valueChanged(int arg1);
 };
 
 #endif // MAINWINDOW_H
