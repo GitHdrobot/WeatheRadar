@@ -32,7 +32,7 @@ const unsigned char commandWrite[] = "WRIT";
 #define COMMAND_READ "READ" //读指令字符
 const unsigned char commandRead[] = "READ";
 #define COMMAND_SEP "|"     //分隔字符
-const unsigned char commandSep = '|';
+const unsigned char commandSep[] = "|";
 #define COMM_WRIT_LEN 4+1+2  //写命令长度 WIRT 4个，| 1个，命令字 2两个
 
 #define SET_ZERO 0 //置0
@@ -225,13 +225,13 @@ const unsigned char procSyncModec = 0x01;
 const unsigned char procFreeRunModec = 0x10;
 const unsigned char procTimeSerisModec = 0x11;
 
-const unsigned short disrange_10 = 10;
-const unsigned short disrange_20 = 20;
-const unsigned short disrange_30 = 30;
-const unsigned short disrange_50 = 50;
-const unsigned short disrange_100 = 100;
-const unsigned short disrange_150 = 150;
-const unsigned short disrange_300 = 300;
+const unsigned short disrange_10 = 10 * 1e3;
+const unsigned short disrange_20 = 20* 1e3;
+const unsigned short disrange_30 = 30* 1e3;
+const unsigned short disrange_50 = 50* 1e3;
+const unsigned short disrange_100 = 100* 1e3;
+const unsigned short disrange_150 = 150* 1e3;
+const unsigned short disrange_300 = 300* 1e3;
 
 //processing mode PPP,FFT,RPP,DPRT_1,DPRT_2
 const unsigned short soprmProcessModePPP = 1;

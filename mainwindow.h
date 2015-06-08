@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QCloseEvent>
+#include <QErrorMessage>
 
 #include "fetchdatathread.h"
 #include "dialogsetting.h"  //参数设置对话框头文件
@@ -39,9 +40,34 @@ private:
     FetchDataThread fetchDataThread;//获取数据线程
 
 
+
 public slots:
-    void paraSetSlot();//参数设置槽函数
-    void dispFourPicSlot();//显示四图槽函数
+    void MainWindow::paraSetSlot(){//参数设置槽函数
+
+    }
+    void MainWindow::dispFourPicSlot(){//显示四图槽函数
+        dispMode = disp4PicMode;
+    }
+    void MainWindow::disp2PicZTSlot(){//显示2图槽函数
+        dispMode = disp2PicZTMode;
+    }
+    void MainWindow::disp2PicZVSlot(){
+        dispMode = disp2PicZTMode;
+    }//显示2图槽函数
+    void MainWindow::disp2PicZWSlot(){dispMode = disp2PicZTMode;}//显示2图槽函数
+    void MainWindow::disp2PicTVSlot(){dispMode = disp2PicZTMode;}//显示2图槽函数
+    void MainWindow::disp2PicTWSlot(){dispMode = disp2PicZTMode;}//显示2图槽函数
+    void MainWindow::disp2PicVWSlot(){dispMode = disp2PicZTMode;}//显示2图槽函数
+    void MainWindow::disp1PicZSlot(){dispMode = disp1PicZMode;}//显示1图槽函数
+    void MainWindow::disp1PicTSlot(){dispMode = disp1PicZMode;}//显示1图槽函数
+    void MainWindow::disp1PicVSlot(){dispMode = disp1PicZMode;}//显示1图槽函数
+    void MainWindow::disp1PicWSlot(){dispMode = disp1PicZMode;}//显示1图槽函数
+
+
+
+
+
+
     void closeEvent(QCloseEvent *);
 
 
@@ -66,6 +92,8 @@ public:
     int collectData();
     /* get diaplay info**/
     int getDispInfo();
+    //err dialog
+    static void errDialog(int errCode);
 
 public slots:
     /*处理 打开发射按钮 发出的点击信号*/

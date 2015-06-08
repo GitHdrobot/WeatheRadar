@@ -25,7 +25,7 @@ signals:
 
 public slots:
 
-    on_paintDispInfo_timeout();
+    void on_update_timeout();
 
 public:
     unsigned char PalColorMat[palColorNum][baseColorNum];     //调色板颜色矩阵256*3
@@ -72,6 +72,8 @@ public:
 
     /*paint picture title*/
     int paintTitle(QRect rect,const char*p);
+    //
+    void paintDispInfo();
 
 };
 

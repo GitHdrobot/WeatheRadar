@@ -14,17 +14,17 @@ MainDisplay::MainDisplay(QWidget *parent) : QWidget(parent)
         fread(PalColorMat,1,palColorNum*3,fp);
         fclose(fp);
     }else{
-        if(fp=fopen("Palette.dat","wb")){
+        if(NULL != (fp=fopen("Palette.dat","wb"))){
             colorBinFactory();
             fwrite(PalColorMat,1,palColorNum*3,fp);
             fclose(fp);
         }
     }
 
-    QTimer *timer= new QTimer(this);
-    connect(timer,SIGNAL(timeout()),this,SLOT(on_paintDispInfo_timeout()));
-    timer1->start(1000);
 
+    QTimer *timer= new QTimer(this);
+    connect(timer,SIGNAL(timeout()),this,SLOT(on_update_timeout()));
+    timer->start(1000);
 }
 
 MainDisplay::~MainDisplay()
@@ -44,6 +44,7 @@ void MainDisplay::paintEvent(QPaintEvent *){
     painter.begin(this);
     setAutoFillBackground(true);
     paintManager();
+    paintDispInfo();
 }
 
 
@@ -383,33 +384,44 @@ int MainDisplay::paintTitle(QRect rect,const char *p){
 }
 
 
-int MainDisplay::on_paintDispInfo_timeout(){
+void MainDisplay::paintDispInfo(){
     painter.save();
+    QFont font;
+    QPen pen;
+    this->show();
+    pen.setColor(Qt::white);
+    font.setPixelSize(18);
+    painter.setFont(font);
+    painter.setPen(pen);
     //Date
     QString str;
     QDate currentDdate =  QDate::currentDate();
-    currentDdate.toString(str);
-    QPoint point(dateRect.x()+dateRect.width(),dateRect.y()+dateRect.height()/2);
+    str = currentDdate.toString("yyyy-MM-dd ");
+    QPoint point(dateRect.x()+dateRect.width(),dateRect.y()+dateRect.height());
     painter.drawText(point,str);
     //Time
     QTime currentTime = QTime::currentTime();
-    currentTime.toString(str);
+    str = currentTime.toString("HH:mm:ss");
     point.setX(timeRect.x()+timeRect.width());
-    point.setY(timeRect.y()+timeRect.height()/2);
+    point.setY(timeRect.y()+timeRect.height());
     painter.drawText(point,str);
     //prf
     str = QString::number(rvp9.pulsePRF);
     point.setX(freqRect.x()+freqRect.width());
-    point.setY(freqRect.y()+freqRect.height()/2);
+    point.setY(freqRect.y()+freqRect.height());
     painter.drawText(point,str);
     //double prf ratio
     str = QString::number(rvp9.procUnfold);
     point.setX(dfreqRatioRect.x()+dfreqRatioRect.width());
-    point.setY(dfreqRatioRect.y()+dfreqRatioRect.height()/2);
+    point.setY(dfreqRatioRect.y()+dfreqRatioRect.height());
     painter.drawText(point,str);
     //range
     str = QString::number(rvp9.distance);
     point.setX(distanceRect.x()+distanceRect.width());
-    point.setY(distanceRect.y()+distanceRect.height()/2);
+    point.setY(distanceRect.y()+distanceRect.height());
     painter.drawText(point,str);
+    painter.restore();
+}
+void MainDisplay::on_update_timeout(){
+    this->update();
 }

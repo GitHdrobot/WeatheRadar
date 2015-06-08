@@ -216,6 +216,7 @@ int RVP900::loadRangeMsk(){
     strcat (sendBuffer,(char*)lrmskCommLen);//lrmsk指令的长度
     strcat (sendBuffer,(char*)commandWrite);
     strcat (sendBuffer,(char*)commandSep);
+    //sendBuffer[12] = commandSep;
     sendBuffer[13]=lrmskOpCode; //距离掩码指令操作码
     sendBuffer[14]= lrmskRangeAvg;    //距离平均
     lrmskBinsNum = markNums / (lrmskRangeAvg+1);//计算出输出的库个数

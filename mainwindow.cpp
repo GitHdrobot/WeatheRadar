@@ -12,7 +12,8 @@ QRect timeRect,dateRect,freqRect,eleRect,dfreqRatioRect,distanceRect;//save rect
 //扇形半径
 int sectorWidth ,colorTotal;
 
-
+//disp mode
+unsigned short dispMode;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -29,6 +30,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->menuParaSetting,SIGNAL(aboutToShow()),this,SLOT(paraSetSlot()));
     connect(ui->action4_Pic,SIGNAL(triggered()),this,SLOT(dispFourPicSlot()));
+    connect(ui->action2_dbzw,SIGNAL(triggered()),this,SLOT(disp2PicZWSlot()));
+    connect(ui->action2_dbzv,SIGNAL(triggered()),this,SLOT(disp2PicZVSlot()));
+    connect(ui->action2_dbzt,SIGNAL(triggered()),this,SLOT(disp2PicZTSlot()));
+    connect(ui->action2_dbtw,SIGNAL(triggered()),this,SLOT(disp2PicTWSlot()));
+    connect(ui->action2_dbtv,SIGNAL(triggered()),this,SLOT(disp2PicTVSlot()));
+    connect(ui->action2_vw,SIGNAL(triggered()),this,SLOT(disp2PicVWSlot()));
+
+    connect(ui->action1_dbz,SIGNAL(triggered()),this,SLOT(disp1PicZSlot()));
+    connect(ui->action1_dbt,SIGNAL(triggered()),this,SLOT(disp1PicTSlot()));
+    connect(ui->action1_v,SIGNAL(triggered()),this,SLOT(disp1PicVSlot()));
+    connect(ui->action1_w,SIGNAL(triggered()),this,SLOT(disp1PicWSlot()));
+
     connect(ui->spinBoxAzimuthSet,SIGNAL(valueChanged(int)),SLOT(on_doubleSpinBoxAzimuth_valueChanged(double)));
     connect(ui->spinBoxElevationSet,SIGNAL(valueChanged(int)),SLOT(on_doubleSpinBoxElevation_valueChanged(double)));
     connect(ui->pbtnOpenTransmit,SIGNAL(clicked()),SLOT(on_pbtnOpenTransmit_clicked()));
@@ -66,6 +79,8 @@ MainWindow::MainWindow(QWidget *parent) :
     serialPort.setDataBits(DATA_8);
     serialPort.setStopBits(STOP_1);
 
+    //rvp900 initialize
+    rvp9.RVP9Initialize();
 }
 
 MainWindow::~MainWindow()
@@ -87,11 +102,6 @@ void MainWindow::dispFourPicSlot()
 {
     //qDebug( "my icon size = %x",4 );
 }
-
-//void MainWindow::paintEvent(QPaintEvent *)
-//{
-//    ui->widgetDisplay->update();
-//}
 
 //处理 打开发射按钮 发出的点击信号
 void MainWindow::on_pbtnOpenTransmit_clicked()
@@ -364,11 +374,39 @@ void MainWindow::closeEvent(QCloseEvent *event)
 }
 int MainWindow::getDispInfo(){
     //save rect of time,date,frequency,elevation
-    timeRect = ui->labelTime->rect();
-    dateRect = ui->labelDate->rect();
-    freqRect = ui->labelPRF->rect();
-    eleRect = ui->labelAntaElevation->rect();
-    dfreqRatioRect=ui->labelDPRF->rect();
-    distanceRect = ui->labelRange->rect();
+    timeRect = ui->labelTime->geometry();
+    dateRect = ui->labelDate->geometry();
+    freqRect = ui->labelPRF->geometry();
+    eleRect = ui->labelAntaElevation->geometry();
+    dfreqRatioRect=ui->labelDPRF->geometry();
+    distanceRect = ui->labelRange->geometry();
 }
 
+void MainWindow::errDialog(int errCode){
+    QErrorMessage errMsgBox;
+    errMsgBox.showMessage("running error ,error code is" + QString::number(errCode));
+}
+void MainWindow::disp4PicSlot(){}
+void MainWindow::disp2PicZTSlot(){}
+void MainWindow::disp2PicZVSlot(){}
+void MainWindow::disp2PicZWSlot(){}
+void MainWindow::disp2PicTVSlot(){}
+void MainWindow::disp2PicTWSlot(){}
+void MainWindow::disp2PicVWSlot(){}
+
+void MainWindow::disp1PicZSlot(){}
+void MainWindow::disp1PicTSlot(){}
+void MainWindow::disp1PicVSlot(){}
+void MainWindow::disp1PicWSlot(){}
+
+connect(ui->action2_dbzw,SIGNAL(triggered()),this,SLOT(disp2PicZWSlot()));
+connect(ui->action2_dbzv,SIGNAL(triggered()),this,SLOT(disp2PicZVSlot()));
+connect(ui->action2_dbzt,SIGNAL(triggered()),this,SLOT(disp2PicZTSlot()));
+connect(ui->action2_dbtw,SIGNAL(triggered()),this,SLOT(disp2PicTWSlot()));
+connect(ui->action2_dbtv,SIGNAL(triggered()),this,SLOT(disp2PicTVSlot()));
+connect(ui->action2_vw,SIGNAL(triggered()),this,SLOT(disp2PicVWSlot()));
+
+connect(ui->action1_dbz,SIGNAL(triggered()),this,SLOT(disp1PicZSlot()));
+connect(ui->action1_dbt,SIGNAL(triggered()),this,SLOT(disp1PicTSlot()));
+connect(ui->action1_v,SIGNAL(triggered()),this,SLOT(disp1PicVSlot()));
+connect(ui->action1_w,SIGNAL(triggered()),this,SLOT(disp1PicWSlot()));

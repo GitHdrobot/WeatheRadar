@@ -1109,6 +1109,7 @@
     <addaction name="action2_dbzw"/>
     <addaction name="action2_dbtv"/>
     <addaction name="action2_dbtw"/>
+    <addaction name="action2_vw"/>
     <addaction name="separator"/>
     <addaction name="action1_dbz"/>
     <addaction name="action1_dbt"/>
@@ -1183,6 +1184,11 @@
   <action name="action1_w">
    <property name="text">
     <string>1图W</string>
+   </property>
+  </action>
+  <action name="action2_vw">
+   <property name="text">
+    <string>2图（V+W）</string>
    </property>
   </action>
  </widget>

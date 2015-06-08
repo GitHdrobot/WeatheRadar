@@ -111,7 +111,7 @@ public :
     //距离平均 distance averaging
     unsigned char lrmskRangeAvg;
     //距离量程 与设置的距离分辨率 距离掩码有关 distance = Res * (Nth - 1),默认10km
-    int distance = 10;
+    int distance = disrange_10;
 
 
 
