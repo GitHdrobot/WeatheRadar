@@ -42,26 +42,18 @@ private:
 
 
 public slots:
-    void MainWindow::paraSetSlot(){//参数设置槽函数
-
-    }
-    void MainWindow::dispFourPicSlot(){//显示四图槽函数
-        dispMode = disp4PicMode;
-    }
-    void MainWindow::disp2PicZTSlot(){//显示2图槽函数
-        dispMode = disp2PicZTMode;
-    }
-    void MainWindow::disp2PicZVSlot(){
-        dispMode = disp2PicZTMode;
-    }//显示2图槽函数
-    void MainWindow::disp2PicZWSlot(){dispMode = disp2PicZTMode;}//显示2图槽函数
-    void MainWindow::disp2PicTVSlot(){dispMode = disp2PicZTMode;}//显示2图槽函数
-    void MainWindow::disp2PicTWSlot(){dispMode = disp2PicZTMode;}//显示2图槽函数
-    void MainWindow::disp2PicVWSlot(){dispMode = disp2PicZTMode;}//显示2图槽函数
-    void MainWindow::disp1PicZSlot(){dispMode = disp1PicZMode;}//显示1图槽函数
-    void MainWindow::disp1PicTSlot(){dispMode = disp1PicZMode;}//显示1图槽函数
-    void MainWindow::disp1PicVSlot(){dispMode = disp1PicZMode;}//显示1图槽函数
-    void MainWindow::disp1PicWSlot(){dispMode = disp1PicZMode;}//显示1图槽函数
+    void  paraSetSlot();
+    void  dispFourPicSlot();
+    void  disp2PicZTSlot();
+    void  disp2PicZVSlot();
+    void  disp2PicZWSlot();//显示2图槽函数
+    void  disp2PicTVSlot();//显示2图槽函数
+    void  isp2PicTWSlot();//显示2图槽函数
+    void  disp2PicVWSlot();//显示2图槽函数
+    void  disp1PicZSlot();//显示1图槽函数
+    void  disp1PicTSlot();//显示1图槽函数
+    void  disp1PicVSlot();//显示1图槽函数
+    void  disp1PicWSlot();//显示1图槽函数
 
 
 

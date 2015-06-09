@@ -15,7 +15,7 @@
 
 
 extern DispDevice dispDev;
-extern int dispMode;
+extern unsigned short dispMode;
 extern int sectorWidth;
 class RVP900
 {
@@ -221,8 +221,8 @@ public:
     RVP900();
     ~RVP900();
     int iniCommand();//对命令进行必要的初始化
-    int connectRVP();//连接到server socket
-    int openRVP900();//发送一组命令 打开RVP900
+    int connectRVP9();//连接到server socket
+    //int openRVP900();//发送一组命令 打开RVP900
     int readSocketResp();//读取rvp900响应信息
     int assembleCmdMsg(int length,char *cmd,char *data);//构造要发送的命令的信息
     int sendMsg(char *buffer,int length);//向RVP900发送数据

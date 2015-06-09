@@ -59,6 +59,19 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->comboBoxPulseWidth,SIGNAL(activated(int)),SLOT(on_comboBoxPulseWidth_activated(int)));
     connect(ui->comboBoxDopFilter,SIGNAL(activated(int)),SLOT(on_comboBoxDopFilter_activated(int)));
 
+
+    connect(ui->action2_dbzw,SIGNAL(triggered()),this,SLOT(disp2PicZWSlot()));
+    connect(ui->action2_dbzv,SIGNAL(triggered()),this,SLOT(disp2PicZVSlot()));
+    connect(ui->action2_dbzt,SIGNAL(triggered()),this,SLOT(disp2PicZTSlot()));
+    connect(ui->action2_dbtw,SIGNAL(triggered()),this,SLOT(disp2PicTWSlot()));
+    connect(ui->action2_dbtv,SIGNAL(triggered()),this,SLOT(disp2PicTVSlot()));
+    connect(ui->action2_vw,SIGNAL(triggered()),this,SLOT(disp2PicVWSlot()));
+
+    connect(ui->action1_dbz,SIGNAL(triggered()),this,SLOT(disp1PicZSlot()));
+    connect(ui->action1_dbt,SIGNAL(triggered()),this,SLOT(disp1PicTSlot()));
+    connect(ui->action1_v,SIGNAL(triggered()),this,SLOT(disp1PicVSlot()));
+    connect(ui->action1_w,SIGNAL(triggered()),this,SLOT(disp1PicWSlot()));
+
     this->resize(dispDev.width,dispDev.height);
     QPoint wCenter(deskrect.width()/8,deskrect.height()/8);
     this->move(wCenter);
@@ -81,6 +94,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //rvp900 initialize
     rvp9.RVP9Initialize();
+    //connect to RVP900
+    rvp9.connectRVP9();
 }
 
 MainWindow::~MainWindow()
@@ -96,11 +111,6 @@ void MainWindow::paraSetSlot()
     dlgSetUi->setFocus();
     dlgSetUi->setModal(true);
     dlgSetUi->show();
-}
-
-void MainWindow::dispFourPicSlot()
-{
-    //qDebug( "my icon size = %x",4 );
 }
 
 //处理 打开发射按钮 发出的点击信号
@@ -386,27 +396,26 @@ void MainWindow::errDialog(int errCode){
     QErrorMessage errMsgBox;
     errMsgBox.showMessage("running error ,error code is" + QString::number(errCode));
 }
-void MainWindow::disp4PicSlot(){}
-void MainWindow::disp2PicZTSlot(){}
-void MainWindow::disp2PicZVSlot(){}
-void MainWindow::disp2PicZWSlot(){}
-void MainWindow::disp2PicTVSlot(){}
-void MainWindow::disp2PicTWSlot(){}
-void MainWindow::disp2PicVWSlot(){}
 
-void MainWindow::disp1PicZSlot(){}
-void MainWindow::disp1PicTSlot(){}
-void MainWindow::disp1PicVSlot(){}
-void MainWindow::disp1PicWSlot(){}
 
-connect(ui->action2_dbzw,SIGNAL(triggered()),this,SLOT(disp2PicZWSlot()));
-connect(ui->action2_dbzv,SIGNAL(triggered()),this,SLOT(disp2PicZVSlot()));
-connect(ui->action2_dbzt,SIGNAL(triggered()),this,SLOT(disp2PicZTSlot()));
-connect(ui->action2_dbtw,SIGNAL(triggered()),this,SLOT(disp2PicTWSlot()));
-connect(ui->action2_dbtv,SIGNAL(triggered()),this,SLOT(disp2PicTVSlot()));
-connect(ui->action2_vw,SIGNAL(triggered()),this,SLOT(disp2PicVWSlot()));
+void  MainWindow::dispFourPicSlot(){//显示四图槽函数
+    dispMode = disp4PicMode;
+}
+void  MainWindow::disp2PicZTSlot(){//显示2图槽函数
+    dispMode = disp2PicZTMode;
+}
+void  MainWindow::disp2PicZVSlot(){
+    dispMode = disp2PicZTMode;
+}//显示2图槽函数
+void  MainWindow::disp2PicZWSlot(){dispMode = disp2PicZWMode;}//显示2图槽函数
+void  MainWindow::disp2PicTVSlot(){dispMode = disp2PicTVMode;}//显示2图槽函数
+void  MainWindow::isp2PicTWSlot(){dispMode = disp2PicTWMode;}//显示2图槽函数
+void  MainWindow::disp2PicVWSlot(){dispMode = disp2PicVWMode;}//显示2图槽函数
+void  MainWindow::disp1PicZSlot(){dispMode = disp1PicZMode;}//显示1图槽函数
+void  MainWindow::disp1PicTSlot(){dispMode = disp1PicTMode;}//显示1图槽函数
+void  MainWindow::disp1PicVSlot(){dispMode = disp1PicVMode;}//显示1图槽函数
+void  MainWindow::disp1PicWSlot(){dispMode = disp1PicWMode;}//显示1图槽函数
 
-connect(ui->action1_dbz,SIGNAL(triggered()),this,SLOT(disp1PicZSlot()));
-connect(ui->action1_dbt,SIGNAL(triggered()),this,SLOT(disp1PicTSlot()));
-connect(ui->action1_v,SIGNAL(triggered()),this,SLOT(disp1PicVSlot()));
-connect(ui->action1_w,SIGNAL(triggered()),this,SLOT(disp1PicWSlot()));
+
+
+

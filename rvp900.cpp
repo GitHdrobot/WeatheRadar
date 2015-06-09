@@ -455,7 +455,7 @@ int RVP900::sendMsg(char *buffer,int length)//向RVP900发送数据
 }
 
 
-int RVP900::connectRVP(){//连接到RVP900
+int RVP900::connectRVP9(){//连接到RVP900
     struct sockaddr_in adrin,adrins;
 
     memset (&adrin,0,sizeof(adrin));

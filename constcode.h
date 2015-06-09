@@ -62,10 +62,12 @@ const unsigned disp2PicZVMode = 3;
 const unsigned disp2PicZWMode = 4;
 
 const unsigned disp2PicTVMode = 5;
-const unsigned disp2PicZWMode = 6;
+const unsigned disp2PicTWMode = 6;
 const unsigned disp2PicVWMode = 7;
-const unsigned disp2PicZMode = 8;
-const unsigned disp2PicTMode = 9;
-const unsigned disp2PicVMode = 10;
-const unsigned disp2PicWMode = 11;
+
+
+const unsigned disp1PicZMode = 8;
+const unsigned disp1PicTMode = 9;
+const unsigned disp1PicVMode = 10;
+const unsigned disp1PicWMode = 11;
 #endif // CONSTCODE_H
