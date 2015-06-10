@@ -75,6 +75,22 @@ public:
     //
     void paintDispInfo();
 
+
+    int paint4PicMode() ;
+    int paint2PicZTMode ();
+    int paint2PicZVMode( );
+    int paint2PicZWMode ();
+
+    int paint2PicTVMode ();
+    int paint2PicTWMode ();
+    int paint2PicVWMode ();
+
+    int paint1PicZMode ();
+    int paint1PicTMode ();
+    int paint1PicVMode ();
+    int paint1PicWMode ();
+
+
 };
 
 #endif // MAINDISPLAY_H

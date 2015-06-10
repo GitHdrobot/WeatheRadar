@@ -86,7 +86,13 @@ public:
     int getDispInfo();
     //err dialog
     static void errDialog(int errCode);
+    //mainwindow slot signal connect
+    void slotSignalconnect();
 
+     // display info initialize
+    void dispInitiallize();
+    //serial port initialize
+    void serialPortInitilize();
 public slots:
     /*处理 打开发射按钮 发出的点击信号*/
     void on_pbtnOpenTransmit_clicked();

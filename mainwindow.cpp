@@ -19,15 +19,60 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
+
+    ui->setupUi(this);
+    //slot signal connect
+    slotSignalconnect();
+    //display info initialize
+    dispInitiallize();
+
+    getDispInfo();
+    //serial port initialze
+    serialPortInitilize();
+
+    //rvp900 initialize
+    rvp9.RVP9Initialize();
+    //connect to RVP900
+    rvp9.connectRVP9();
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+    delete &rvp9;
+}
+void MainWindow::serialPortInitilize(){
+    /*对串口进行设置*/
+    serialPort.setPortName(TTY_DEV4);
+    serialPort.setBaudRate(BAUD38400);
+    serialPort.setFlowControl(FLOW_XONXOFF);
+    serialPort.setParity(PAR_NONE);
+    serialPort.setDataBits(DATA_8);
+    serialPort.setStopBits(STOP_1);
+}
+void MainWindow::dispInitiallize(){
     /*获取显示设备可用的分辨率*/
     QDesktopWidget *dwsktopwidget = QApplication::desktop();
     QRect deskrect = dwsktopwidget->availableGeometry();
     //QRect screenrect = dwsktopwidget->screenGeometry();
     dispDev.setWidth(deskrect.width());
     dispDev.setHeight(deskrect.height());
+    this->resize(dispDev.width,dispDev.height);
+    QPoint wCenter(deskrect.width()/8,deskrect.height()/8);
+    this->move(wCenter);
+    /*
+        this->setMaximumHeight(dispDev.height);
+        this->setMaximumWidth(dispDev.width);
+        this->setMinimumHeight(dispDev.height);
+        this->setMinimumWidth(dispDev.width);
+    */
+    //defalut display 4 pic mode
+    dispMode = disp4PicMode;
+}
 
-    ui->setupUi(this);
 
+void MainWindow::slotSignalconnect(){
     connect(ui->menuParaSetting,SIGNAL(aboutToShow()),this,SLOT(paraSetSlot()));
     connect(ui->action4_Pic,SIGNAL(triggered()),this,SLOT(dispFourPicSlot()));
     connect(ui->action2_dbzw,SIGNAL(triggered()),this,SLOT(disp2PicZWSlot()));
@@ -72,38 +117,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->action1_v,SIGNAL(triggered()),this,SLOT(disp1PicVSlot()));
     connect(ui->action1_w,SIGNAL(triggered()),this,SLOT(disp1PicWSlot()));
 
-    this->resize(dispDev.width,dispDev.height);
-    QPoint wCenter(deskrect.width()/8,deskrect.height()/8);
-    this->move(wCenter);
-    /*
-        this->setMaximumHeight(dispDev.height);
-        this->setMaximumWidth(dispDev.width);
-        this->setMinimumHeight(dispDev.height);
-        this->setMinimumWidth(dispDev.width);
-    */
-
-    getDispInfo();
-
-    /*对串口进行设置*/
-    serialPort.setPortName(TTY_DEV4);
-    serialPort.setBaudRate(BAUD38400);
-    serialPort.setFlowControl(FLOW_XONXOFF);
-    serialPort.setParity(PAR_NONE);
-    serialPort.setDataBits(DATA_8);
-    serialPort.setStopBits(STOP_1);
-
-    //rvp900 initialize
-    rvp9.RVP9Initialize();
-    //connect to RVP900
-    rvp9.connectRVP9();
 }
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-    delete &rvp9;
-}
-
 void MainWindow::paraSetSlot()
 {
     //qDebug( "my icon size = %x", this->iconSize() );
@@ -170,15 +184,44 @@ void MainWindow::on_pbtnStopSweep_clicked()
     char stopbuf[]={0x53,0x01,0x50,0x5C,0};
     serialPort.write(stopbuf,4);
 }
-
+//方位定位
 void MainWindow::on_pbtnAzimuth_clicked()
 {
-    //方位定位
+    char azimuthBuf[6]={0x53,0x03,0x41,0x00,0x00,0x00};
+    char ch_t;
+    float azimuth,azimuth_t;
+    int azimuthi;
+    azimuth_t=ui->spinBoxAzimuthSet->value();
+    if (azimuth_t>=0&&azimuth_t<=60)
+        azimuth=azimuth_t*4096.0/360.0;
+    else if(a>=-60&&a<0)
+        azimuth=(360+azimuth_t)*4096.0/360.0;
+    azimuthi=azimuth;
+    azimuthBuf[3]=azimuthi%256;
+    azimuthBuf[4]=azimuthi/256;
+    ch_t=azBuf[0]+azBuf[1]+azimuthBuf[2]+azimuthBuf[3]+azimuthBuf[4];
+    azimuthBuf[5]=0-c;
+    serialPort.write(azimuthBuf,6);
 }
-
+//仰角定位
 void MainWindow::on_pbtnElevation_clicked()
 {
-    //仰角定位
+
+    char elevationBuf[6]={0x53,0x03,0x45,0x00,0x00,0x00};
+    char ch_t;
+    float elevation,elevation_t;
+    int elevationi;
+    elevation_t=ui->spinBoxAzimuthSet->value();
+    if (elevation_t>=0&&elevation_t<=60)
+        elevation=elevation_t*4096.0/360.0;
+    else if(a>=-60&&a<0)
+        elevation=(360+elevation_t)*4096.0/360.0;
+    elevationi=elevation;
+    elevationBuf[3]=elevationi%256;
+    elevationBuf[4]=elevationi/256;
+    ch_t=elevationBuf[0]+elevationBuf[1]+elevationBuf[2]+elevationBuf[3]+elevationBuf[4];
+    elevationBuf[5]=0-ch_t;
+    serialPort.write(elevationBuf,6);
 }
 /*停止采集*/
 void MainWindow::on_pbtnStop_clicked()
@@ -398,23 +441,47 @@ void MainWindow::errDialog(int errCode){
 }
 
 
-void  MainWindow::dispFourPicSlot(){//显示四图槽函数
+void  MainWindow::dispFourPicSlot(){//显示四图槽函数 ZTVW
     dispMode = disp4PicMode;
 }
-void  MainWindow::disp2PicZTSlot(){//显示2图槽函数
+void  MainWindow::disp2PicZTSlot(){//显示2图槽函数 ZT
     dispMode = disp2PicZTMode;
 }
-void  MainWindow::disp2PicZVSlot(){
+void  MainWindow::disp2PicZVSlot(){//显示2图槽函数 ZVS
     dispMode = disp2PicZTMode;
-}//显示2图槽函数
-void  MainWindow::disp2PicZWSlot(){dispMode = disp2PicZWMode;}//显示2图槽函数
-void  MainWindow::disp2PicTVSlot(){dispMode = disp2PicTVMode;}//显示2图槽函数
-void  MainWindow::isp2PicTWSlot(){dispMode = disp2PicTWMode;}//显示2图槽函数
-void  MainWindow::disp2PicVWSlot(){dispMode = disp2PicVWMode;}//显示2图槽函数
-void  MainWindow::disp1PicZSlot(){dispMode = disp1PicZMode;}//显示1图槽函数
-void  MainWindow::disp1PicTSlot(){dispMode = disp1PicTMode;}//显示1图槽函数
-void  MainWindow::disp1PicVSlot(){dispMode = disp1PicVMode;}//显示1图槽函数
-void  MainWindow::disp1PicWSlot(){dispMode = disp1PicWMode;}//显示1图槽函数
+}
+void  MainWindow::disp2PicZWSlot(){//显示2图槽函数 ZW
+    dispMode = disp2PicZWMode;
+    this->update();
+}
+void  MainWindow::disp2PicTVSlot(){//显示2图槽函数 TV
+    dispMode = disp2PicTVMode;
+    this->update();
+}
+void  MainWindow::isp2PicTWSlot(){//显示2图槽函数 TW
+    dispMode = disp2PicTWMode;
+    this->update();
+}
+void  MainWindow::disp2PicVWSlot(){//显示2图槽函数 VW
+    dispMode = disp2PicVWMode;
+    this->update();
+}
+void  MainWindow::disp1PicZSlot(){//显示1图槽函数 Z
+    dispMode = disp1PicZMode;
+    this->update();
+}
+void  MainWindow::disp1PicTSlot(){//显示1图槽函数 T
+    dispMode = disp1PicTMode;
+    this->update();
+}
+void  MainWindow::disp1PicVSlot(){//显示1图槽函数 V
+    dispMode = disp1PicVMode;
+    this->update();
+}
+void  MainWindow::disp1PicWSlot(){//显示1图槽函数 W
+    dispMode = disp1PicWMode;
+    this->update();
+}
 
 
 

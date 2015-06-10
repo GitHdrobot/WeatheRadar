@@ -204,52 +204,42 @@ int MainDisplay::paintSector(Sector *pSector){
     return 1;
 }
 int MainDisplay:: paintManager(){
-    int palLenth = 15;
-    QRect sectorRect(50,50,500,500);
-    QPoint SLB;
-    //设置dBZ的位置、大小
-    dBZSector.setXloc(sectorRect.x());
-    dBZSector.setYloc(sectorRect.y());
-    dBZSector.setWidth(sectorRect.width());
-    dBZSector.setHeight(sectorRect.height());
-    paintSector(&dBZSector);
-    SLB.setX(sectorRect.x());
-    SLB.setY(sectorRect.y()+sectorRect.height());
-    paintDBZPal(dBZPal,palLenth,SLB);//绘制dbz色标卡
-    paintTitle(sectorRect,"dBZ");
-    //设置dBT的位置、大小
-    sectorRect = QRect(550,50,500,500);
-    dBTSector.setXloc(sectorRect.x());
-    dBTSector.setYloc(sectorRect.y());
-    dBTSector.setWidth(sectorRect.width());
-    dBTSector.setHeight(sectorRect.height());
-    paintSector(&dBTSector);
-    SLB.setX(sectorRect.x());
-    SLB.setY(sectorRect.y()+sectorRect.height());
-    paintDBTPal(dBTPal,palLenth,SLB);//绘制dbt色标卡
-    paintTitle(sectorRect,"dBT");
-    //设置V位置、大小
-    sectorRect = QRect(50,380,500,500);
-    vSector.setXloc(sectorRect.x());
-    vSector.setYloc(sectorRect.y());
-    vSector.setWidth(sectorRect.width());
-    vSector.setHeight(sectorRect.height());
-    paintSector(&vSector);
-    SLB.setX(sectorRect.x());
-    SLB.setY(sectorRect.y()+sectorRect.height());
-    paintVPal(dBTPal,palLenth,SLB);//绘制v色标卡
-    paintTitle(sectorRect,"V");
-    //设置W位置、大小
-    sectorRect = QRect(550,380,500,500);
-    wSector.setXloc(sectorRect.x());
-    wSector.setYloc(sectorRect.y());
-    wSector.setWidth(sectorRect.width());
-    wSector.setHeight(sectorRect.height());
-    paintSector(&wSector);
-    SLB.setX(sectorRect.x());
-    SLB.setY(sectorRect.y()+sectorRect.height());
-    paintWPal(dBTPal,palLenth,SLB);//绘制w色标卡
-    paintTitle(sectorRect,"W");
+    switch(dispMode){
+    case disp4PicMode:
+         paint4PicMode();
+         break;
+    case disp2PicZTMode:
+         paint2PicZTMode();
+         break;
+    case disp2PicZVMode:
+         paint2PicZVMode();
+         break;
+    case disp2PicZWMode:
+         paint2PicZWMode();
+         break;
+    case disp2PicTVMode:
+         paint2PicTVMode();
+         break;
+    case disp2PicTWMode:
+         paint2PicTWMode();
+         break;
+    case disp2PicVWMode:
+         paint2PicVWMode();
+         break;
+    case disp1PicZMode:
+         paint1PicZMode();
+         break;
+    case disp1PicTMode:
+         paint1PicTMode();
+         break;
+    case disp1PicVMode:
+         paint1PicVMode();
+         break;
+    case disp1PicWMode:
+         paint1PicWMode();
+         break;
+    }
+
 }
 int MainDisplay:: colorBinFactory(){
     int cursor = 0;
@@ -424,4 +414,290 @@ void MainDisplay::paintDispInfo(){
 }
 void MainDisplay::on_update_timeout(){
     this->update();
+}
+
+int MainDisplay::paint4PicMode() {
+    int palLenth = 15;
+    QRect sectorRect(50,50,500,500);
+    QPoint SLB;
+    //设置dBZ的位置、大小
+    dBZSector.setXloc(sectorRect.x());
+    dBZSector.setYloc(sectorRect.y());
+    dBZSector.setWidth(sectorRect.width());
+    dBZSector.setHeight(sectorRect.height());
+    paintSector(&dBZSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintDBZPal(dBZPal,palLenth,SLB);//绘制dbz色标卡
+    paintTitle(sectorRect,"dBZ");
+    //设置dBT的位置、大小
+    sectorRect = QRect(550,50,500,500);
+    dBTSector.setXloc(sectorRect.x());
+    dBTSector.setYloc(sectorRect.y());
+    dBTSector.setWidth(sectorRect.width());
+    dBTSector.setHeight(sectorRect.height());
+    paintSector(&dBTSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintDBTPal(dBTPal,palLenth,SLB);//绘制dbt色标卡
+    paintTitle(sectorRect,"dBT");
+    //设置V位置、大小
+    sectorRect = QRect(50,380,500,500);
+    vSector.setXloc(sectorRect.x());
+    vSector.setYloc(sectorRect.y());
+    vSector.setWidth(sectorRect.width());
+    vSector.setHeight(sectorRect.height());
+    paintSector(&vSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintVPal(dBTPal,palLenth,SLB);//绘制v色标卡
+    paintTitle(sectorRect,"V");
+    //设置W位置、大小
+    sectorRect = QRect(550,380,500,500);
+    wSector.setXloc(sectorRect.x());
+    wSector.setYloc(sectorRect.y());
+    wSector.setWidth(sectorRect.width());
+    wSector.setHeight(sectorRect.height());
+    paintSector(&wSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintWPal(dBTPal,palLenth,SLB);//绘制w色标卡
+    paintTitle(sectorRect,"W");
+}
+int MainDisplay::paint2PicZTMode (){
+    int palLenth = 15;
+    QRect sectorRect(50,50,500,500);
+    QPoint SLB;
+    //设置dBZ的位置、大小
+    dBZSector.setXloc(sectorRect.x());
+    dBZSector.setYloc(sectorRect.y());
+    dBZSector.setWidth(sectorRect.width());
+    dBZSector.setHeight(sectorRect.height());
+    paintSector(&dBZSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintDBZPal(dBZPal,palLenth,SLB);//绘制dbz色标卡
+    paintTitle(sectorRect,"dBZ");
+    //设置dBT的位置、大小
+    sectorRect = QRect(550,50,500,500);
+    dBTSector.setXloc(sectorRect.x());
+    dBTSector.setYloc(sectorRect.y());
+    dBTSector.setWidth(sectorRect.width());
+    dBTSector.setHeight(sectorRect.height());
+    paintSector(&dBTSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintDBTPal(dBTPal,palLenth,SLB);//绘制dbt色标卡
+    paintTitle(sectorRect,"dBT");
+}
+int MainDisplay::paint2PicZVMode( ){
+    int palLenth = 15;
+    QRect sectorRect(50,50,500,500);
+    QPoint SLB;
+    //设置dBZ的位置、大小
+    dBZSector.setXloc(sectorRect.x());
+    dBZSector.setYloc(sectorRect.y());
+    dBZSector.setWidth(sectorRect.width());
+    dBZSector.setHeight(sectorRect.height());
+    paintSector(&dBZSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintDBZPal(dBZPal,palLenth,SLB);//绘制dbz色标卡
+    paintTitle(sectorRect,"dBZ");
+    //设置V位置、大小
+    sectorRect = QRect(50,380,500,500);
+    vSector.setXloc(sectorRect.x());
+    vSector.setYloc(sectorRect.y());
+    vSector.setWidth(sectorRect.width());
+    vSector.setHeight(sectorRect.height());
+    paintSector(&vSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintVPal(dBTPal,palLenth,SLB);//绘制v色标卡
+    paintTitle(sectorRect,"V");
+
+}
+int MainDisplay::paint2PicZWMode (){
+    int palLenth = 15;
+    QRect sectorRect(50,50,500,500);
+    QPoint SLB;
+    //设置dBZ的位置、大小
+    dBZSector.setXloc(sectorRect.x());
+    dBZSector.setYloc(sectorRect.y());
+    dBZSector.setWidth(sectorRect.width());
+    dBZSector.setHeight(sectorRect.height());
+    paintSector(&dBZSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintDBZPal(dBZPal,palLenth,SLB);//绘制dbz色标卡
+    paintTitle(sectorRect,"dBZ");
+
+    //设置W位置、大小
+    sectorRect = QRect(550,380,500,500);
+    wSector.setXloc(sectorRect.x());
+    wSector.setYloc(sectorRect.y());
+    wSector.setWidth(sectorRect.width());
+    wSector.setHeight(sectorRect.height());
+    paintSector(&wSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintWPal(dBTPal,palLenth,SLB);//绘制w色标卡
+    paintTitle(sectorRect,"W");
+}
+
+int MainDisplay::paint2PicTVMode (){
+    int palLenth = 15;
+    QRect sectorRect(50,50,500,500);
+    QPoint SLB;
+
+    //设置dBT的位置、大小
+    sectorRect = QRect(550,50,500,500);
+    dBTSector.setXloc(sectorRect.x());
+    dBTSector.setYloc(sectorRect.y());
+    dBTSector.setWidth(sectorRect.width());
+    dBTSector.setHeight(sectorRect.height());
+    paintSector(&dBTSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintDBTPal(dBTPal,palLenth,SLB);//绘制dbt色标卡
+    paintTitle(sectorRect,"dBT");
+    //设置V位置、大小
+    sectorRect = QRect(50,380,500,500);
+    vSector.setXloc(sectorRect.x());
+    vSector.setYloc(sectorRect.y());
+    vSector.setWidth(sectorRect.width());
+    vSector.setHeight(sectorRect.height());
+    paintSector(&vSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintVPal(dBTPal,palLenth,SLB);//绘制v色标卡
+    paintTitle(sectorRect,"V");
+
+}
+int MainDisplay::paint2PicTWMode (){
+    int palLenth = 15;
+    QRect sectorRect(50,50,500,500);
+    QPoint SLB;
+
+    //设置dBT的位置、大小
+    sectorRect = QRect(550,50,500,500);
+    dBTSector.setXloc(sectorRect.x());
+    dBTSector.setYloc(sectorRect.y());
+    dBTSector.setWidth(sectorRect.width());
+    dBTSector.setHeight(sectorRect.height());
+    paintSector(&dBTSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintDBTPal(dBTPal,palLenth,SLB);//绘制dbt色标卡
+    paintTitle(sectorRect,"dBT");
+
+    //设置W位置、大小
+    sectorRect = QRect(550,380,500,500);
+    wSector.setXloc(sectorRect.x());
+    wSector.setYloc(sectorRect.y());
+    wSector.setWidth(sectorRect.width());
+    wSector.setHeight(sectorRect.height());
+    paintSector(&wSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintWPal(dBTPal,palLenth,SLB);//绘制w色标卡
+    paintTitle(sectorRect,"W");
+}
+int MainDisplay::paint2PicVWMode (){
+    int palLenth = 15;
+    QRect sectorRect(50,50,500,500);
+    QPoint SLB;
+
+    //设置V位置、大小
+    sectorRect = QRect(50,380,500,500);
+    vSector.setXloc(sectorRect.x());
+    vSector.setYloc(sectorRect.y());
+    vSector.setWidth(sectorRect.width());
+    vSector.setHeight(sectorRect.height());
+    paintSector(&vSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintVPal(dBTPal,palLenth,SLB);//绘制v色标卡
+    paintTitle(sectorRect,"V");
+    //设置W位置、大小
+    sectorRect = QRect(550,380,500,500);
+    wSector.setXloc(sectorRect.x());
+    wSector.setYloc(sectorRect.y());
+    wSector.setWidth(sectorRect.width());
+    wSector.setHeight(sectorRect.height());
+    paintSector(&wSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintWPal(dBTPal,palLenth,SLB);//绘制w色标卡
+    paintTitle(sectorRect,"W");
+}
+
+int MainDisplay::paint1PicZMode (){
+    int palLenth = 15;
+    QRect sectorRect(50,50,500,500);
+    QPoint SLB;
+    //设置dBZ的位置、大小
+    dBZSector.setXloc(sectorRect.x());
+    dBZSector.setYloc(sectorRect.y());
+    dBZSector.setWidth(sectorRect.width());
+    dBZSector.setHeight(sectorRect.height());
+    paintSector(&dBZSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintDBZPal(dBZPal,palLenth,SLB);//绘制dbz色标卡
+    paintTitle(sectorRect,"dBZ");
+
+}
+int MainDisplay::paint1PicTMode (){
+    int palLenth = 15;
+    QRect sectorRect(50,50,500,500);
+    QPoint SLB;
+
+    //设置dBT的位置、大小
+    sectorRect = QRect(550,50,500,500);
+    dBTSector.setXloc(sectorRect.x());
+    dBTSector.setYloc(sectorRect.y());
+    dBTSector.setWidth(sectorRect.width());
+    dBTSector.setHeight(sectorRect.height());
+    paintSector(&dBTSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintDBTPal(dBTPal,palLenth,SLB);//绘制dbt色标卡
+    paintTitle(sectorRect,"dBT");
+
+}
+int MainDisplay::paint1PicVMode (){
+    int palLenth = 15;
+    QRect sectorRect(50,50,500,500);
+    QPoint SLB;
+
+    //设置V位置、大小
+    sectorRect = QRect(50,380,500,500);
+    vSector.setXloc(sectorRect.x());
+    vSector.setYloc(sectorRect.y());
+    vSector.setWidth(sectorRect.width());
+    vSector.setHeight(sectorRect.height());
+    paintSector(&vSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintVPal(dBTPal,palLenth,SLB);//绘制v色标卡
+    paintTitle(sectorRect,"V");
+
+}
+int MainDisplay::paint1PicWMode (){
+    int palLenth = 15;
+    QRect sectorRect(50,50,500,500);
+    QPoint SLB;
+
+    //设置W位置、大小
+    sectorRect = QRect(550,380,500,500);
+    wSector.setXloc(sectorRect.x());
+    wSector.setYloc(sectorRect.y());
+    wSector.setWidth(sectorRect.width());
+    wSector.setHeight(sectorRect.height());
+    paintSector(&wSector);
+    SLB.setX(sectorRect.x());
+    SLB.setY(sectorRect.y()+sectorRect.height());
+    paintWPal(dBTPal,palLenth,SLB);//绘制w色标卡
+    paintTitle(sectorRect,"W");
 }

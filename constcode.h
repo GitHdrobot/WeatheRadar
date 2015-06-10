@@ -4,24 +4,7 @@
 #ifndef CONSTCODE_H
 #define CONSTCODE_H
 
-#define MODE1_4_PIC 1 //方式1 4图
-#define MODE2_2_DBZT 2
-#define MODE2_2_DBZV 3
-#define MODE2_2_DBZW 4
-#define MODE2_2_DBTV 5
-#define MODE2_2_DBTW 6
 
-#define MODE3_1_DBZ 6 //方式3一图DBZ
-#define MODE3_1_DBT 7
-#define MODE3_1_V 8
-#define MODE3_1_W 9
-
-#define MODE_1PIC 1   //一图
-#define MODE_2PIC 2   //两图
-#define MODE_4PIC 4   //四图
-
-#define CONFIG_WIDTH 365  //右侧设置面板占据的宽度
-#define TOP_BOTTOM_HEIGHT 7 //上下占据的高度
 #define PI 3.1415926
 
 /*颜色每隔16取1个*/
