@@ -172,11 +172,9 @@ void MainWindow::on_pbtnSweep_clicked()
     rvp9.antennaBuf[6]=0-c;
     //通过串口发送数据
     serialPort.write(rvp9.antennaBuf,7);
-    if(true == rvp9.isWorking )
-    {
-        //开始采集数据
-        collectData();
-    }
+    rvp9.isWorking = true;
+    //开始采集数据
+    collectData();
 }
 //处理 天线停止扫描按钮 发出的点击信号
 void MainWindow::on_pbtnStopSweep_clicked()
@@ -194,13 +192,13 @@ void MainWindow::on_pbtnAzimuth_clicked()
     azimuth_t=ui->spinBoxAzimuthSet->value();
     if (azimuth_t>=0&&azimuth_t<=60)
         azimuth=azimuth_t*4096.0/360.0;
-    else if(a>=-60&&a<0)
+    else if(azimuth_t>=-60&&azimuth_t<0)
         azimuth=(360+azimuth_t)*4096.0/360.0;
     azimuthi=azimuth;
     azimuthBuf[3]=azimuthi%256;
     azimuthBuf[4]=azimuthi/256;
-    ch_t=azBuf[0]+azBuf[1]+azimuthBuf[2]+azimuthBuf[3]+azimuthBuf[4];
-    azimuthBuf[5]=0-c;
+    ch_t=azimuthBuf[0]+azimuthBuf[1]+azimuthBuf[2]+azimuthBuf[3]+azimuthBuf[4];
+    azimuthBuf[5]=0-ch_t;
     serialPort.write(azimuthBuf,6);
 }
 //仰角定位
@@ -214,7 +212,7 @@ void MainWindow::on_pbtnElevation_clicked()
     elevation_t=ui->spinBoxAzimuthSet->value();
     if (elevation_t>=0&&elevation_t<=60)
         elevation=elevation_t*4096.0/360.0;
-    else if(a>=-60&&a<0)
+    else if(elevation_t>=-60&&elevation_t<0)
         elevation=(360+elevation_t)*4096.0/360.0;
     elevationi=elevation;
     elevationBuf[3]=elevationi%256;
@@ -383,7 +381,8 @@ void MainWindow::on_doubleSpinBoxElevation_valueChanged(int arg1)
 /*数据采集*/
 int MainWindow::collectData(){
     rvp9.calculateVmax();
-    rvp9.isWorking = true;
+//    rvp9.isWorking = true;
+    fetchDataThread.threadFlag = true;
     fetchDataThread.start();
     while(rvp9.isWorking)
     {
