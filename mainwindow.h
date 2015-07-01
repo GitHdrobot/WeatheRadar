@@ -43,12 +43,13 @@ private:
 
 public slots:
     void  paraSetSlot();
+    void  sampleSlot();
     void  dispFourPicSlot();
     void  disp2PicZTSlot();
     void  disp2PicZVSlot();
     void  disp2PicZWSlot();//显示2图槽函数
     void  disp2PicTVSlot();//显示2图槽函数
-    void  isp2PicTWSlot();//显示2图槽函数
+    void  disp2PicTWSlot();//显示2图槽函数
     void  disp2PicVWSlot();//显示2图槽函数
     void  disp1PicZSlot();//显示1图槽函数
     void  disp1PicTSlot();//显示1图槽函数

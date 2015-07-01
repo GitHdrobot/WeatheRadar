@@ -69,11 +69,17 @@ void MainWindow::dispInitiallize(){
     */
     //defalut display 4 pic mode
     dispMode = disp4PicMode;
+    ui->pbtnCloseTransmit->setEnabled(false);
+    ui->pbtnStop->setEnabled(false);
+    ui->pbtnStopSweep->setEnabled(false);
+
 }
 
 
 void MainWindow::slotSignalconnect(){
-    connect(ui->menuParaSetting,SIGNAL(aboutToShow()),this,SLOT(paraSetSlot()));
+    connect(ui->actionParaSetting,SIGNAL(triggered()),this,SLOT(paraSetSlot()));
+    connect(ui->actionSample,SIGNAL(triggered()),this,SLOT(sampleSlot()));
+
     connect(ui->action4_Pic,SIGNAL(triggered()),this,SLOT(dispFourPicSlot()));
     connect(ui->action2_dbzw,SIGNAL(triggered()),this,SLOT(disp2PicZWSlot()));
     connect(ui->action2_dbzv,SIGNAL(triggered()),this,SLOT(disp2PicZVSlot()));
@@ -87,8 +93,8 @@ void MainWindow::slotSignalconnect(){
     connect(ui->action1_v,SIGNAL(triggered()),this,SLOT(disp1PicVSlot()));
     connect(ui->action1_w,SIGNAL(triggered()),this,SLOT(disp1PicWSlot()));
 
-    connect(ui->spinBoxAzimuthSet,SIGNAL(valueChanged(int)),SLOT(on_doubleSpinBoxAzimuth_valueChanged(double)));
-    connect(ui->spinBoxElevationSet,SIGNAL(valueChanged(int)),SLOT(on_doubleSpinBoxElevation_valueChanged(double)));
+    connect(ui->spinBoxAzimuthSet,SIGNAL(valueChanged(int)),SLOT(on_doubleSpinBoxAzimuth_valueChanged(int)));
+    connect(ui->spinBoxElevationSet,SIGNAL(valueChanged(int)),SLOT(on_doubleSpinBoxElevation_valueChanged(int)));
     connect(ui->pbtnOpenTransmit,SIGNAL(clicked()),SLOT(on_pbtnOpenTransmit_clicked()));
     connect(ui->pbtnCloseTransmit,SIGNAL(clicked()),SLOT(on_pbtnCloseTransmit_clicked()));
     connect(ui->pbtnSweep,SIGNAL(clicked()),SLOT(on_pbtnSweep_clicked()));
@@ -127,27 +133,48 @@ void MainWindow::paraSetSlot()
     dlgSetUi->show();
 }
 
+void MainWindow::sampleSlot()
+{
+    //qDebug( "my icon size = %x", this->iconSize() );
+    DialogSample *pDlgSampleUi = new DialogSample();
+    pDlgSampleUi->setFocus();
+    pDlgSampleUi->setModal(true);
+    pDlgSampleUi->show();
+}
+
 //处理 打开发射按钮 发出的点击信号
 void MainWindow::on_pbtnOpenTransmit_clicked()
 {
-    char openbuf[]={0x54,0x01,0xAA,0x01,0};
-    serialPort.write(openbuf);
-    serialPort.read(rvp9.rcverStatus,8);
-    //改变相关显示状态
+    if(ui->pbtnOpenTransmit->isEnabled()){
+        char openbuf[]={0x54,0x01,0xAA,0x01,0};
+        serialPort.write(openbuf);
+        serialPort.read(rvp9.rcverStatus,8);
+        //改变相关显示状态
+        ui->pbtnOpenTransmit->setEnabled(false);
+        ui->pbtnCloseTransmit->setEnabled(true);
+    }
+
 }
 //处理 关闭发射按钮 发出的点击信号
 void MainWindow::on_pbtnCloseTransmit_clicked()
 {
-    char closebuf[]={0x54,0x01,0x55,0x56,0};
-    serialPort.write(closebuf);
-    serialPort.read(rvp9.rcverStatus,8);
-    //改变相关显示状态
+    if(ui->pbtnCloseTransmit->isEnabled()){
+        char closebuf[]={0x54,0x01,0x55,0x56,0};
+        serialPort.write(closebuf);
+        serialPort.read(rvp9.rcverStatus,8);
+        //改变相关显示状态
+        ui->pbtnCloseTransmit->setEnabled(false);
+        ui->pbtnOpenTransmit->setEnabled(true);
+    }
+
 }
 //处理 天线扫描按钮 发出的点击信号
 void MainWindow::on_pbtnSweep_clicked()
 {
     //使 停止扫描按钮 使能
     ui->pbtnStopSweep->setEnabled(true);
+    ui->pbtnSweep->setEnabled(false);
+
     //此处的天线扫描不明白
     char c;
     float elevationf;
@@ -179,8 +206,13 @@ void MainWindow::on_pbtnSweep_clicked()
 //处理 天线停止扫描按钮 发出的点击信号
 void MainWindow::on_pbtnStopSweep_clicked()
 {
-    char stopbuf[]={0x53,0x01,0x50,0x5C,0};
-    serialPort.write(stopbuf,4);
+    if(ui->pbtnStopSweep->isEnabled()){
+        char stopbuf[]={0x53,0x01,0x50,0x5C,0};
+        serialPort.write(stopbuf,4);
+        ui->pbtnStopSweep->setEnabled(false);
+        ui->pbtnSweep->setEnabled(true);
+    }
+
 }
 //方位定位
 void MainWindow::on_pbtnAzimuth_clicked()
@@ -233,6 +265,8 @@ void MainWindow::on_pbtnStop_clicked()
         ui->comboBoxDopFilter->setEnabled(true);
         ui->comboBoxLmsk->setEnabled(true);
         ui->comboBoxDPrf->setEnabled(true);
+        //ui->pbtnSweep->setEnabled(false);
+        //ui->pbtnOpenTransmit->setEnabled(false);
     }
 }
 
@@ -248,6 +282,8 @@ void MainWindow::on_pbtnCollect_clicked()
         ui->comboBoxDopFilter->setEnabled(false);
         ui->comboBoxLmsk->setEnabled(false);
         ui->comboBoxDPrf->setEnabled(false);
+        //ui->pbtnSweep->setEnabled(false);
+        //ui->pbtnOpenTransmit->setEnabled(false);
     }
     rvp9.setPwPrf();
     rvp9.setLFILT();
@@ -446,8 +482,8 @@ void  MainWindow::dispFourPicSlot(){//显示四图槽函数 ZTVW
 void  MainWindow::disp2PicZTSlot(){//显示2图槽函数 ZT
     dispMode = disp2PicZTMode;
 }
-void  MainWindow::disp2PicZVSlot(){//显示2图槽函数 ZVS
-    dispMode = disp2PicZTMode;
+void  MainWindow::disp2PicZVSlot(){//显示2图槽函数 ZV
+    dispMode = disp2PicZVMode;
 }
 void  MainWindow::disp2PicZWSlot(){//显示2图槽函数 ZW
     dispMode = disp2PicZWMode;
@@ -457,7 +493,7 @@ void  MainWindow::disp2PicTVSlot(){//显示2图槽函数 TV
     dispMode = disp2PicTVMode;
     this->update();
 }
-void  MainWindow::isp2PicTWSlot(){//显示2图槽函数 TW
+void  MainWindow::disp2PicTWSlot(){//显示2图槽函数 TW
     dispMode = disp2PicTWMode;
     this->update();
 }

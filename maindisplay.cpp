@@ -600,7 +600,7 @@ int MainDisplay::paint2PicTWMode (){
     paintSector(&wSector);
     SLB.setX(sectorRect.x());
     SLB.setY(sectorRect.y()+sectorRect.height());
-    paintWPal(dBTPal,palLenth,SLB);//绘制w色标卡
+    paintWPal(wPal,palLenth,SLB);//绘制w色标卡
     paintTitle(sectorRect,"W");
 }
 int MainDisplay::paint2PicVWMode (){

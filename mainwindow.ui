@@ -1125,11 +1125,13 @@
     <property name="title">
      <string>参数设置</string>
     </property>
+    <addaction name="actionParaSetting"/>
    </widget>
    <widget class="QMenu" name="menuSample">
     <property name="title">
      <string>Sample</string>
     </property>
+    <addaction name="actionSample"/>
    </widget>
    <addaction name="menuDispMode"/>
    <addaction name="menuSaveData"/>
@@ -1189,6 +1191,16 @@
   <action name="action2_vw">
    <property name="text">
     <string>2图（V+W）</string>
+   </property>
+  </action>
+  <action name="actionParaSetting">
+   <property name="text">
+    <string>参数设置</string>
+   </property>
+  </action>
+  <action name="actionSample">
+   <property name="text">
+    <string>Sample</string>
    </property>
   </action>
  </widget>

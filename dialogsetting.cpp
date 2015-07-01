@@ -13,7 +13,7 @@ DialogSetting::DialogSetting(QWidget *parent) :
     connect(ui->checkBoxR2Enable,SIGNAL(clicked()),this,SLOT(on_checkBoxR2Enable_clicked()));
     connect(ui->checkBoxRangeNorm,SIGNAL(clicked()),this,SLOT(on_checkBoxRangeNorm_clicked()));
 
-    connect(ui->comboBoxBinNum,SIGNAL(currentIndexChanged(int)),this,SLOT(on_comboBoxBinNum_currentIndexChanged()));
+    connect(ui->comboBoxBinNum,SIGNAL(currentIndexChanged(int)),this,SLOT(on_comboBoxBinNum_currentIndexChanged(int)));
     connect(ui->comboBoxProcMode,SIGNAL(currentIndexChanged(int)),this,SLOT(on_comboBoxProcMode_currentIndexChanged(int)));
     connect(ui->comboBoxPulseAccu,SIGNAL(currentIndexChanged(int)),this,SLOT(on_comboBoxPulseAccu_currentIndexChanged(int)));
     connect(ui->comboBoxProcMode,SIGNAL(currentIndexChanged(int)),this,SLOT(on_comboBoxProcMode_currentIndexChanged(int)));
