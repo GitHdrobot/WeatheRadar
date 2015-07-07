@@ -200,8 +200,9 @@ void MainWindow::on_pbtnSweep_clicked()
     //通过串口发送数据
     serialPort.write(rvp9.antennaBuf,7);
     rvp9.isWorking = true;
-    //开始采集数据
-    collectData();
+//    ui->pbtnCollect->setEnabled(false);
+//    ui->pbtnStop->setEnabled(true);
+
 }
 //处理 天线停止扫描按钮 发出的点击信号
 void MainWindow::on_pbtnStopSweep_clicked()
@@ -212,6 +213,13 @@ void MainWindow::on_pbtnStopSweep_clicked()
         ui->pbtnStopSweep->setEnabled(false);
         ui->pbtnSweep->setEnabled(true);
     }
+//    if(rvp9.isWorking == true){
+//        ui->pbtnCollect->setEnabled(false);
+//        ui->pbtnStop->setEnabled(true);
+//    }else{
+//        ui->pbtnCollect->setEnabled(true);
+//        ui->pbtnStop->setEnabled(false);
+//    }
 
 }
 //方位定位
@@ -256,7 +264,7 @@ void MainWindow::on_pbtnElevation_clicked()
 /*停止采集*/
 void MainWindow::on_pbtnStop_clicked()
 {
-    if(true == rvp9.isWorking){
+    if(true == ui->pbtnStop->isEnabled()){
         rvp9.isWorking = false;
         ui->pbtnStop->setEnabled(false);
         ui->pbtnCollect->setEnabled(true);
@@ -270,10 +278,10 @@ void MainWindow::on_pbtnStop_clicked()
     }
 }
 
-/*恢复采集*/
+/*开始采集*/
 void MainWindow::on_pbtnCollect_clicked()
 {
-    if(false == rvp9.isWorking){
+    if(true == ui->pbtnCollect->isEnabled()){
         rvp9.isWorking = true;
         ui->pbtnStop->setEnabled(true);
         ui->pbtnCollect->setEnabled(false);
@@ -284,9 +292,14 @@ void MainWindow::on_pbtnCollect_clicked()
         ui->comboBoxDPrf->setEnabled(false);
         //ui->pbtnSweep->setEnabled(false);
         //ui->pbtnOpenTransmit->setEnabled(false);
+
     }
-    rvp9.setPwPrf();
-    rvp9.setLFILT();
+    if(true == rvp9.isWorking){
+        rvp9.setPwPrf();
+        rvp9.setLFILT();
+        //开始采集数据
+        collectData();
+    }
 }
 
 /*扫描方式  改变*/
@@ -417,7 +430,7 @@ void MainWindow::on_doubleSpinBoxElevation_valueChanged(int arg1)
 /*数据采集*/
 int MainWindow::collectData(){
     rvp9.calculateVmax();
-//    rvp9.isWorking = true;
+    //    rvp9.isWorking = true;
     fetchDataThread.threadFlag = true;
     fetchDataThread.start();
     while(rvp9.isWorking)

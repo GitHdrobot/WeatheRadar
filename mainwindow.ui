@@ -714,7 +714,7 @@
      </font>
     </property>
     <property name="text">
-     <string>恢复采集</string>
+     <string>开始采集</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pbtnOpenTransmit">
