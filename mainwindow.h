@@ -14,7 +14,18 @@
 
 #include "headerctrl.h"
 
-
+//portinfo_t portinfo = {
+//'0',      // print prompt after receiving
+//38400,   // baudrate: 38400
+//'8',      // databit 8
+//'0',      // debug: off
+//'0',      // echo off
+//'0',      // flow control: software
+//'4',      // default tt: SAC0
+//'0',      // parity: none
+//'1',      // stopbit: 1
+// 0       // reserved
+//};
 
 
 namespace Ui {
@@ -39,7 +50,7 @@ private:
 
     FetchDataThread fetchDataThread;//获取数据线程
 
-
+    QPixmap pix_green,pix_red;
 
 public slots:
     void  paraSetSlot();
@@ -94,6 +105,8 @@ public:
     void dispInitiallize();
     //serial port initialize
     void serialPortInitilize();
+    //change pic
+   void rvp9StateDisp(char status[]);
 public slots:
     /*处理 打开发射按钮 发出的点击信号*/
     void on_pbtnOpenTransmit_clicked();

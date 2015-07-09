@@ -30,7 +30,12 @@ MainWindow::MainWindow(QWidget *parent) :
     getDispInfo();
     //serial port initialze
     serialPortInitilize();
-
+    //int serial_fd=PortOpen(&portinfo);
+    //if(serial_fd<0){printf("serial open failed!!!");}else{
+    //    QTimer *timer = new QTimer(this);
+    //    connect(timer,SIGNAL(timeout()),this,SLOT(send_Slot()));
+    //    timer->start(1000);}
+    //    PortSet(serial_fd,&portinfo);
     //rvp900 initialize
     rvp9.RVP9Initialize();
     //connect to RVP900
@@ -72,6 +77,9 @@ void MainWindow::dispInitiallize(){
     ui->pbtnCloseTransmit->setEnabled(false);
     ui->pbtnStop->setEnabled(false);
     ui->pbtnStopSweep->setEnabled(false);
+    //load pix
+    pix_red.load(":/res/res/red_24.ico");
+    pix_green.load(":/res/res/green_24.ico");
 
 }
 
@@ -101,7 +109,7 @@ void MainWindow::slotSignalconnect(){
     connect(ui->pbtnStopSweep,SIGNAL(clicked()),SLOT(on_pbtnStopSweep_clicked()));
     connect(ui->pbtnAzimuth,SIGNAL(clicked()),SLOT(on_pbtnAzimuth_clicked()));
     connect(ui->pbtnElevation,SIGNAL(clicked()),SLOT(on_pbtnElevation_clicked()) );
-    connect(ui->pbtnStop,SIGNAL(clicked()),SLOT(on_pbtnStop_clicked()) );
+    connect(ui->pbtnStop,SIGNAL(clicked()),SLOT(on_pbtnStop_clicked()),Qt::QueuedConnection );
     connect(ui->pbtnCollect,SIGNAL(clicked()),SLOT(on_pbtnCollect_clicked()));
     connect(ui->comboBoxMode,SIGNAL(activated(int)),SLOT(on_comboBoxMode_activated(int)));
     connect(ui->comboBoxLmsk,SIGNAL(activated(int)),SLOT(on_comboBoxLmsk_activated(int)));
@@ -152,6 +160,8 @@ void MainWindow::on_pbtnOpenTransmit_clicked()
         //改变相关显示状态
         ui->pbtnOpenTransmit->setEnabled(false);
         ui->pbtnCloseTransmit->setEnabled(true);
+        //change pic
+       rvp9StateDisp(rvp9.rcverStatus);
     }
 
 }
@@ -165,6 +175,8 @@ void MainWindow::on_pbtnCloseTransmit_clicked()
         //改变相关显示状态
         ui->pbtnCloseTransmit->setEnabled(false);
         ui->pbtnOpenTransmit->setEnabled(true);
+        //change pic
+       rvp9StateDisp(rvp9.rcverStatus);
     }
 
 }
@@ -200,8 +212,8 @@ void MainWindow::on_pbtnSweep_clicked()
     //通过串口发送数据
     serialPort.write(rvp9.antennaBuf,7);
     rvp9.isWorking = true;
-//    ui->pbtnCollect->setEnabled(false);
-//    ui->pbtnStop->setEnabled(true);
+    //    ui->pbtnCollect->setEnabled(false);
+    //    ui->pbtnStop->setEnabled(true);
 
 }
 //处理 天线停止扫描按钮 发出的点击信号
@@ -213,13 +225,13 @@ void MainWindow::on_pbtnStopSweep_clicked()
         ui->pbtnStopSweep->setEnabled(false);
         ui->pbtnSweep->setEnabled(true);
     }
-//    if(rvp9.isWorking == true){
-//        ui->pbtnCollect->setEnabled(false);
-//        ui->pbtnStop->setEnabled(true);
-//    }else{
-//        ui->pbtnCollect->setEnabled(true);
-//        ui->pbtnStop->setEnabled(false);
-//    }
+    //    if(rvp9.isWorking == true){
+    //        ui->pbtnCollect->setEnabled(false);
+    //        ui->pbtnStop->setEnabled(true);
+    //    }else{
+    //        ui->pbtnCollect->setEnabled(true);
+    //        ui->pbtnStop->setEnabled(false);
+    //    }
 
 }
 //方位定位
@@ -264,7 +276,8 @@ void MainWindow::on_pbtnElevation_clicked()
 /*停止采集*/
 void MainWindow::on_pbtnStop_clicked()
 {
-    if(true == ui->pbtnStop->isEnabled()){
+    //    if(true == ui->pbtnStop->isEnabled()){
+    if(true == rvp9.isWorking){
         rvp9.isWorking = false;
         ui->pbtnStop->setEnabled(false);
         ui->pbtnCollect->setEnabled(true);
@@ -281,7 +294,8 @@ void MainWindow::on_pbtnStop_clicked()
 /*开始采集*/
 void MainWindow::on_pbtnCollect_clicked()
 {
-    if(true == ui->pbtnCollect->isEnabled()){
+    //if(true == ui->pbtnCollect->isEnabled()){
+    if(false == rvp9.isWorking ){
         rvp9.isWorking = true;
         ui->pbtnStop->setEnabled(true);
         ui->pbtnCollect->setEnabled(false);
@@ -292,13 +306,11 @@ void MainWindow::on_pbtnCollect_clicked()
         ui->comboBoxDPrf->setEnabled(false);
         //ui->pbtnSweep->setEnabled(false);
         //ui->pbtnOpenTransmit->setEnabled(false);
-
-    }
-    if(true == rvp9.isWorking){
         rvp9.setPwPrf();
         rvp9.setLFILT();
         //开始采集数据
         collectData();
+
     }
 }
 
@@ -455,6 +467,7 @@ int MainWindow::collectData(){
         }
         //更新仰角控件的值
         ui->spinBoxElevationDisp->setValue(elevationf);
+
     }
 }
 
@@ -531,6 +544,155 @@ void  MainWindow::disp1PicWSlot(){//显示1图槽函数 W
     this->update();
 }
 
+void MainWindow::rvp9StateDisp(char Rbuf[]){
+    //发射状态
+    if(Rbuf[1]&128)//发射通讯
+        ui->label_tc->setPixmap(pix_green);
+    else
+        ui->label_tc->setPixmap(pix_red);
 
+    if(Rbuf[1]&64)//电源
+        ui->label_pwr->setPixmap(pix_green);
+    else
+        ui->label_pwr->setPixmap(pix_red);
+
+    if(Rbuf[1]&32)//+28V
+        ui->label_28Vol->setPixmap(pix_green);
+    else
+        ui->label_28Vol->setPixmap(pix_red);
+
+    if(Rbuf[1]&16)//保护脉冲
+        ui->label_pp->setPixmap(pix_green);
+    else
+        ui->label_pp->setPixmap(pix_red);
+
+    if(Rbuf[1]&8)//过温
+        ui->label_ht->setPixmap(pix_green);
+    else
+        ui->label_ht->setPixmap(pix_red);
+
+    if(Rbuf[1]&4)//功率
+        ui->label_walt->setPixmap(pix_green);
+    else
+         ui->label_walt->setPixmap(pix_red);
+
+    if(Rbuf[1]&2)//发射
+         ui->label_t->setPixmap(pix_green);
+    else
+        ui->label_t->setPixmap(pix_red);
+
+    if(Rbuf[1]&1)//准加
+        ui->label_add->setPixmap(pix_green);
+    else
+        ui->label_add->setPixmap(pix_red);
+
+    //接收状态
+    if(Rbuf[2]&8)//激励源
+        ui->label_ds->setPixmap(pix_green);
+    else
+        ui->label_ds->setPixmap(pix_red);
+
+    if(Rbuf[2]&4)//本振源
+        ui->label_co->setPixmap(pix_green);
+    else
+        ui->label_co->setPixmap(pix_red);
+
+    if(Rbuf[2]&2)//时钟源
+        ui->label_clk->setPixmap(pix_green);
+    else
+        ui->label_clk->setPixmap(pix_red);
+
+    if(Rbuf[2]&1)//相参基准
+        ui->label_pb->setPixmap(pix_green);
+    else
+        ui->label_pb->setPixmap(pix_red);
+
+    //伺服状态
+    if(Rbuf[5]&128)//伺服通讯
+        ui->label_servo->setPixmap(pix_green);
+    else
+        ui->label_servo->setPixmap(pix_red);
+}
+//void MainWindow::send_Slot()
+//{
+//    char Zbuf[]={0x3F,0x01,0x53,0x6D,0};
+//    PortSend_1(serial_fd,Zbuf,4);
+//    receive_Slot();
+//}
+
+//void MainWindow::receive_Slot()
+//{
+//    char Rbuf[8]={0,0,0,0,0,0,0,0};
+//    //Rbuf[1]=0xaa;
+//    PortRecv(serial_fd,Rbuf,8,38400);
+//    //发射状态
+//    if(Rbuf[1]&128)
+//        pix1 = pix_green;
+//    else
+//        pix1 = pix_red;
+
+//    if(Rbuf[1]&64)
+//        pix2 = pix_green;
+//    else
+//        pix2 = pix_red;
+
+//    if(Rbuf[1]&32)
+//        pix3 = pix_green;
+//    else
+//        pix3 = pix_red;
+
+//    if(Rbuf[1]&16)
+//        pix4 = pix_green;
+//    else
+//        pix4 = pix_red;
+
+//    if(Rbuf[1]&8)
+//        pix5 = pix_green;
+//    else
+//        pix5 = pix_red;
+
+//    if(Rbuf[1]&4)
+//        pix6 = pix_green;
+//    else
+//        pix6 = pix_red;
+
+//    if(Rbuf[1]&2)
+//        pix7 = pix_green;
+//    else
+//        pix7 = pix_red;
+
+//    if(Rbuf[1]&1)
+//        pix8 = pix_green;
+//    else
+//        pix8 = pix_red;
+
+//    //接收状态
+//    if(Rbuf[2]&8)
+//        pix9 = pix_green;
+//    else
+//        pix9 = pix_red;
+
+//    if(Rbuf[2]&4)
+//        pix10 = pix_green;
+//    else
+//        pix10 = pix_red;
+
+//    if(Rbuf[2]&2)
+//        pix11 = pix_green;
+//    else
+//        pix11 = pix_red;
+
+//    if(Rbuf[2]&1)
+//        pix12 = pix_green;
+//    else
+//        pix12 = pix_red;
+
+//    //伺服状态
+//    if(Rbuf[5]&128)
+//        pix13 = pix_green;
+//    else
+//        pix13 = pix_red;
+
+//}
 
 
